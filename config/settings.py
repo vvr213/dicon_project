@@ -10,23 +10,36 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+# import dj_database_url #インポートいずれ要る
+import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# envファイルを読み込む
+#load_dotenv(os.path.join(BASE_DIR,'.env')) #dr
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dq1lcrq0*ql5h5s*9kzi85or11m*vp0bvxb!^7hrnmtv39h6bb'
+# SECRET_KEY = 'django-insecure-dq1lcrq0*ql5h5s*9kzi85or11m*vp0bvxb!^7hrnmtv39h6bb'
+SECRET_KEY = os.environ.get('SECRET_KEY') # .envから読み込むように変更
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+# # .envから読み込む（なければFalseになる安全策）
+# DEBUG = os.environ.get('DEBAG','False') == 'True'
+# # 許可するドメイン。本番ではRenderのURLが入る。
+# # '*'波全許可だが、今回は簡易的に設定（実務ではドメイン指定推奨）
+# ALLOWED_HOSTS = ['*']
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -37,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dicon_app',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +65,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+# いずれ修正すること12/21（templatesフォルダの定義を追加）
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -73,6 +88,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# デフォルトはSQLite（開発用）
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -80,6 +96,9 @@ DATABASES = {
     }
 }
 
+# #本番環境
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -103,9 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
