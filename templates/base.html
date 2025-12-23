@@ -1,2 +1,19 @@
-{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Dicon Project</title>
+</head>
+<body>
+
+  <nav>
+    <a href="{% url 'dicon_app:product_list' %}">商品一覧</a> |
+    <a href="{% url 'orders:order_list' %}">注文履歴</a>
+  </nav>
+  <hr>
+
+  {% block content %}
+  {% endblock %}
+
+</body>
+</html>
