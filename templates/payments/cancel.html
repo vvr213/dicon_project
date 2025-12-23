@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
 <h1>決済失敗（ダミー）</h1>
 <p>もう一度お試しください。</p>
 
@@ -8,5 +11,5 @@
 
 <p><a href="{% url 'dicon_app:product_detail' product.id %}">商品詳細に戻る</a></p>
 <p><a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a></p>
-
+{% endblock %}
 <!-- 戻るリンクOKに -->

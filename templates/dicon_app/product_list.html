@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
 <h1>商品一覧</h1>
 
 <ul>
@@ -9,5 +12,5 @@
     </li>
   {% endfor %}
 </ul>
-
+{% endblock %}
 <!-- URLを 文字列で直書きしていない urls.py とちゃんとつながっている、将来URLを変えても壊れない -->
