@@ -2,18 +2,32 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Dicon Project</title>
+  <title>{% block title %}Dicon Project{% endblock %}</title>
 </head>
 <body>
 
-  <nav>
-    <a href="{% url 'dicon_app:product_list' %}">商品一覧</a> |
-    <a href="{% url 'orders:order_list' %}">注文履歴</a>
+  <nav class="nav">
+    <a href="{% url 'dicon_app:product_list' %}"
+       class="nav__link {% if request.resolver_match.url_name == 'product_list' and request.resolver_match.namespace == 'dicon_app' %}is-active{% endif %}">
+      商品一覧
+    </a>
+    |
+    <a href="{% url 'orders:order_list' %}"
+       class="nav__link {% if request.resolver_match.url_name == 'order_list' and request.resolver_match.namespace == 'orders' %}is-active{% endif %}">
+      注文履歴
+    </a>
   </nav>
+
   <hr>
 
-  {% block content %}
-  {% endblock %}
+  {% block content %}{% endblock %}
+
+  <hr>
+
+  <footer class="footer">
+    <small>© 2025 Dicon Project</small>
+  </footer>
 
 </body>
 </html>
+<!-- if文の意味 「今のページが商品一覧なら」 「太字にする」 -->
