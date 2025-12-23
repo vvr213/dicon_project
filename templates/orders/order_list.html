@@ -5,19 +5,38 @@
 {% block content %}
 <h1>注文履歴</h1>
 
-<ul>
-  {% for order in orders %}
-    <li>
-      注文ID：{{ order.id }} /
-      商品：{{ order.product.name }} /
-      金額：{{ order.amount }}円 /
-      状態：{{ order.get_status_display }} /
-      日時：{{ order.created_at }}
-    </li>
-  {% empty %}
-    <li>注文はまだありません</li>
-  {% endfor %}
-</ul>
+{% if orders %}
+  <div class="table-wrap">
+    <table class="order-table">
+      <thead>
+        <tr>
+          <th>日時</th>
+          <th>商品</th>
+          <th>金額</th>
+          <th>状態</th>
+          <th>注文ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.created_at|date:"Y/m/d H:i" }}</td>
+            <td>{{ order.product.name }}</td>
+            <td>{{ order.amount }}円</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>#{{ order.id }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p>注文はまだありません</p>
+{% endif %}
 
-<a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a>
+<p><a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a></p>
 {% endblock %}
+
+<!-- {% empty %} じゃなくて if/else にしてるのは、table構造を壊さないため
+date フィルタで日時を読みやすく（実務感アップ）
+tableを div.table-wrap で囲って、スマホで横スクロールOKにする -->

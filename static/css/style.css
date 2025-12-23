@@ -2,3 +2,21 @@
     font-weight: bold;
     text-decoration: underline;
   }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+  
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px; /* スマホで潰れない */
+  }
+  
+  .order-table th,
+  .order-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+  }
