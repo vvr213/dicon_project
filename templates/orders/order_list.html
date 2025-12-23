@@ -1,0 +1,17 @@
+<h1>注文履歴</h1>
+
+<ul>
+  {% for order in orders %}
+    <li>
+      注文ID：{{ order.id }} /
+      商品：{{ order.product.name }} /
+      金額：{{ order.amount }}円 /
+      状態：{{ order.get_status_display }} /
+      日時：{{ order.created_at }}
+    </li>
+  {% empty %}
+    <li>注文はまだありません</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a>

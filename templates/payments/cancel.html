@@ -1,0 +1,12 @@
+<h1>決済失敗（ダミー）</h1>
+<p>もう一度お試しください。</p>
+
+<p>注文番号：{{ order.id }}</p>
+<p>商品：{{ product.name }}</p>
+
+<p>LINE通知（ダミー）：{{ message }}</p>
+
+<p><a href="{% url 'dicon_app:product_detail' product.id %}">商品詳細に戻る</a></p>
+<p><a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a></p>
+
+<!-- 戻るリンクOKに -->

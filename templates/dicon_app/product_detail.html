@@ -1,0 +1,11 @@
+<h1>{{ product.name }}</h1>
+
+<p>価格：{{ product.price }} 円</p>
+
+<!-- <a href="#">購入する</a> -->
+
+<p>
+  <!-- <a href="{% url 'dicon_app:product_list' %}"> -->
+    <a href="{% url 'payments:checkout' product.id %}">購入する</a> 
+    <a href="{% url 'dicon_app:product_list' %}">← 商品一覧に戻る</a>
+</p>

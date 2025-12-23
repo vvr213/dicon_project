@@ -1,0 +1,11 @@
+<h1>ダミー決済</h1>
+
+<p>注文番号：{{ order.id }}</p>
+<p>商品：{{ product.name }}</p>
+<p>金額：{{ product.price }} 円</p>
+
+<p><a href="{% url 'payments:success' order.id %}">✅ ダミー決済成功</a></p>
+<p><a href="{% url 'payments:cancel' order.id %}">❌ ダミー決済失敗</a></p>
+
+<p><a href="{% url 'dicon_app:product_detail' product.id %}">← 商品詳細に戻る</a></p>
+<!-- success/cancel へ product_id 付きで飛ばす →　checkout 画面で「成功/失敗」を押すなら、URL は order_id で呼 -->

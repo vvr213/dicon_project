@@ -1,0 +1,13 @@
+<h1>商品一覧</h1>
+
+<ul>
+  {% for product in products %}
+    <li>
+      <a href="{% url 'dicon_app:product_detail' product.id %}">
+        {{ product.name }} - {{ product.price }}円
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<!-- URLを 文字列で直書きしていない urls.py とちゃんとつながっている、将来URLを変えても壊れない -->
