@@ -1,0 +1,4 @@
+.nav__link.is-active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
