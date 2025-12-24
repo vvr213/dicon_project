@@ -1,15 +1,15 @@
+{# partials/breadcrumbs.html #}
+
+{% if crumbs %}
 <nav aria-label="breadcrumb" class="breadcrumbs">
-    {% if crumbs %}
-      <a href="{% url 'dicon_app:street_list' %}">通り一覧</a>
-      {% for c in crumbs %}
-        &gt;
-        {% if c.url %}
-          <a href="{{ c.url }}">{{ c.label }}</a>
-        {% else %}
-          <span>{{ c.label }}</span>
-        {% endif %}
-      {% endfor %}
+  <a href="{% url 'dicon_app:street_list' %}">通り一覧</a>
+  {% for c in crumbs %}
+    &gt;
+    {% if c.url %}
+      <a href="{{ c.url }}">{{ c.label }}</a>
     {% else %}
-      <a href="{% url 'dicon_app:street_list' %}">通り一覧</a>
+      <span>{{ c.label }}</span>
     {% endif %}
-  </nav>
+  {% endfor %}
+</nav>
+{% endif %}
