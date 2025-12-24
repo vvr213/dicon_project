@@ -7,7 +7,9 @@
 <ul>
     {% for street in streets %}
       <li>
-        <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}">
+        <!-- <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}"> -->
+        <!-- <slug> を手打ちする必要ゼロ -->
+        <a href="{% url 'dicon_app:shop_list_by_street' street.slug %}">
           {{ street.name }}
         </a>
       </li>
