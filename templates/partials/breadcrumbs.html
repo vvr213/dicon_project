@@ -1,0 +1,15 @@
+<nav aria-label="breadcrumb" class="breadcrumbs">
+    {% if crumbs %}
+      <a href="{% url 'dicon_app:street_list' %}">通り一覧</a>
+      {% for c in crumbs %}
+        &gt;
+        {% if c.url %}
+          <a href="{{ c.url }}">{{ c.label }}</a>
+        {% else %}
+          <span>{{ c.label }}</span>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <a href="{% url 'dicon_app:street_list' %}">通り一覧</a>
+    {% endif %}
+  </nav>

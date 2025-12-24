@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ shop.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ shop.name }}</h1>
+
+<!-- 管理画面の説明（description）表示 -->
+{% if shop.description %}
+  <p>{{ shop.description }}</p>
+{% endif %}
+
+<p>{{ shop.street.name }} のお店</p>
+
+<h2>商品</h2>
+<ul>
+  {% for product in products %}
+    <li>{{ product.name }}（{{ product.price }}円）</li>
+  {% empty %}
+    <li>このお店にはまだ商品がありません</li>
+  {% endfor %}
+</ul>
+
+<p><a href="{% url 'dicon_app:shop_list_by_street' shop.street.slug %}">店舗一覧へ戻る</a></p>
+{% endblock %}

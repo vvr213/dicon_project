@@ -12,6 +12,7 @@
     border-collapse: collapse;
     min-width: 700px; /* スマホで潰れない */
   }
+
   
   .order-table th,
   .order-table td {
@@ -19,4 +20,16 @@
     padding: 8px;
     text-align: left;
     white-space: nowrap;
+  }
+
+
+  .breadcrumbs {
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .breadcrumbs a {
+    text-decoration: none;
+  }
+  .breadcrumbs span {
+    font-weight: bold;
   }

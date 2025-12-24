@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}通り一覧{% endblock %}
+
+{% block content %}
+<h1>通り一覧</h1>
+
+<ul>
+    {% for street in streets %}
+      <li>
+        <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}">
+          {{ street.name }}
+        </a>
+      </li>
+    {% empty %}
+      <li>通りがまだありません</li>
+    {% endfor %}
+  </ul>
+
+<p><a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a></p>
+{% endblock %}

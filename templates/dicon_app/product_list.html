@@ -8,6 +8,7 @@
 <ul>
   {% for product in products %}
     <li>
+      <!-- 商品詳細いらない、一覧だけでOK」なら削除 今ページがないのでエラー表示12/24 -->
       <a href="{% url 'dicon_app:product_detail' product.id %}">
         {{ product.name }} - {{ product.price }}円
       </a>
