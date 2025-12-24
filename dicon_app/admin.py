@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Street, Shop, Product
+from .models import Street, Shop, Product, Set, HeroSlide
 
 # Register your models here.
 
@@ -23,6 +23,22 @@ class ShopAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "shop", "price")
-    list_filter = ("shop", "shop__street")
+    list_display = ("name", "shop", "price", "is_sale", "sale_price")
+    list_filter = ("shop", "shop__street", "is_sale")
     search_fields = ("name",)
+
+
+@admin.register(Set)
+class SetAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("name", "description")
+    prepopulated_fields = {"slug": ("name",)}
+    filter_horizontal = ("products",)
+
+
+@admin.register(HeroSlide)
+class HeroSlideAdmin(admin.ModelAdmin):
+    list_display = ("order", "title", "is_active", "link_url")
+    list_filter = ("is_active",)
+    search_fields = ("title", "subtitle", "link_url")

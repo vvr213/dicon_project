@@ -10,25 +10,28 @@
 
   <nav class="nav">
     <a href="{% url 'dicon_app:street_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'street_list' %}is-active{% endif %}">
+       class="nav__link {% if request.resolver_match.namespace == 'dicon_app' and request.resolver_match.url_name == 'street_list' %}is-active{% endif %}">
       通り一覧
     </a>
     |
     <a href="{% url 'dicon_app:product_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'product_list' and request.resolver_match.namespace == 'dicon_app' %}is-active{% endif %}">
+       class="nav__link {% if request.resolver_match.namespace == 'dicon_app' and request.resolver_match.url_name == 'product_list' %}is-active{% endif %}">
       商品一覧
     </a>
     |
     <a href="{% url 'orders:order_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'order_list' and request.resolver_match.namespace == 'orders' %}is-active{% endif %}">
+       class="nav__link {% if request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'order_list' %}is-active{% endif %}">
       注文履歴
     </a>
   </nav>
-  
+
   <hr>
-  
-  {% include "partials/breadcrumbs.html" %}
+
+  {# breadcrumbs は「ある時だけ」表示（partialsが未作成でも落ちない） #}
+  {% include "partials/breadcrumbs.html" ignore missing %}
+
   {% block content %}{% endblock %}
+
   <hr>
 
   <footer class="footer">
@@ -37,4 +40,3 @@
 
 </body>
 </html>
-<!-- if文の意味 「今のページが商品一覧なら」 「太字にする」 -->

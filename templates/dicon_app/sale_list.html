@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}特売一覧{% endblock %}
+
+{% block content %}
+<h1>特売一覧</h1>
+
+<ul>
+  {% for product in products %}
+    <li>
+      <a href="{% url 'dicon_app:product_detail' product.id %}">{{ product.name }}</a>
+      （{% if product.sale_price %}{{ product.sale_price }}円{% else %}特売{% endif %}）
+    </li>
+  {% empty %}
+    <li>特売商品はまだありません</li>
+  {% endfor %}
+</ul>
+{% endblock %}

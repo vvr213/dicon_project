@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ set.name }}｜おすすめセット{% endblock %}
+
+{% block content %}
+<h1>{{ set.name }}</h1>
+{% if set.description %}<p>{{ set.description }}</p>{% endif %}
+
+<h2>セット内容</h2>
+<ul>
+  {% for product in set.products.all %}
+    <li>
+      <a href="{% url 'dicon_app:product_detail' product.id %}">{{ product.name }}</a>
+      （{{ product.price }}円）
+    </li>
+  {% empty %}
+    <li>まだ商品が紐づいていません</li>
+  {% endfor %}
+</ul>
+
+<p><a href="{% url 'dicon_app:set_list' %}">← セット一覧へ</a></p>
+{% endblock %}
