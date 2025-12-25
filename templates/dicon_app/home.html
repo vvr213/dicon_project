@@ -4,6 +4,21 @@
 {% block content %}
 <h1>トップ</h1>
 
+<!-- お知らせ表示 -->
+<section class="home-section">
+    <h2>お知らせ</h2>
+  
+    {% if notices %}
+    <div class="notice-carousel" aria-label="お知らせカルーセル">
+      {% for n in notices %}
+        <a class="notice-card" href="{{ n.url }}">{{ n.title }}</a>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>お知らせは準備中です</p>
+    {% endif %}
+  </section>
+
 <h2>お知らせ</h2>
 <div class="carousel">
   {% for slide in slides %}

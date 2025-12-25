@@ -33,3 +33,24 @@
   .breadcrumbs span {
     font-weight: bold;
   }
+
+  .notice-carousel{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding:8px 0 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .notice-card{
+    display:block;
+    min-width:220px;
+    padding:12px 14px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    text-decoration:none;
+  }
+  .notice-card:hover{
+    text-decoration:underline;
+  }
+  

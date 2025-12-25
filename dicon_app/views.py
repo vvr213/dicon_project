@@ -14,6 +14,13 @@ def home(request):
     streets = Street.objects.all().order_by("name")[:3]
     products = Product.objects.all().order_by("-id")[:6]  # 最初は新着でOK
 
+    # 「お知らせカルーセル」（JSなしで確実に動く）homeに notices を追加
+    notices = [
+        {"title": "年末セール準備中！", "url": "/sales/"},
+        {"title": "おすすめセット更新予定", "url": "/sets/"},
+        {"title": "新機能：お店から探す（準備中）", "url": "/shops/"},
+    ]
+
     context = {
         "slides": slides,
         "sets": sets,
