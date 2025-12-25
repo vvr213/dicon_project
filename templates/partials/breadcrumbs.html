@@ -2,9 +2,8 @@
 
 {% if crumbs %}
 <nav aria-label="breadcrumb" class="breadcrumbs">
-  <a href="{% url 'dicon_app:street_list' %}">通り一覧</a>
   {% for c in crumbs %}
-    &gt;
+    {% if not forloop.first %} &gt; {% endif %}
     {% if c.url %}
       <a href="{{ c.url }}">{{ c.label }}</a>
     {% else %}

@@ -9,18 +9,33 @@
 <body>
 
   <nav class="nav">
+    <a href="{% url 'dicon_app:home' %}"
+       class="nav__link {% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">
+      ホーム
+    </a>
+    |
     <a href="{% url 'dicon_app:street_list' %}"
-       class="nav__link {% if request.resolver_match.namespace == 'dicon_app' and request.resolver_match.url_name == 'street_list' %}is-active{% endif %}">
+       class="nav__link {% if request.resolver_match.url_name == 'street_list' %}is-active{% endif %}">
       通り一覧
     </a>
     |
+    <a href="{% url 'dicon_app:sale_list' %}"
+       class="nav__link {% if request.resolver_match.url_name == 'sale_list' %}is-active{% endif %}">
+      特売
+    </a>
+    |
+    <a href="{% url 'dicon_app:set_list' %}"
+       class="nav__link {% if request.resolver_match.url_name == 'set_list' %}is-active{% endif %}">
+      おすすめセット
+    </a>
+    |
     <a href="{% url 'dicon_app:product_list' %}"
-       class="nav__link {% if request.resolver_match.namespace == 'dicon_app' and request.resolver_match.url_name == 'product_list' %}is-active{% endif %}">
+       class="nav__link {% if request.resolver_match.url_name == 'product_list' %}is-active{% endif %}">
       商品一覧
     </a>
     |
     <a href="{% url 'orders:order_list' %}"
-       class="nav__link {% if request.resolver_match.namespace == 'orders' and request.resolver_match.url_name == 'order_list' %}is-active{% endif %}">
+       class="nav__link {% if request.resolver_match.namespace == 'orders' %}is-active{% endif %}">
       注文履歴
     </a>
   </nav>

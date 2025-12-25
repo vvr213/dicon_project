@@ -2,13 +2,16 @@
 {% block title %}おすすめセット一覧{% endblock %}
 
 {% block content %}
-<h1>おすすめセット一覧</h1>
+<h1>おすすめセット</h1>
 
 <ul>
   {% for set in sets %}
-    <li><a href="{% url 'dicon_app:set_detail' slug=set.slug %}">{{ set.name }}</a></li>
+    <li>
+      <a href="{% url 'dicon_app:set_detail' slug=set.slug %}">{{ set.name }}</a>
+      {% if set.description %}<br><small>{{ set.description }}</small>{% endif %}
+    </li>
   {% empty %}
-    <li>おすすめセットはまだありません</li>
+    <li>セットがまだありません</li>
   {% endfor %}
 </ul>
 {% endblock %}

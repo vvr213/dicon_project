@@ -5,7 +5,7 @@
 <h1>{{ set.name }}</h1>
 {% if set.description %}<p>{{ set.description }}</p>{% endif %}
 
-<h2>このセットの商品</h2>
+<h2>セット内容</h2>
 <ul>
   {% for product in set.products.all %}
     <li>
@@ -13,9 +13,9 @@
       （{{ product.price }}円）
     </li>
   {% empty %}
-    <li>商品がまだ紐づいていません</li>
+    <li>まだ商品が紐づいていません</li>
   {% endfor %}
 </ul>
 
-<p><a href="{% url 'dicon_app:set_list' %}">セット一覧へ戻る</a></p>
+<p><a href="{% url 'dicon_app:set_list' %}">← セット一覧へ</a></p>
 {% endblock %}
