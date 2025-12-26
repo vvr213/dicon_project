@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}トップ｜Dicon Project{% endblock %}
+
+{% block content %}
+<h1>トップ</h1>
+
+<section>
+  <h2>お知らせ</h2>
+  {% if notices %}
+    <div class="notice-carousel">
+      {% for n in notices %}
+        <a class="notice-card" href="{{ n.url }}">{{ n.title }}</a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>お知らせは準備中です</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>ピックアップ</h2>
+  <div class="carousel">
+    {% for slide in slides %}
+      <div class="carousel__item">
+        <strong>{{ slide.title }}</strong><br>
+        <small>{{ slide.subtitle }}</small><br>
+        <a href="{{ slide.link_url }}">詳しく見る</a>
+      </div>
+    {% empty %}
+      <p>ピックアップは準備中です</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <h2>おすすめセット</h2>
+  <ul>
+    {% for set in sets %}
+      <li>
+        <a href="{% url 'dicon_app:set_detail' slug=set.slug %}">{{ set.name }}</a>
+        {% if set.description %}<br><small>{{ set.description }}</small>{% endif %}
+      </li>
+    {% empty %}
+      <li>おすすめセットはまだありません</li>
+    {% endfor %}
+  </ul>
+  <p><a href="{% url 'dicon_app:set_list' %}">おすすめセットをもっと見る</a></p>
+</section>
+
+<section>
+  <h2>本日の特売</h2>
+  <ul>
+    {% for product in sale_products %}
+      <li>
+        <a href="{% url 'dicon_app:product_detail' product.id %}">{{ product.name }}</a>
+        （{% if product.sale_price %}{{ product.sale_price }}円{% else %}特売{% endif %}）
+      </li>
+    {% empty %}
+      <li>特売はまだありません</li>
+    {% endfor %}
+  </ul>
+  <p><a href="{% url 'dicon_app:sale_list' %}">特売一覧を見る</a></p>
+</section>
+
+<section>
+  <h2>通りから探す</h2>
+  <ul>
+    {% for street in streets %}
+      <li><a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}">{{ street.name }}</a></li>
+    {% empty %}
+      <li>通りがまだありません</li>
+    {% endfor %}
+  </ul>
+  <p><a href="{% url 'dicon_app:street_list' %}">通り一覧へ</a></p>
+</section>
+
+{% endblock %}

@@ -53,4 +53,85 @@
   .notice-card:hover{
     text-decoration:underline;
   }
-  
+
+
+  /* ===== Top page Card UI (A: シンプル白背景＋アイコン) ===== */
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.page-title {
+  font-size: 32px;
+  margin: 8px 0 16px;
+}
+
+.section-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.section-title {
+  font-size: 20px;
+  margin: 0 0 12px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 840px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
+.card-link {
+  display: block;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+
+.card-link:hover {
+  border-color: #cbd5e1;
+}
+
+.mini-muted { color: #6b7280; font-size: 13px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.badge-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.more-link {
+  display: inline-block;
+  margin-top: 10px;
+}
+
