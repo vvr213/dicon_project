@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+{% static 'img/sets/placeholder.jpg' as placeholder_img %}
 {% block title %}トップ｜Dicon Project{% endblock %}
 
 {% block content %}
@@ -51,9 +53,22 @@
           <div class="col-12 col-md-4">
             <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
               <div class="border rounded-3 p-3 h-100">
-                <div class="text-muted small mb-2">（写真を後で入れる場所）</div>
-                <div class="fw-bold">{{ set.name }}</div>
-                {% if set.description %}<div class="text-muted small">{{ set.description }}</div>{% endif %}
+                <div class="text-muted small mb-2"></div>
+                <!-- セット画像（slugで自動読込 / 無ければplaceholder） -->
+
+  <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+    <img
+      src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
+      alt="{{ set.name }}"
+      class="w-100 h-100 object-fit-cover"
+      loading="lazy"
+      decoding="async"
+      onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
+    >
+  </div>
+
+  <div class="fw-bold">{{ set.name }}</div>
+  {% if set.description %}<div class="text-muted small">{{ set.description }}</div>{% endif %}
               </div>
             </a>
           </div>

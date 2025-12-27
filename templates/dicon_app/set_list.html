@@ -1,17 +1,43 @@
 {% extends "base.html" %}
+{% load static %}
+{% static 'img/sets/placeholder.jpg' as placeholder_img %}
 {% block title %}おすすめセット一覧{% endblock %}
 
 {% block content %}
-<h1>おすすめセット</h1>
+<div class="container py-3">
+  <h1 class="h3 mb-3">おすすめセット</h1>
 
-<ul>
-  {% for set in sets %}
-    <li>
-      <a href="{% url 'dicon_app:set_detail' slug=set.slug %}">{{ set.name }}</a>
-      {% if set.description %}<br><small>{{ set.description }}</small>{% endif %}
-    </li>
-  {% empty %}
-    <li>セットがまだありません</li>
-  {% endfor %}
-</ul>
+  <div class="row g-3">
+    {% for set in sets %}
+      <div class="col-12 col-md-4">
+        <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
+          <div class="card h-100">
+            
+            <!-- セット画像（slugで自動読込 / 無ければplaceholder） -->
+
+              <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+                <img
+                  src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
+                  alt="{{ set.name }}"
+                  class="w-100 h-100 object-fit-cover"
+                  loading="lazy"
+                  decoding="async"
+                  onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
+                >
+              </div>
+
+            <div class="card-body">
+              <div class="fw-bold">{{ set.name }}</div>
+              {% if set.description %}
+                <div class="text-muted small mt-1">{{ set.description }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+    {% empty %}
+      <p>セットがまだありません</p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
