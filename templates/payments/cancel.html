@@ -1,17 +1,12 @@
 {% extends "base.html" %}
-
-{% block title %}決済失敗｜{{ product.name }}{% endblock %}
+{% block title %}キャンセル{% endblock %}
 
 {% block content %}
-<h1>決済失敗</h1>
-<p>もう一度お試しください。</p>
+<div class="container py-3">
+  <h1 class="h4">キャンセル（テスト）</h1>
+  <p>注文ID：{{ order.id }}</p>
+  <p>ステータス：{{ order.status }}</p>
 
-<p>注文番号：{{ order.id }}</p>
-<p>商品：{{ product.name }}</p>
-
-<p>LINE通知（ダミー）：{{ message }}</p>
-
-<p><a href="{% url 'dicon_app:product_detail' product.id %}">商品詳細に戻る</a></p>
-<!-- <p><a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a></p> -->
+  <a class="btn btn-outline-dark" href="{% url 'dicon_app:home' %}">トップへ戻る</a>
+</div>
 {% endblock %}
-<!-- 戻るリンクOKに -->

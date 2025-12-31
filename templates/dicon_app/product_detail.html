@@ -11,7 +11,7 @@
 
 <p>
   <!-- <a href="{% url 'dicon_app:product_list' %}"> -->
-    <a href="{% url 'payments:checkout' product.id %}">購入する</a> 
+    <a class="btn btn-dark" href="{% url 'payments:checkout' product.id %}">購入する</a> 
     <a href="{% url 'dicon_app:product_list' %}">← 商品一覧に戻る</a>
 </p>
 {% endblock %}

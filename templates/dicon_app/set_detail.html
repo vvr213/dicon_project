@@ -17,5 +17,12 @@
   {% endfor %}
 </ul>
 
+{# dicon_app/set_detail.html #}
+
+<a class="btn btn-dark"
+   href="{% url 'payments:checkout_set' set.slug %}">
+  このセットをまとめて購入
+</a>
+
 <p><a href="{% url 'dicon_app:set_list' %}">セット一覧へ戻る</a></p>
 {% endblock %}

@@ -135,3 +135,41 @@
   margin-top: 10px;
 }
 
+
+/* .hero-carousel{
+  height: clamp(180px, 28vw, 320px);
+}
+
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item,
+.hero-carousel .hero-img{
+  height: 100%;
+}
+
+.hero-carousel .hero-img{
+  object-fit: contain; /* 全部見せたい */
+  /* object-fit: cover; /* 余白がイヤで、画面いっぱいに見せたい */
+  
+  /* background: #fff;
+} */
+
+
+/* 1) Heroの高さ（好きな値に調整してOK） */
+.hero-carousel{
+  height: clamp(220px, 32vw, 360px);
+}
+
+/* 2) 高さを中まで伝える（これが重要） */
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item{
+  height: 100%;
+}
+
+/* 3) 画像を枠いっぱいに */
+.hero-carousel .hero-img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;      /* ← 余白ゼロの鍵 */
+  object-position: center;
+  display: block;
+}

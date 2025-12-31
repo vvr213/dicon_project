@@ -11,14 +11,28 @@
 
 <p>{{ shop.street.name }} のお店</p>
 
-<h2>商品</h2>
-<ul>
+<h2 class="h5 mt-4">商品</h2>
+
+<div class="list-group">
   {% for product in products %}
-    <li>{{ product.name }}（{{ product.price }}円）</li>
+    <div class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <div class="fw-bold">{{ product.name }}</div>
+        <div class="text-muted small">{{ product.price }}円</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm"
+           href="{% url 'dicon_app:product_detail' product.id %}">
+          詳細
+        </a>
+        <a class="btn btn-sm btn-dark" href="{% url 'payments:checkout' product.id %}">購入</a>
+      </div>
+    </div>
   {% empty %}
-    <li>このお店にはまだ商品がありません</li>
+    <div class="list-group-item">このお店にはまだ商品がありません</div>
   {% endfor %}
-</ul>
+</div>
 
 <p>
     <a href="{% url 'dicon_app:shop_list_by_street' street_slug=shop.street.slug %}">

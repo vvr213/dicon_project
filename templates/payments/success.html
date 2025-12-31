@@ -1,17 +1,12 @@
 {% extends "base.html" %}
-
-{% block title %}注文完了｜{{ product.name }}{% endblock %}
+{% block title %}決済成功{% endblock %}
 
 {% block content %}
-<h1>注文完了</h1>
+<div class="container py-3">
+  <h1 class="h4">決済成功（テスト）</h1>
+  <p>注文ID：{{ order.id }}</p>
+  <p>ステータス：{{ order.status }}</p>
 
-<p>注文番号：{{ order.id }}</p>
-<p>商品：{{ product.name }}</p>
-<p>金額：{{ order.amount }} 円</p>
-
-<!-- 主導線とサブ導線 -->
-<a href="{% url 'orders:order_list' %}">注文履歴を見る</a>
- | 
-<a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a>
-
+  <a class="btn btn-dark" href="{% url 'orders:order_list' %}">注文履歴へ</a>
+</div>
 {% endblock %}

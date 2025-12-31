@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}セット決済｜{{ set.name }}{% endblock %}
+
+{% block content %}
+<h1>セット決済（テスト）</h1>
+
+<h2>{{ set.name }}</h2>
+
+<ul>
+  {% for p in products %}
+    <li>{{ p.name }}（{{ p.price }}円）</li>
+  {% endfor %}
+</ul>
+
+<p><strong>合計：{{ total }}円</strong></p>
+
+<p>
+  <a class="btn btn-success" href="{% url 'payments:success_set' %}">✅ セット決済成功（ダミー）</a>
+  <a class="btn btn-danger" href="{% url 'payments:cancel_set' %}">❌ セット決済失敗（ダミー）</a>
+</p>
+
+<p><a href="{% url 'dicon_app:set_detail' set.slug %}">← セット詳細に戻る</a></p>
+{% endblock %}

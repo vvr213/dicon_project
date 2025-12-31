@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'dicon_app',
     "payments",
     "orders",
+    'accounts',  # ← 追加12/29
+    # 'accounts.apps.AccountsConfig', #念の為
 ]
 
 MIDDLEWARE = [
@@ -148,3 +150,18 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ログイン後に飛ぶ先（デフォルトの /accounts/profile/ をやめる）
+LOGIN_REDIRECT_URL = "dicon_app:home"
+
+# ログアウト後の戻り先（好みで home か login）
+LOGOUT_REDIRECT_URL = "dicon_app:home"
+
+# login_required() などで未ログイン時に飛ばす先（任意だけど入れとくと安定）
+LOGIN_URL = "accounts:login"
+
+
+AUTHENTICATION_BACKENDS = [
+    # "accounts.backends.EmailBackend",
+    "django.contrib.auth.backends.ModelBackend",  # 一応残しておくと安心12/30
+]

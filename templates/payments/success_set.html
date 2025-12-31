@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}セット決済成功{% endblock %}
+
+{% block content %}
+<h1>セット決済：成功</h1>
+
+<ul>
+  {% for o in orders %}
+    <li>{{ o.product.name }}（{{ o.amount }}円） - {{ o.status }}</li>
+  {% endfor %}
+</ul>
+
+<p><strong>合計：{{ total }}円</strong></p>
+
+<p><a href="{% url 'dicon_app:set_list' %}">← セット一覧へ</a></p>
+{% endblock %}

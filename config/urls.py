@@ -22,4 +22,5 @@ urlpatterns = [
     path("", include("dicon_app.urls")),
     path("payments/", include("payments.urls")),
     path("orders/", include("orders.urls")),
+    path("accounts/", include("accounts.urls")),  # ← 追加12/29
 ]

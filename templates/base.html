@@ -1,60 +1,96 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Dicon Project{% endblock %}</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
-  <nav class="nav">
-    <a href="{% url 'dicon_app:home' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">
-      ホーム
-    </a>
-    |
-    <a href="{% url 'dicon_app:street_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'street_list' %}is-active{% endif %}">
-      通り一覧
-    </a>
-    |
-    <a href="{% url 'dicon_app:sale_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'sale_list' %}is-active{% endif %}">
-      特売
-    </a>
-    |
-    <a href="{% url 'dicon_app:set_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'set_list' %}is-active{% endif %}">
-      おすすめセット
-    </a>
-    |
-    <a href="{% url 'dicon_app:product_list' %}"
-       class="nav__link {% if request.resolver_match.url_name == 'product_list' %}is-active{% endif %}">
-      商品一覧
-    </a>
-    |
-    <a href="{% url 'orders:order_list' %}"
-       class="nav__link {% if request.resolver_match.namespace == 'orders' %}is-active{% endif %}">
-      注文履歴
-    </a>
-  </nav>
+  <!-- ナビ-->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container">
 
-  <hr>
+      <!-- ロゴ（Homeへ） -->
+      <a class="navbar-brand fw-bold" href="{% url 'dicon_app:home' %}">Dicon</a>
 
-  {# breadcrumbs は「ある時だけ」表示（partialsが未作成でも落ちない） #}
-  {% include "partials/breadcrumbs.html" %}
+      <!-- ★スマホの上の1行に「ログイン中：◯◯さん」出す（lg以上では非表示） -->
+      {% if user.is_authenticated %}
+        <span class="navbar-text small text-muted ms-auto me-2 d-lg-none">
+          ログイン中：{{ user.first_name|default:user.username }}さん
+        </span>
+      {% endif %}
 
-  {% block content %}{% endblock %}
+      <!-- スマホで開閉するボタン -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#globalNav"
+              aria-controls="globalNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <hr>
+      <!-- ナビ本体 -->
+      <div class="collapse navbar-collapse" id="globalNav">
 
-  <footer class="footer">
-    <small>© 2025 Dicon Project</small>
+        <!-- 左：メニュー -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:street_list' %}">通り一覧</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:sale_list' %}">特売</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:set_list' %}">おすすめセット</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:product_list' %}">商品一覧</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'orders:order_list' %}">注文履歴</a></li>
+        </ul>
+
+        <!-- 右：カート/お気に入り/ログイン系 -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#" title="カート"><i class="fa-solid fa-cart-shopping"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" title="お気に入り"><i class="fa-solid fa-heart"></i></a>
+          </li>
+
+          {% if user.is_authenticated %}
+           <!-- ★PC（lg以上）だけ表示：スマホは上の1行で出してるのでここは隠す -->
+            <li class="nav-item d-none d-lg-block">
+              <span class="nav-link text-muted">
+                ログイン中：{{ user.first_name|default:user.username }}さん
+              </span>
+            </li>
+
+            <li class="nav-item">
+              <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-link btn btn-link p-0">ログアウト</button>
+              </form>
+            </li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">会員登録</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a></li>
+          {% endif %}
+        </ul>
+
+    </div>
+  </div>
+</nav>
+
+  <!-- 本文 -->
+  <main class="container py-4">
+    {# breadcrumbs は今はいったん無しでOK（ファイルを作ってから復活） #}
+    {# {% include "partials/breadcrumbs.html" %} #}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-top py-3">
+    <div class="container">
+      <small>© 2025 Dicon Project</small>
+    </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
