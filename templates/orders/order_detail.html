@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}注文詳細｜注文#{{ order.id }}{% endblock %}
+
+{% block content %}
+  <h1>注文詳細</h1>
+
+  <p>注文番号：{{ order.id }}</p>
+  <p>商品：{{ order.product.name }}</p>
+  <p>金額：{{ order.amount }} 円</p>
+  <p>状態：{{ order.get_status_display }}</p>
+  <p>注文日時：{{ order.created_at }}</p>
+
+  <hr>
+
+  {% if shop.line_url %}
+    <a class="btn btn-outline-success"
+       href="{% url 'dicon_app:shop_consult' shop_pk=shop.id %}?order={{ order.id }}&product={{ order.product.name|urlencode }}&qty=1">
+      この注文についてLINEで相談
+    </a>
+  {% else %}
+    <p class="text-muted">※ この店舗はLINEリンク未設定です</p>
+  {% endif %}
+
+  <p class="mt-3">
+    <a href="{% url 'orders:order_list' %}">← 注文履歴へ戻る</a>
+  </p>
+{% endblock %}

@@ -23,6 +23,7 @@ class Shop(models.Model):
     )
     name = models.CharField("店舗名", max_length=120)
     description = models.TextField("説明", blank=True)
+    line_url = models.URLField("LINEリンク", blank=True, null=True) #1/1LINE追加
 
     class Meta:
         verbose_name = "店舗"

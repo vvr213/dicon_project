@@ -11,6 +11,12 @@
 
 <p>{{ shop.street.name }} のお店</p>
 
+<!-- 1/1追加 -->
+<a class="btn btn-success"
+   href="{% url 'dicon_app:shop_consult' shop.pk %}">
+  LINEで相談する
+</a>
+
 <h2 class="h5 mt-4">商品</h2>
 
 <div class="list-group">

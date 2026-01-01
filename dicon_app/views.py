@@ -1,7 +1,41 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render
 from django.urls import reverse
 
 from .models import Product, Street, Shop, Set, HeroSlide
+
+# 1/1追加→さらに変更
+def shop_consult(request, shop_pk):
+    shop = get_object_or_404(Shop.objects.select_related("street"), pk=shop_pk)
+
+    product = request.GET.get("product", "")
+    qty = request.GET.get("qty", "")
+    set_name = request.GET.get("set", "")
+    order_id = request.GET.get("order", "")
+
+    lines = []
+    lines.append(f"【相談】{shop.name} さんへ")
+    lines.append("")
+    if product:
+        lines.append(f"商品：{product}")
+        if qty:
+            lines.append(f"数量：{qty}")
+        lines.append("")
+    if set_name:
+        lines.append(f"セット：{set_name}")
+        lines.append("")
+    if order_id:
+        lines.append(f"注文番号：{order_id}")
+        lines.append("（この注文について相談です）")
+        lines.append("")
+
+    lines += ["希望：", "受取希望日時：", "その他："]
+    draft = "\n".join(lines)
+
+    return render(request, "dicon_app/shop_consult.html", {
+        "shop": shop,
+        "draft": draft,
+        "line_url": shop.line_url,  # ←テンプレで使うなら渡す
+    })
 
 
 # --------------------

@@ -12,6 +12,7 @@ urlpatterns = [
     path("streets/", views.street_list, name="street_list"),
     path("streets/<slug:street_slug>/", views.shop_list_by_street, name="shop_list_by_street"),
     path("shops/<int:shop_pk>/", views.shop_detail, name="shop_detail"),
+    path("shops/<int:shop_pk>/consult/", views.shop_consult, name="shop_consult"),
 
     path("sets/", views.set_list, name="set_list"),
     path("sets/<slug:slug>/", views.set_detail, name="set_detail"),

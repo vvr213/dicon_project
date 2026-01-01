@@ -11,7 +11,7 @@ class StreetAdmin(admin.ModelAdmin):
 
 @admin.register(Shop)
 class ShopAdmin(admin.ModelAdmin):
-    list_display = ("name", "street")
+    list_display = ("id", "name", "street", "line_url")
     list_filter = ("street",)
     search_fields = ("name",)
     autocomplete_fields = ("street",)

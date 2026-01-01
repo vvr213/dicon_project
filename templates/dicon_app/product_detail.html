@@ -11,6 +11,10 @@
 
 <p>
   <!-- <a href="{% url 'dicon_app:product_list' %}"> -->
+    <a class="btn btn-outline-success"
+   href="{% url 'dicon_app:shop_consult' shop_pk=product.shop_id %}?product={{ product.name|urlencode }}&qty=1">
+  LINEでこの商品を相談
+    </a>
     <a class="btn btn-dark" href="{% url 'payments:checkout' product.id %}">購入する</a> 
     <a href="{% url 'dicon_app:product_list' %}">← 商品一覧に戻る</a>
 </p>

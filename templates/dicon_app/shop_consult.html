@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ shop.name }}に相談 | Dicon{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 720px;">
+  <h2 class="mb-3">{{ shop.name }} に相談</h2>
+
+  {% if not shop.line_url %}
+    <div class="alert alert-warning">
+      この店舗はまだLINEリンクが登録されていません（管理画面で shop.line_url を設定してください）
+    </div>
+  {% endif %}
+
+  <label class="form-label">送る文章（下書き）</label>
+  <textarea id="draftText" class="form-control" rows="8" readonly>{{ draft }}</textarea>
+
+  <div class="d-flex gap-2 mt-3">
+    <button type="button" class="btn btn-outline-secondary" id="copyBtn">
+      コピー
+    </button>
+
+    {% if shop.line_url %}
+      <a class="btn btn-success" href="{{ shop.line_url }}" target="_blank" rel="noopener">
+        LINEを開く
+      </a>
+    {% else %}
+      <button class="btn btn-success" type="button" disabled>LINEを開く</button>
+    {% endif %}
+
+    <a class="btn btn-link" href="{% url 'dicon_app:shop_detail' shop.pk %}">
+      店詳細に戻る
+    </a>
+  </div>
+
+  <p class="text-muted small mt-3 mb-0">
+    ※「コピー」→「LINEを開く」→トークに貼り付け、の流れで使います。
+  </p>
+</div>
+
+<script>
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const text = document.getElementById("draftText").value;
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("コピーしました！");
+    } catch (e) {
+      alert("コピーに失敗しました。手動で選択してコピーしてください。");
+    }
+  });
+</script>
+{% endblock %}
