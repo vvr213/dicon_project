@@ -57,7 +57,7 @@
 
   /* ===== Top page Card UI (A: シンプル白背景＋アイコン) ===== */
 
-.container {
+  .top-container {
   max-width: 980px;
   margin: 0 auto;
   padding: 16px;
@@ -173,3 +173,6 @@
   object-position: center;
   display: block;
 }
+
+
+.object-fit-cover { object-fit: cover; }

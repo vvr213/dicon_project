@@ -4,48 +4,57 @@
 {% block title %}トップ｜Dicon Project{% endblock %}
 
 {% block content %}
-<div class="container py-3">
+<div class="top-container py-3">
 
   <!-- Hero -->
-<div class="border rounded-4 p-3 mb-3 bg-white">
+  <div class="border rounded-4 p-3 mb-3 bg-white">
     <h1 class="h3 mb-1">トップ</h1>
     <div class="text-muted small mb-3">今日のごはん、商店街でパパっと。</div>
-  
+
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner rounded-4 overflow-hidden">
-  
+
+        <!-- 1 -->
         <div class="carousel-item active">
-          <img
-            src="{% static 'img/hero_quick.png' %}"
-            class="d-block w-100 hero-img"
-            alt="時短"
-            loading="lazy"
-            decoding="async"
-          >
+          <div class="ratio ratio-16x9">
+            <img
+              src="{% static 'img/hero_quick.png' %}"
+              class="w-100 h-100 object-fit-cover"
+              alt="時短"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
         </div>
-  
+
+        <!-- 2 -->
         <div class="carousel-item">
-          <img
-            src="{% static 'img/hero_shotengai.png' %}"
-            class="d-block w-100 hero-img"
-            alt="商店街体験"
-            loading="lazy"
-            decoding="async"
-          >
+          <div class="ratio ratio-16x9">
+            <img
+              src="{% static 'img/hero_shotengai.png' %}"
+              class="w-100 h-100 object-fit-cover"
+              alt="商店街体験"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
         </div>
-  
+
+        <!-- 3 -->
         <div class="carousel-item">
-          <img
-            src="{% static 'img/hero_sale.png' %}"
-            class="d-block w-100 hero-img"
-            alt="特売"
-            loading="lazy"
-            decoding="async"
-          >
+          <div class="ratio ratio-16x9">
+            <img
+              src="{% static 'img/hero_sale.png' %}"
+              class="w-100 h-100 object-fit-cover"
+              alt="特売"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
         </div>
-  
+
       </div>
-  
+
       <!-- 左右ボタン -->
       <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -55,7 +64,7 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-  
+
       <!-- 下の点々 -->
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
@@ -65,7 +74,7 @@
     </div>
 
     <!-- 探し方4ボタン -->
-    <div class="row g-2">
+    <div class="row g-2 mt-3">
       <div class="col-12 col-md-6">
         <a class="btn btn-outline-dark w-100" href="{% url 'dicon_app:set_list' %}">④ おすすめセット（主役）</a>
       </div>
@@ -79,6 +88,100 @@
         <a class="btn btn-outline-dark w-100" href="{% url 'dicon_app:product_list' %}">① 商品一覧（時短）</a>
       </div>
     </div>
+  </div>
+
+  <!-- 相談プリセット入口（5枚） -->
+  <div id="consultCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+    </div>
+
+    <div class="carousel-inner rounded border bg-light overflow-hidden">
+
+      <!-- 1 刺身 -->
+      <div class="carousel-item active">
+        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
+          <div class="me-3 flex-shrink-0" style="width: 180px;">
+            <img src="{% static 'img/consult/sashimi.jpg' %}" class="img-fluid rounded" alt="刺身盛り">
+          </div>
+          <div>
+            <h3 class="mb-1">刺身盛り、予算で作れます</h3>
+            <p class="text-muted mb-3">人数 / 予算 / 苦手食材を入れて相談</p>
+            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">お店にカスタム相談！</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 BBQ -->
+      <div class="carousel-item">
+        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
+          <div class="me-3 flex-shrink-0" style="width: 180px;">
+            <img src="{% static 'img/consult/bbq.jpg' %}" class="img-fluid rounded" alt="BBQセット">
+          </div>
+          <div>
+            <h3 class="mb-1">BBQ用に、肉と野菜まとめて</h3>
+            <p class="text-muted mb-3">人数 / 予算 / 焼き方（厚切り等）</p>
+            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">この相談で進める</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 下ごしらえ -->
+      <div class="carousel-item">
+        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
+          <div class="me-3 flex-shrink-0" style="width: 180px;">
+            <img src="{% static 'img/consult/prep.jpg' %}" class="img-fluid rounded" alt="下ごしらえ">
+          </div>
+          <div>
+            <h3 class="mb-1">下ごしらえだけお願いしたい</h3>
+            <p class="text-muted mb-3">ささがき / あく抜き / カット</p>
+            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">下書きを作る</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 おかず -->
+      <div class="carousel-item">
+        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
+          <div class="me-3 flex-shrink-0" style="width: 180px;">
+            <img src="{% static 'img/consult/okazu.jpg' %}" class="img-fluid rounded" alt="おかず">
+          </div>
+          <div>
+            <h3 class="mb-1">今夜のおかず、相談して決める</h3>
+            <p class="text-muted mb-3">好み / 予算 / 作り置きもOK</p>
+            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">おかずで相談</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 スムージー -->
+      <div class="carousel-item">
+        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
+          <div class="me-3 flex-shrink-0" style="width: 180px;">
+            <img src="{% static 'img/consult/smoothie.jpg' %}" class="img-fluid rounded" alt="スムージー">
+          </div>
+          <div>
+            <h3 class="mb-1">スムージー用に、果物と野菜をセット</h3>
+            <p class="text-muted mb-3">甘さ / アレルギー / 量を相談</p>
+            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">スムージーで相談</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#consultCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">前へ</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#consultCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">次へ</span>
+    </button>
   </div>
 
   <!-- notices（あなたの自作カルーセルを残す） -->
@@ -106,22 +209,19 @@
           <div class="col-12 col-md-4">
             <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
               <div class="border rounded-3 p-3 h-100">
-                <div class="text-muted small mb-2"></div>
-                <!-- セット画像（slugで自動読込 / 無ければplaceholder） -->
+                <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+                  <img
+                    src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
+                    alt="{{ set.name }}"
+                    class="w-100 h-100 object-fit-cover"
+                    loading="lazy"
+                    decoding="async"
+                    onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
+                  >
+                </div>
 
-  <div class="ratio ratio-16x9 rounded-top overflow-hidden">
-    <img
-      src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
-      alt="{{ set.name }}"
-      class="w-100 h-100 object-fit-cover"
-      loading="lazy"
-      decoding="async"
-      onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
-    >
-  </div>
-
-  <div class="fw-bold">{{ set.name }}</div>
-  {% if set.description %}<div class="text-muted small">{{ set.description }}</div>{% endif %}
+                <div class="fw-bold mt-2">{{ set.name }}</div>
+                {% if set.description %}<div class="text-muted small">{{ set.description }}</div>{% endif %}
               </div>
             </a>
           </div>

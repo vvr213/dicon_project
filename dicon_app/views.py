@@ -163,3 +163,42 @@ def sale_list(request):
         "products": products,
         "crumbs": [{"label": "特売情報", "url": None}],
     })
+
+
+from django.shortcuts import render
+
+def consult_home(request):
+    presets = [
+        {
+            "key": "sashimi",
+            "title": "刺身盛り、予算で作れます",
+            "desc": "人数 / 予算 / 苦手食材を入れて相談",
+            "image": "img/consult/sashimi.jpg",
+        },
+        {
+            "key": "bbq",
+            "title": "BBQ用に、肉と野菜まとめて",
+            "desc": "人数 / 予算 / 焼き方（厚切り等）",
+            "image": "img/consult/bbq.jpg",
+        },
+        {
+            "key": "prep",
+            "title": "下ごしらえだけお願いしたい",
+            "desc": "ささがき / あく抜き / カット",
+            "image": "img/consult/prep.jpg",
+        },
+        {
+            "key": "okazu",
+            "title": "焼いておいてほしい、作っておいてほしい",
+            "desc": "塩焼き / 煮物 / 揚げ物",
+            "image": "img/consult/okazu.jpg",
+        },
+        {
+            "key": "smoothie",
+            "title": "スムージー用にセットしてほしい",
+            "desc": "甘さ / アレルギー / 量",
+            "image": "img/consult/smoothie.jpg",
+        },
+    ]
+    return render(request, "dicon_app/consult_home.html", {"presets": presets})
+    # 画像は後で置く、今は仮でページ動かす

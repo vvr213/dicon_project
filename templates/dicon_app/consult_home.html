@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}相談プリセット｜Dicon{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 980px;">
+  <h1 class="mb-2">お店にカスタム相談！</h1>
+  <p class="text-muted mb-4">まずは相談の種類を選んでください（あとで店を選べます）</p>
+
+  <div class="row g-3">
+    {% for p in presets %}
+      <div class="col-12 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="row g-0">
+            <div class="col-5">
+              <img src="{% static p.image %}" class="img-fluid rounded-start" alt="{{ p.title }}">
+            </div>
+            <div class="col-7">
+              <div class="card-body">
+                <h5 class="card-title">{{ p.title }}</h5>
+                <p class="card-text text-muted small">{{ p.desc }}</p>
+
+                {# 次の拡張：ここから「店を選ぶ」or「最近の店」へ #}
+                <a class="btn btn-outline-success btn-sm"
+                   href="{% url 'dicon_app:street_list' %}">
+                  この相談で進める
+                </a>
+                <span class="text-muted small ms-2">（次にお店を選びます）</span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <hr class="my-4">
+
+  <div class="d-flex gap-2 flex-wrap">
+    <a class="btn btn-outline-success" href="{% url 'dicon_app:street_list' %}">店名から相談</a>
+    <a class="btn btn-outline-dark" href="{% url 'dicon_app:product_list' %}">商品から相談</a>
+    <span class="text-muted small align-self-center">
+      ※電話/FAX対応は次フェーズで追加（店ごとに表示切替）
+    </span>
+  </div>
+</div>
+{% endblock %}
+
+<!-- MVPは「まず相談の入口がある」ことが目的なので、ここでは次の遷移をいったん「通り一覧（店選び）」に、
+次のステップで、ここを “店選択ページ” や “最近使った店” に差し替えられるように作る -->

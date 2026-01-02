@@ -18,4 +18,6 @@ urlpatterns = [
     path("sets/<slug:slug>/", views.set_detail, name="set_detail"),
 
     path("sale/", views.sale_list, name="sale_list"),
+    # 1/2追加
+    path("consult/", views.consult_home, name="consult_home"),
 ]
