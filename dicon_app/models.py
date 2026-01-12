@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
-
+from django.urls import reverse
+from django.utils import timezone
 
 class Street(models.Model):
     name = models.CharField("通り名", max_length=100, unique=True)
@@ -102,3 +103,67 @@ class HeroSlide(models.Model):
 
     def __str__(self):
         return f"{self.order}: {self.title}"
+
+# 1/12追加
+class Event(models.Model):
+    CATEGORY_CHOICES = [
+        ("food", "食"),
+        ("experience", "体験"),
+        ("kids", "子ども"),
+        ("sale", "特売"),
+        ("season", "季節"),
+        ("other", "その他"),
+    ]
+
+    title = models.CharField("タイトル", max_length=120)
+    slug = models.SlugField("スラッグ", max_length=140, unique=True, blank=True)
+
+    start_date = models.DateField("開始日")
+    end_date = models.DateField("終了日", blank=True, null=True)
+
+    summary = models.CharField("一言説明", max_length=160, blank=True)
+    body = models.TextField("詳細", blank=True)
+
+    category = models.CharField("カテゴリ", max_length=20, choices=CATEGORY_CHOICES, default="season")
+
+    image = models.CharField("画像（staticパス）", max_length=200, blank=True)
+
+    location = models.CharField("場所", max_length=120, blank=True)
+    map_url = models.URLField("地図URL", blank=True)
+
+    apply_url = models.URLField("申込URL", blank=True)
+    share_text = models.CharField("シェア文（任意）", max_length=120, blank=True)
+
+    is_featured = models.BooleanField("ピックアップ", default=False)
+    is_active = models.BooleanField("公開中", default=True)
+
+    created_at = models.DateTimeField("作成日", auto_now_add=True)
+    updated_at = models.DateTimeField("更新日", auto_now=True)
+
+    class Meta:
+        ordering = ["start_date", "-created_at"]
+        verbose_name = "イベント"
+        verbose_name_plural = "イベント"
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        # slugが空なら自動生成（日本語タイトルでも一旦 slugify で作る）
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("dicon_app:event_detail", kwargs={"slug": self.slug})
+
+    @property
+    def is_multi_day(self):
+        # 終了日が開始日より後のときだけ「複数日」
+        return bool(self.end_date and self.end_date > self.start_date)
+
+    @property
+    def is_upcoming(self):
+        today = timezone.localdate()
+        end = self.end_date or self.start_date
+        return end >= today

@@ -1,55 +1,130 @@
 {% extends "base.html" %}
 {% load static %}
 {% static 'img/sets/placeholder.jpg' as placeholder_img %}
+{% static 'img/consult/placeholder.jpg' as consult_placeholder %}
+
 {% block title %}トップ｜Dicon Project{% endblock %}
 
 {% block content %}
 <div class="top-container py-3">
 
-  <!-- Hero -->
-  <div class="border rounded-4 p-3 mb-3 bg-white">
+  <!-- =========================
+       ★イベント枠（ヘッダー直下）
+  ========================== -->
+  <div class="card-soft mb-4">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-2">
+        <h2 class="h5 section-title mb-0">今月のイベント</h2>
+        <a class="small text-decoration-none" href="{% url 'dicon_app:event_list' %}">一覧を見る →</a>
+      </div>
+      <div class="text-muted small mb-3">「毎週なにかある」商店街を見える化。</div>
+
+      {% if featured_events %}
+        <div id="eventCarousel" class="carousel slide rounded-4 overflow-hidden mb-3" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for e in featured_events %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <a href="{{ e.get_absolute_url }}" class="text-decoration-none text-dark">
+                  <div class="event-hero p-3 p-md-4">
+                    <div class="row g-3 align-items-center">
+                      <div class="col-12 col-md-5">
+                        <div class="ratio ratio-16x9 rounded-4 overflow-hidden">
+                          {% if e.image %}
+                            <img src="{% static e.image %}" alt="{{ e.title }}" class="w-100 h-100 object-fit-cover" loading="lazy" decoding="async"
+                                 onerror="this.onerror=null;this.src='{{ placeholder_img }}';">
+                          {% else %}
+                            <img src="{{ placeholder_img }}" alt="placeholder" class="w-100 h-100 object-fit-cover" loading="lazy" decoding="async">
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="col-12 col-md-7">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                          <span class="badge-soft badge-cat">{{ e.get_category_display }}</span>
+                          <span class="small text-muted">
+                            {{ e.start_date }}{% if e.is_multi_day %} 〜 {{ e.end_date }}{% endif %}
+                          </span>
+                          <span class="badge-soft badge-hot">PICKUP</span>
+                        </div>
+                        <div class="fw-bold fs-5 mt-2">{{ e.title }}</div>
+                        {% if e.summary %}
+                          <div class="text-muted mt-2">{{ e.summary }}</div>
+                        {% endif %}
+                        <div class="mt-3">
+                          <span class="btn btn-success btn-sm">詳細を見る</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+
+          <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">前へ</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">次へ</span>
+          </button>
+        </div>
+      {% endif %}
+
+      {% if upcoming_events %}
+        <div class="row g-3">
+          {% for e in upcoming_events|slice:":6" %}
+            <div class="col-12 col-md-4">
+              <a class="text-decoration-none text-dark" href="{{ e.get_absolute_url }}">
+                <div class="event-card p-3 h-100">
+                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <span class="badge-soft badge-cat">{{ e.get_category_display }}</span>
+                    <span class="small text-muted">{{ e.start_date }}</span>
+                  </div>
+                  <div class="fw-bold mt-2">{{ e.title }}</div>
+                  {% if e.summary %}
+                    <div class="text-muted small mt-1">{{ e.summary }}</div>
+                  {% endif %}
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-muted">イベントを追加すると、ここが一気に賑わいます。</div>
+      {% endif %}
+    </div>
+  </div>
+
+
+  <!-- =========================
+       Hero（カルーセル＋4導線）
+  ========================== -->
+  <div class="hero-shell p-3 p-md-4 mb-4">
     <h1 class="h3 mb-1">トップ</h1>
     <div class="text-muted small mb-3">今日のごはん、商店街でパパっと。</div>
 
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
       <div class="carousel-inner rounded-4 overflow-hidden">
 
         <!-- 1 -->
         <div class="carousel-item active">
           <div class="ratio ratio-16x9">
-            <img
-              src="{% static 'img/hero_quick.png' %}"
-              class="w-100 h-100 object-fit-cover"
-              alt="時短"
-              loading="lazy"
-              decoding="async"
-            >
+            <img src="{% static 'img/hero_quick.png' %}" class="w-100 h-100 object-fit-cover hero-img" alt="時短" loading="lazy" decoding="async">
           </div>
         </div>
 
         <!-- 2 -->
         <div class="carousel-item">
           <div class="ratio ratio-16x9">
-            <img
-              src="{% static 'img/hero_shotengai.png' %}"
-              class="w-100 h-100 object-fit-cover"
-              alt="商店街体験"
-              loading="lazy"
-              decoding="async"
-            >
+            <img src="{% static 'img/hero_shotengai.png' %}" class="w-100 h-100 object-fit-cover" alt="商店街体験" loading="lazy" decoding="async">
           </div>
         </div>
 
         <!-- 3 -->
         <div class="carousel-item">
           <div class="ratio ratio-16x9">
-            <img
-              src="{% static 'img/hero_sale.png' %}"
-              class="w-100 h-100 object-fit-cover"
-              alt="特売"
-              loading="lazy"
-              decoding="async"
-            >
+            <img src="{% static 'img/hero_sale.png' %}" class="w-100 h-100 object-fit-cover" alt="特売" loading="lazy" decoding="async">
           </div>
         </div>
 
@@ -65,32 +140,58 @@
         <span class="visually-hidden">Next</span>
       </button>
 
-      <!-- 下の点々 -->
-      <div class="carousel-indicators">
+      <!-- 下の点々：★ここに class 追加 -->
+      <div class="carousel-indicators dicon-indicators">
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
       </div>
     </div>
 
-    <!-- 探し方4ボタン -->
-    <div class="row g-2 mt-3">
-      <div class="col-12 col-md-6">
-        <a class="btn btn-outline-dark w-100" href="{% url 'dicon_app:set_list' %}">④ おすすめセット（主役）</a>
+    <!-- 探し方4導線（ピル型タブ） -->
+    <div class="hero-tabs mt-3">
+      <a class="hero-tab" href="{% url 'dicon_app:product_list' %}"><span class="tab-no">①</span> 商品一覧（時短）</a>
+      <a class="hero-tab" href="{% url 'dicon_app:street_list' %}"><span class="tab-no">②</span> 通りからお店へ</a>
+      <a class="hero-tab" href="{% url 'dicon_app:sale_list' %}"><span class="tab-no">③</span> 特売で探す</a>
+      <a class="hero-tab is-main" href="{% url 'dicon_app:set_list' %}"><span class="tab-no">④</span> おすすめセット（主役）</a>
+    </div>
+  </div>
+  <!-- ✅ ここで hero-shell を閉じる（超重要） -->
+
+
+  <!-- =========================
+      刺さる「華やか＋説得力」ブロック
+  ========================== -->
+  <div class="card-soft mb-4">
+    <div class="card-body">
+      <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+          <h2 class="h5 section-title mb-2">主婦歴50年やで、まかしとき。</h2>
+          <div class="section-sub small mb-3">
+            商店街のプロが「何を買えばいい？」の不安を、最短で解消します。
+          </div>
+        </div>
+        <div class="small text-muted">
+          <span class="badge-soft">相談→下書き自動作成</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6">
-        <a class="btn btn-outline-dark w-100" href="{% url 'dicon_app:street_list' %}">② 通りからお店へ</a>
-      </div>
-      <div class="col-12 col-md-6">
-        <a class="btn btn-outline-dark w-100" href="{% url 'dicon_app:sale_list' %}">③ 特売で探す</a>
-      </div>
-      <div class="col-12 col-md-6">
-        <a class="btn btn-outline-dark w-100" href="{% url 'dicon_app:product_list' %}">① 商品一覧（時短）</a>
+
+      <!-- 青チップ：★ここに class 追加 -->
+      <div class="feature-chips">
+        <span class="badge-soft">旬の目利き</span>
+        <span class="badge-soft">予算内で提案</span>
+        <span class="badge-soft">下ごしらえ代行</span>
+        <span class="badge-soft">アレルギー配慮</span>
+        <span class="badge-soft">LINEで相談</span>
+        <span class="badge-soft">特売で時短</span>
       </div>
     </div>
   </div>
 
-  <!-- 相談プリセット入口（5枚） -->
+
+  <!-- =========================
+       相談プリセット入口（5枚）
+  ========================== -->
   <div id="consultCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -100,13 +201,20 @@
       <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
     </div>
 
-    <div class="carousel-inner rounded border bg-light overflow-hidden">
+    <div class="carousel-inner consult-shell rounded-4 overflow-hidden">
 
       <!-- 1 刺身 -->
       <div class="carousel-item active">
         <div class="d-flex align-items-center p-4" style="min-height: 220px;">
           <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img src="{% static 'img/consult/sashimi.jpg' %}" class="img-fluid rounded" alt="刺身盛り">
+            <img
+              src="{% static 'img/consult/sashimi.jpg' %}"
+              class="img-fluid rounded"
+              alt="刺身盛り"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
+            >
           </div>
           <div>
             <h3 class="mb-1">刺身盛り、予算で作れます</h3>
@@ -120,7 +228,14 @@
       <div class="carousel-item">
         <div class="d-flex align-items-center p-4" style="min-height: 220px;">
           <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img src="{% static 'img/consult/bbq.jpg' %}" class="img-fluid rounded" alt="BBQセット">
+            <img
+              src="{% static 'img/consult/bbq.jpg' %}"
+              class="img-fluid rounded"
+              alt="BBQセット"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
+            >
           </div>
           <div>
             <h3 class="mb-1">BBQ用に、肉と野菜まとめて</h3>
@@ -134,7 +249,14 @@
       <div class="carousel-item">
         <div class="d-flex align-items-center p-4" style="min-height: 220px;">
           <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img src="{% static 'img/consult/prep.jpg' %}" class="img-fluid rounded" alt="下ごしらえ">
+            <img
+              src="{% static 'img/consult/prep.jpg' %}"
+              class="img-fluid rounded"
+              alt="下ごしらえ"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
+            >
           </div>
           <div>
             <h3 class="mb-1">下ごしらえだけお願いしたい</h3>
@@ -148,7 +270,14 @@
       <div class="carousel-item">
         <div class="d-flex align-items-center p-4" style="min-height: 220px;">
           <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img src="{% static 'img/consult/okazu.jpg' %}" class="img-fluid rounded" alt="おかず">
+            <img
+              src="{% static 'img/consult/okazu.jpg' %}"
+              class="img-fluid rounded"
+              alt="おかず"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
+            >
           </div>
           <div>
             <h3 class="mb-1">今夜のおかず、相談して決める</h3>
@@ -162,7 +291,14 @@
       <div class="carousel-item">
         <div class="d-flex align-items-center p-4" style="min-height: 220px;">
           <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img src="{% static 'img/consult/smoothie.jpg' %}" class="img-fluid rounded" alt="スムージー">
+            <img
+              src="{% static 'img/consult/smoothie.jpg' %}"
+              class="img-fluid rounded"
+              alt="スムージー"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
+            >
           </div>
           <div>
             <h3 class="mb-1">スムージー用に、果物と野菜をセット</h3>
@@ -184,32 +320,45 @@
     </button>
   </div>
 
-  <!-- notices（あなたの自作カルーセルを残す） -->
-  <div class="card mb-3">
+
+  <!-- =========================
+       お知らせ（横スクロール・チップ帯）
+  ========================== -->
+  <div class="card-soft mb-3">
     <div class="card-body">
-      <h2 class="h5 mb-3">お知らせ</h2>
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+        <h2 class="h5 mb-0 section-title">お知らせ</h2>
+      </div>
+
       {% if notices %}
-        <div class="notice-carousel" aria-label="お知らせカルーセル">
+        <div class="notice-strip" aria-label="お知らせ">
           {% for n in notices %}
-            <a class="notice-card" href="{{ n.url }}">{{ n.title }}</a>
+            <a class="notice-chip" href="{{ n.url }}">{{ n.title }}</a>
           {% endfor %}
         </div>
       {% else %}
-        <p class="mb-0">お知らせは準備中です</p>
+        <p class="mb-0 text-muted">お知らせは準備中です</p>
       {% endif %}
     </div>
   </div>
 
-  <!-- おすすめセット（主役） -->
-  <div class="card mb-3">
+
+  <!-- =========================
+       おすすめセット（主役）
+  ========================== -->
+  <div class="card-soft mb-3">
     <div class="card-body">
-      <h2 class="h5 mb-3">おすすめセット</h2>
+      <div class="d-flex align-items-center justify-content-between gap-3 mb-3 flex-wrap">
+        <h2 class="h5 section-title mb-0">おすすめセット</h2>
+        <a class="small text-decoration-none" href="{% url 'dicon_app:set_list' %}">もっと見る →</a>
+      </div>
+
       <div class="row g-3">
         {% for set in sets %}
           <div class="col-12 col-md-4">
             <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
-              <div class="border rounded-3 p-3 h-100">
-                <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+              <div class="set-tile p-3 h-100">
+                <div class="ratio ratio-16x9 rounded-4 overflow-hidden">
                   <img
                     src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
                     alt="{{ set.name }}"
@@ -219,17 +368,17 @@
                     onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
                   >
                 </div>
-
                 <div class="fw-bold mt-2">{{ set.name }}</div>
-                {% if set.description %}<div class="text-muted small">{{ set.description }}</div>{% endif %}
+                {% if set.description %}
+                  <div class="text-muted small">{{ set.description }}</div>
+                {% endif %}
               </div>
             </a>
           </div>
         {% empty %}
-          <p>おすすめセットはまだありません</p>
+          <p class="mb-0">おすすめセットはまだありません</p>
         {% endfor %}
       </div>
-      <a class="d-inline-block mt-3" href="{% url 'dicon_app:set_list' %}">おすすめセットをもっと見る</a>
     </div>
   </div>
 

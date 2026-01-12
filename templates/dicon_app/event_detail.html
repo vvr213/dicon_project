@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% static 'img/sets/placeholder.jpg' as placeholder_img %}
+
+{% block title %}{{ event.title }}｜イベント｜Dicon Project{% endblock %}
+
+{% block content %}
+<div class="top-container py-3">
+
+  <div class="card-soft mb-3">
+    <div class="card-body">
+      <a class="small text-decoration-none" href="{% url 'dicon_app:event_list' %}">← 一覧へ戻る</a>
+
+      <div class="d-flex align-items-center gap-2 flex-wrap mt-2">
+        <span class="badge-soft badge-cat">{{ event.get_category_display }}</span>
+        <span class="small text-muted">
+          {{ event.start_date }}{% if event.is_multi_day %} 〜 {{ event.end_date }}{% endif %}
+        </span>
+        {% if event.is_featured %}<span class="badge-soft badge-hot">PICKUP</span>{% endif %}
+      </div>
+
+      <h1 class="h4 mt-2 mb-2">{{ event.title }}</h1>
+
+      {% if event.summary %}
+        <div class="text-muted">{{ event.summary }}</div>
+      {% endif %}
+
+      <div class="mt-3">
+        {% if event.image %}
+          <img src="{% static event.image %}" alt="{{ event.title }}" class="img-fluid rounded-4"
+               onerror="this.onerror=null;this.src='{{ placeholder_img }}';">
+        {% else %}
+          <img src="{{ placeholder_img }}" alt="placeholder" class="img-fluid rounded-4">
+        {% endif %}
+      </div>
+
+      <div class="mt-3">
+        {% if event.location %}
+          <div class="small text-muted">📍 {{ event.location }}</div>
+        {% endif %}
+      </div>
+
+      {% if event.description %}
+        <hr class="my-3">
+        <div class="lh-lg">{{ event.description|linebreaksbr }}</div>
+      {% endif %}
+
+      <hr class="my-3">
+
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn btn-success" href="{% url 'dicon_app:street_list' %}">商店街（通り）を見る</a>
+        <a class="btn btn-outline-secondary" href="{{ share_url }}" target="_blank" rel="noopener">共有リンク</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

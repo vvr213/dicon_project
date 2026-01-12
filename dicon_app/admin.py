@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Street, Shop, Product, Set, HeroSlide
+from .models import Street, Shop, Product, Set, HeroSlide, Event
 
 
 @admin.register(Street)
@@ -41,3 +41,12 @@ class HeroSlideAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("title",)
     ordering = ("order",)
+
+
+# 1/12追加
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ("title", "start_date", "end_date", "category", "is_featured", "is_active")
+    list_filter = ("category", "is_featured", "is_active", "start_date")
+    search_fields = ("title", "summary", "body", "location")
+    prepopulated_fields = {"slug": ("title",)}
