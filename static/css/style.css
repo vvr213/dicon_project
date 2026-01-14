@@ -723,3 +723,95 @@ body{
 @media (max-width: 420px){
   .hero-tab{ padding: 10px 12px; }
 }
+
+
+
+/* =========================
+   定番イベント（横スクロール）
+   ========================= */
+   .fixed-events-scroll{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding:6px 2px 10px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .fixed-events-scroll::-webkit-scrollbar{
+    height:8px;
+  }
+  .fixed-events-scroll::-webkit-scrollbar-thumb{
+    border-radius:999px;
+    background: rgba(0,0,0,0.12);
+  }
+  
+  .fixed-event-chip{
+    flex: 0 0 auto;
+    width: 320px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:10px;
+    border-radius:18px;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    scroll-snap-align:start;
+  }
+  
+  .fixed-event-thumb{
+    width:72px;
+    height:72px;
+    border-radius:16px;
+    overflow:hidden;
+    flex: 0 0 auto;
+  }
+  
+  .fixed-event-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  
+  .fixed-event-title{
+    font-weight:700;
+    font-size:0.95rem;
+    line-height:1.2;
+  }
+  
+  .fixed-event-sub{
+    font-size:0.8rem;
+    color: rgba(0,0,0,0.55);
+    margin-top:4px;
+  }
+  
+  /* スマホは少し幅を狭く */
+  @media (max-width: 576px){
+    .fixed-event-chip{
+      width: 280px;
+    }
+  }
+
+  
+  /* ✅ aタグなら入れておくと安心 */
+.fixed-event-chip{
+  text-decoration: none;
+  color: inherit;
+  transition: transform .12s ease, box-shadow .12s ease; /* ちょい今っぽく */
+}
+
+.fixed-event-chip:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(0,0,0,.10);
+}
+
+/* ✅ 文字が長くても崩れない（省略） */
+.fixed-event-meta{ min-width: 0; }  /* ← これが意外と重要 */
+
+.fixed-event-title,
+.fixed-event-sub{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

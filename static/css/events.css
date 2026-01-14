@@ -1,0 +1,157 @@
+/* ============================================
+   DICON Events Pack (events.css)  2026-01
+   - 「イベント/告知」だけを派手にする専用CSS
+   - 既存の style.css を壊さず “上書き” で効かせる
+   ============================================ */
+
+   :root{
+    --ev-radius: 18px;
+    --ev-border: rgba(0,0,0,.08);
+    --ev-shadow: 0 12px 34px rgba(0,0,0,.08);
+    --ev-shadow-soft: 0 8px 22px rgba(0,0,0,.06);
+    --ev-glow-blue: rgba(13,110,253,.16);
+    --ev-glow-green: rgba(25,135,84,.14);
+  }
+  
+  /* hero枠 */
+  .event-hero{
+    background:
+      radial-gradient(900px 280px at 15% 0%, var(--ev-glow-blue), transparent 60%),
+      radial-gradient(700px 260px at 90% 10%, var(--ev-glow-green), transparent 55%),
+      rgba(255,255,255,.72);
+    border: 1px solid var(--ev-border);
+    border-radius: var(--ev-radius);
+  }
+  
+  /* homeのイベントカード等 */
+  .event-card{
+    border-radius: var(--ev-radius);
+    border: 1px solid var(--ev-border);
+    background: rgba(255,255,255,.86);
+    box-shadow: var(--ev-shadow-soft);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .event-card:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--ev-shadow);
+  }
+  
+  .event-hero .hero-img{
+    filter: saturate(1.06) contrast(1.05);
+  }
+  
+  /* PICKUP見た目 */
+  .badge-soft.badge-hot{
+    background: rgba(255,193,7,.18);
+    border: 1px solid rgba(255,193,7,.28);
+    color: rgba(0,0,0,.75);
+  }
+  
+  /* -----------------------------
+     定番イベント（横スクロール）
+  ----------------------------- */
+  .fixed-events-scroll{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding:8px 2px 12px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .fixed-events-scroll::-webkit-scrollbar{ height:8px; }
+  .fixed-events-scroll::-webkit-scrollbar-thumb{
+    border-radius:999px;
+    background: rgba(0,0,0,0.14);
+  }
+  
+  .fixed-event-chip{
+    flex: 0 0 auto;
+    width: 320px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:12px;
+    border-radius: var(--ev-radius);
+    background: rgba(255,255,255,0.88);
+    border: 1px solid var(--ev-border);
+    box-shadow: var(--ev-shadow-soft);
+    scroll-snap-align:start;
+  
+    text-decoration: none;
+    color: inherit;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .fixed-event-chip:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--ev-shadow);
+  }
+  
+  .fixed-event-thumb{
+    width:72px;
+    height:72px;
+    border-radius:16px;
+    overflow:hidden;
+    flex: 0 0 auto;
+    background: rgba(0,0,0,.03);
+  }
+  .fixed-event-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  
+  .fixed-event-meta{ min-width: 0; }
+  .fixed-event-title{
+    font-weight:800;
+    font-size:0.95rem;
+    line-height:1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fixed-event-sub{
+    font-size:0.82rem;
+    color: rgba(0,0,0,0.58);
+    margin-top:4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  @media (max-width: 576px){
+    .fixed-event-chip{ width: 280px; }
+  }
+  
+  /* -----------------------------
+     イベント一覧（event_list.html）
+  ----------------------------- */
+  .dicon-event-list .card{
+    border-radius: var(--ev-radius) !important;
+    border: 1px solid var(--ev-border) !important;
+    box-shadow: var(--ev-shadow-soft);
+  }
+  .dicon-event-list .card:hover{
+    transform: translateY(-2px);
+    transition: transform .15s ease;
+  }
+  .dicon-event-list .card-img-top{
+    object-fit: cover;
+  }
+  
+  /* -----------------------------
+     イベント詳細（event_detail.html）
+  ----------------------------- */
+  .dicon-event-detail .card{
+    border-radius: var(--ev-radius) !important;
+    border: 1px solid var(--ev-border) !important;
+    box-shadow: var(--ev-shadow);
+  }
+  .dicon-event-detail .event-body{
+    line-height: 1.85;
+    font-size: 1.02rem;
+  }
+  .dicon-event-detail .event-actions .btn{
+    border-radius: 999px;
+  }
+  

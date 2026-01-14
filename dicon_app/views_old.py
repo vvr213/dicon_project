@@ -60,24 +60,19 @@ def home(request):
     today = timezone.localdate()
 
     # 未来だけ見せたい（おすすめ）
-    # ※「start_date__gte=today」だけだと、複数日イベント（開始が過去でも終了が未来）を拾えないので、
-    #   event_list() と同じ考え方（終了日が未来なら表示）に揃えて事故を防ぐ。
-    base_upcoming = Event.objects.filter(is_active=True).filter(
-        Q(end_date__gte=today) |
-        Q(end_date__isnull=True, start_date__gte=today)
-    ).order_by("start_date", "-created_at")
+    base_upcoming = Event.objects.filter(
+        is_active=True,
+        start_date__gte=today
+    ).order_by("start_date")
 
-    # ピックアップ（is_featured=True）を優先してトップに出す
     featured_events = base_upcoming.filter(is_featured=True)[:5]
 
-    # 保険：PICKUPが0件なら、直近のイベントを自動でPICKUPに回す
+    # ✅ 保険：PICKUPが0件なら、直近のイベントを自動でPICKUPに回す
     # （is_featured を付け忘れても「イベント枠が寂しくならない」）
     if not featured_events:
         featured_events = base_upcoming[:5]
 
-    # 一覧カード用の「直近イベント」
     upcoming_events = base_upcoming[:12]
-
 
     # 過去も混ぜたいなら：↑の start_date__gte を消すだけでOK
 
@@ -204,44 +199,30 @@ def event_list(request):
     tag = (request.GET.get("tag") or "").strip()
     q = (request.GET.get("q") or "").strip()
 
-    # 複数日イベントも拾う（終了日が未来なら表示）
+    # ✅ home.html と整合：start_date / end_date ベースで「今日以降」を表示
     qs = Event.objects.filter(is_active=True).filter(
-        Q(end_date__gte=today) |
-        Q(end_date__isnull=True, start_date__gte=today)
-    ).order_by("start_date", "-created_at")
-
-    # tag は category として扱う
-    # tag に「night」(value) が来ても「ナイト屋台」(label) が来ても動くようにする
-    value_to_label = dict(Event.CATEGORY_CHOICES)             # {"night": "ナイト屋台", ...}
-    label_to_value = {v: k for k, v in value_to_label.items()} # {"ナイト屋台": "night", ...}
+        Q(start_date__gte=today) |
+        Q(end_date__gte=today, end_date__isnull=False)
+    ).order_by("start_date")
 
     if tag:
-        tag_value = label_to_value.get(tag, tag)  # labelならvalueに変換、違うならそのまま
-        qs = qs.filter(category=tag_value)
+        # ↓ここはあなたのEventモデルに合わせてどちらか
+        qs = qs.filter(tag=tag)            # tag が CharField の場合
+        # qs = qs.filter(tags__slug=tag)   # tags が多対多/Taggit の場合
 
-    # 検索（title/summary/body/location）
     if q:
-        qs = qs.filter(
-            Q(title__icontains=q) |
-            Q(summary__icontains=q) |
-            Q(body__icontains=q) |
-            Q(location__icontains=q)
-        )
+        qs = qs.filter(Q(title__icontains=q) | Q(summary__icontains=q))
 
+    # ✅ テンプレは dicon_app 配下に統一（他のrenderと揃える）
     return render(request, "dicon_app/event_list.html", {
         "events": qs,
         "tag": tag,
         "q": q,
-        "today": today,
-        "category_choices": Event.CATEGORY_CHOICES,  # テンプレでプルダウン生成に使う
+        "crumbs": [{"label": "イベント一覧", "url": None}],
     })
 
 
 def event_detail(request, slug):
     event = get_object_or_404(Event, slug=slug, is_active=True)
     share_url = request.build_absolute_uri(event.get_absolute_url())
-    return render(request, "dicon_app/event_detail.html", {
-        "event": event,
-        "share_url": share_url,
-    })
-
+    return render(request, "dicon_app/event_detail.html", {"event": event, "share_url": share_url})

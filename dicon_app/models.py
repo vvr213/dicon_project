@@ -113,6 +113,12 @@ class Event(models.Model):
         ("sale", "特売"),
         ("season", "季節"),
         ("other", "その他"),
+        
+        # ↓ 定番イベント用（URLの ?tag=xxx と一致させる）# 1/12追加
+        ("night", "ナイト屋台"),
+        ("tasting", "試食リレー"),
+        ("retro", "レトロ歓迎"),
+        ("rainy", "雨の日"),
     ]
 
     title = models.CharField("タイトル", max_length=120)

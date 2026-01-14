@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
+
+{# 画像プレースホルダ（用途別に分ける） #}
 {% static 'img/sets/placeholder.jpg' as placeholder_img %}
 {% static 'img/consult/placeholder.jpg' as consult_placeholder %}
+{% static 'img/events/placeholder.jpg' as event_placeholder %}
 
 {% block title %}トップ｜Dicon Project{% endblock %}
 
@@ -30,25 +33,45 @@
                       <div class="col-12 col-md-5">
                         <div class="ratio ratio-16x9 rounded-4 overflow-hidden">
                           {% if e.image %}
-                            <img src="{% static e.image %}" alt="{{ e.title }}" class="w-100 h-100 object-fit-cover" loading="lazy" decoding="async"
-                                 onerror="this.onerror=null;this.src='{{ placeholder_img }}';">
+                            <img
+                              src="{% static e.image %}"
+                              alt="{{ e.title }}"
+                              class="w-100 h-100 object-fit-cover hero-img"
+                              loading="lazy"
+                              decoding="async"
+                              onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
+                            >
                           {% else %}
-                            <img src="{{ placeholder_img }}" alt="placeholder" class="w-100 h-100 object-fit-cover" loading="lazy" decoding="async">
+                            <img
+                              src="{{ event_placeholder }}"
+                              alt="placeholder"
+                              class="w-100 h-100 object-fit-cover hero-img"
+                              loading="lazy"
+                              decoding="async"
+                            >
                           {% endif %}
                         </div>
                       </div>
+
                       <div class="col-12 col-md-7">
                         <div class="d-flex align-items-center gap-2 flex-wrap">
                           <span class="badge-soft badge-cat">{{ e.get_category_display }}</span>
                           <span class="small text-muted">
                             {{ e.start_date }}{% if e.is_multi_day %} 〜 {{ e.end_date }}{% endif %}
                           </span>
-                          <span class="badge-soft badge-hot">PICKUP</span>
+                          {# PICKUP は “ピックアップ指定された時だけ” 表示する #}
+                          {% if e.is_featured %}
+                            <span class="badge-soft badge-hot">PICKUP</span>
+                          {% endif %}
+                          
                         </div>
+
                         <div class="fw-bold fs-5 mt-2">{{ e.title }}</div>
+
                         {% if e.summary %}
                           <div class="text-muted mt-2">{{ e.summary }}</div>
                         {% endif %}
+
                         <div class="mt-3">
                           <span class="btn btn-success btn-sm">詳細を見る</span>
                         </div>
@@ -69,7 +92,89 @@
             <span class="visually-hidden">次へ</span>
           </button>
         </div>
+      {% else %}
+        <div class="text-muted mb-3">イベントを追加すると、ここが一気に賑わいます。</div>
       {% endif %}
+
+      {# =========================
+         1/13追加 定番イベント（横スクロール固定）
+      ========================= #}
+      <div class="mt-2 mb-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <div class="small fw-bold">定番イベント</div>
+          <div class="small text-muted">毎週・毎月の“いつもの”</div>
+        </div>
+
+        <div class="fixed-events-scroll">
+          <!-- ①毎週金曜：ナイト屋台 -->
+          <a href="{% url 'dicon_app:event_list' %}?tag=night" class="fixed-event-chip">
+            <div class="fixed-event-thumb">
+              <img
+                src="{% static 'img/events/night-yatai.jpg' %}"
+                alt="ナイト屋台"
+                loading="lazy"
+                decoding="async"
+                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
+              >
+            </div>
+            <div class="fixed-event-meta">
+              <div class="fixed-event-title">毎週金曜：ナイト屋台＆BGMジャック</div>
+              <div class="fixed-event-sub">屋台 × DJ × ちょい飲み</div>
+            </div>
+          </a>
+
+          <!-- ②毎週土曜：試食リレー -->
+          <a href="{% url 'dicon_app:event_list' %}?tag=tasting" class="fixed-event-chip">
+            <div class="fixed-event-thumb">
+              <img
+                src="{% static 'img/events/kobachi-relay.jpg' %}"
+                alt="試食リレー"
+                loading="lazy"
+                decoding="async"
+                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
+              >
+            </div>
+            <div class="fixed-event-meta">
+              <div class="fixed-event-title">毎週土曜：試食（小鉢）リレー</div>
+              <div class="fixed-event-sub">1店1口、はしご試食</div>
+            </div>
+          </a>
+
+          <!-- ③毎月1回：レトロ/コスプレ歓迎 -->
+          <a href="{% url 'dicon_app:event_list' %}?tag=retro" class="fixed-event-chip">
+            <div class="fixed-event-thumb">
+              <img
+                src="{% static 'img/events/retro-day.jpg' %}"
+                alt="レトロ歓迎デー"
+                loading="lazy"
+                decoding="async"
+                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
+              >
+            </div>
+            <div class="fixed-event-meta">
+              <div class="fixed-event-title">毎月1回：レトロ服・コスプレ歓迎デー</div>
+              <div class="fixed-event-sub">撮影OK・特典あり</div>
+            </div>
+          </a>
+
+          <!-- ④雨の日限定：雨割 -->
+          <a href="{% url 'dicon_app:event_list' %}?tag=rainy" class="fixed-event-chip">
+            <div class="fixed-event-thumb">
+              <img
+                src="{% static 'img/events/rainy-sale.jpg' %}"
+                alt="雨の日限定"
+                loading="lazy"
+                decoding="async"
+                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
+              >
+            </div>
+            <div class="fixed-event-meta">
+              <div class="fixed-event-title">雨の日限定：雨割＆ポイント2倍</div>
+              <div class="fixed-event-sub">天気が悪い日ほどお得</div>
+            </div>
+          </a>
+        </div>
+      </div>
 
       {% if upcoming_events %}
         <div class="row g-3">
@@ -96,7 +201,6 @@
     </div>
   </div>
 
-
   <!-- =========================
        Hero（カルーセル＋4導線）
   ========================== -->
@@ -117,14 +221,14 @@
         <!-- 2 -->
         <div class="carousel-item">
           <div class="ratio ratio-16x9">
-            <img src="{% static 'img/hero_shotengai.png' %}" class="w-100 h-100 object-fit-cover" alt="商店街体験" loading="lazy" decoding="async">
+            <img src="{% static 'img/hero_shotengai.png' %}" class="w-100 h-100 object-fit-cover hero-img" alt="商店街体験" loading="lazy" decoding="async">
           </div>
         </div>
 
         <!-- 3 -->
         <div class="carousel-item">
           <div class="ratio ratio-16x9">
-            <img src="{% static 'img/hero_sale.png' %}" class="w-100 h-100 object-fit-cover" alt="特売" loading="lazy" decoding="async">
+            <img src="{% static 'img/hero_sale.png' %}" class="w-100 h-100 object-fit-cover hero-img" alt="特売" loading="lazy" decoding="async">
           </div>
         </div>
 
@@ -140,7 +244,7 @@
         <span class="visually-hidden">Next</span>
       </button>
 
-      <!-- 下の点々：★ここに class 追加 -->
+      <!-- 下の点々 -->
       <div class="carousel-indicators dicon-indicators">
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
@@ -156,8 +260,6 @@
       <a class="hero-tab is-main" href="{% url 'dicon_app:set_list' %}"><span class="tab-no">④</span> おすすめセット（主役）</a>
     </div>
   </div>
-  <!-- ✅ ここで hero-shell を閉じる（超重要） -->
-
 
   <!-- =========================
       刺さる「華やか＋説得力」ブロック
@@ -176,7 +278,6 @@
         </div>
       </div>
 
-      <!-- 青チップ：★ここに class 追加 -->
       <div class="feature-chips">
         <span class="badge-soft">旬の目利き</span>
         <span class="badge-soft">予算内で提案</span>
@@ -187,7 +288,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- =========================
        相談プリセット入口（5枚）
@@ -320,7 +420,6 @@
     </button>
   </div>
 
-
   <!-- =========================
        お知らせ（横スクロール・チップ帯）
   ========================== -->
@@ -341,7 +440,6 @@
       {% endif %}
     </div>
   </div>
-
 
   <!-- =========================
        おすすめセット（主役）
