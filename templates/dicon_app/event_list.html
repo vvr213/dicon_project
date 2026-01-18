@@ -2,18 +2,16 @@
 {% extends "dicon_app/base.html" %}
 {% load static %}
 
-{# ★イベントページだけ events.css を読み込む（事故防止） #}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/events.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container py-4 dicon-event-list">
-  {# 解説作戦：dicon-event-list を付けたページだけ events.css の上書きが効く #}
 
   <div class="d-flex align-items-center justify-content-between mb-3">
     <h1 class="h4 mb-0">イベント一覧</h1>
-    <div class="text-muted small">今日（{{ today }}）以降のイベント</div>
+    <div class="text-muted small">今日（{{ today }}）以降</div>
   </div>
 
   <form class="row g-2 mb-4" method="get" action="">
@@ -21,9 +19,7 @@
       <select class="form-select" name="tag">
         <option value="">カテゴリ：すべて</option>
         {% for value, label in category_choices %}
-          <option value="{{ value }}" {% if tag == value or tag == label %}selected{% endif %}>
-            {{ label }}
-          </option>
+          <option value="{{ value }}" {% if tag == value %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
       </select>
     </div>
@@ -37,6 +33,78 @@
       <button class="btn btn-primary" type="submit">検索</button>
     </div>
   </form>
+
+  <!-- {# ----------------------------
+     定番（常時告知）
+     ---------------------------- #} -->
+  <div class="d-flex align-items-center justify-content-between mt-2 mb-2">
+    <h2 class="h6 mb-0">定番（いつものイベント）</h2>
+    <div class="text-muted small">曜日・月一・5の付く日など</div>
+  </div>
+
+  {% if regular_events %}
+    <div class="row g-3 mb-4">
+      {% for event in regular_events %}
+        <div class="col-12 col-md-6">
+          <div class="card h-100 shadow-sm border-0" style="border-radius:18px;">
+            {% if event.image %}
+              <img src="{% static event.image %}" class="card-img-top"
+                   alt="{{ event.title }}"
+                   style="border-top-left-radius:18px;border-top-right-radius:18px;object-fit:cover;max-height:220px;">
+            {% endif %}
+
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                <span class="badge rounded-pill text-bg-primary">{{ event.get_category_display }}</span>
+                {% if event.is_featured %}
+                  <span class="badge rounded-pill text-bg-warning">PICKUP</span>
+                {% endif %}
+
+                {% if event.display_date_text %}
+                  <span class="text-muted small">{{ event.display_date_text }}</span>
+                {% endif %}
+
+              </div>
+
+              <h3 class="h6 mb-2">{{ event.title }}</h3>
+
+              {% if event.summary %}
+                <p class="mb-2 text-muted">{{ event.summary }}</p>
+              {% endif %}
+
+              {% if event.location %}
+                <div class="small mb-3">
+                  <span class="text-danger">📍</span> {{ event.location }}
+                </div>
+              {% endif %}
+
+              <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-primary btn-sm" href="{{ event.get_absolute_url }}">詳細を見る</a>
+                {% if event.map_url %}
+                  <a class="btn btn-outline-secondary btn-sm" href="{{ event.map_url }}" target="_blank" rel="noopener">地図</a>
+                {% endif %}
+                {% if event.apply_url %}
+                  <a class="btn btn-primary btn-sm" href="{{ event.apply_url }}" target="_blank" rel="noopener">申し込む</a>
+                {% endif %}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-light border mb-4">定番イベントがありません。</div>
+  {% endif %}
+
+
+  <!-- {# ----------------------------
+     スポット（期間/単発）
+     ---------------------------- #} -->
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h2 class="h6 mb-0">今月のイベント（期間/単発）</h2>
+    <div class="text-muted small">start_date が今日以降のもの</div>
+  </div>
 
   {% if events %}
     <div class="row g-3">
@@ -52,21 +120,19 @@
             <div class="card-body">
               <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
                 <span class="badge rounded-pill text-bg-primary">{{ event.get_category_display }}</span>
-
                 {% if event.is_featured %}
                   <span class="badge rounded-pill text-bg-warning">PICKUP</span>
                 {% endif %}
 
                 <span class="text-muted small">
-                  {% if event.end_date and event.end_date > event.start_date %}
-                    {{ event.start_date }} 〜 {{ event.end_date }}
-                  {% else %}
-                    {{ event.start_date }}
-                  {% endif %}
+                  {% if event.display_date_text %}
+                <span class="text-muted small">{{ event.display_date_text }}</span>
+                {% endif %}
+
                 </span>
               </div>
 
-              <h2 class="h6 mb-2">{{ event.title }}</h2>
+              <h3 class="h6 mb-2">{{ event.title }}</h3>
 
               {% if event.summary %}
                 <p class="mb-2 text-muted">{{ event.summary }}</p>
@@ -80,17 +146,11 @@
 
               <div class="d-flex flex-wrap gap-2">
                 <a class="btn btn-outline-primary btn-sm" href="{{ event.get_absolute_url }}">詳細を見る</a>
-
                 {% if event.map_url %}
-                  <a class="btn btn-outline-secondary btn-sm" href="{{ event.map_url }}" target="_blank" rel="noopener">
-                    地図
-                  </a>
+                  <a class="btn btn-outline-secondary btn-sm" href="{{ event.map_url }}" target="_blank" rel="noopener">地図</a>
                 {% endif %}
-
                 {% if event.apply_url %}
-                  <a class="btn btn-primary btn-sm" href="{{ event.apply_url }}" target="_blank" rel="noopener">
-                    申し込む
-                  </a>
+                  <a class="btn btn-primary btn-sm" href="{{ event.apply_url }}" target="_blank" rel="noopener">申し込む</a>
                 {% endif %}
               </div>
 
@@ -100,9 +160,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="alert alert-light border">
-      条件に合うイベントがありません。
-    </div>
+    <div class="alert alert-light border">条件に合うイベントがありません。</div>
   {% endif %}
 
 </div>

@@ -2,8 +2,10 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 class Street(models.Model):
+    # # 通り（例：○○通り）を表すモデル
     name = models.CharField("通り名", max_length=100, unique=True)
     slug = models.SlugField("スラッグ", max_length=120, unique=True)
 
@@ -16,6 +18,7 @@ class Street(models.Model):
 
 
 class Shop(models.Model):
+    # # 店舗モデル：どの通りに属しているか（street）を外部キーで持つ
     street = models.ForeignKey(
         Street,
         on_delete=models.CASCADE,
@@ -24,7 +27,7 @@ class Shop(models.Model):
     )
     name = models.CharField("店舗名", max_length=120)
     description = models.TextField("説明", blank=True)
-    line_url = models.URLField("LINEリンク", blank=True, null=True) #1/1LINE追加
+    line_url = models.URLField("LINEリンク", blank=True, null=True)  #1/1LINE追加
 
     class Meta:
         verbose_name = "店舗"
@@ -36,6 +39,7 @@ class Shop(models.Model):
 
 
 class Product(models.Model):
+    # # 商品モデル：店舗（shop）にぶら下がる
     name = models.CharField("商品名", max_length=100)
     price = models.IntegerField("通常価格")
     shop = models.ForeignKey(
@@ -61,6 +65,7 @@ class Product(models.Model):
 
 class Set(models.Model):
     """④おすすめセット（献立提案）"""
+    # # セット（献立提案）モデル：複数の商品を紐づけられる
     name = models.CharField("セット名", max_length=120)
     slug = models.SlugField("スラッグ", max_length=140, unique=True)
     description = models.TextField("説明", blank=True)
@@ -87,6 +92,7 @@ class Set(models.Model):
 
 class HeroSlide(models.Model):
     """トップの告知カルーセル"""
+    # # トップページの「固定スライド」用モデル
     title = models.CharField("タイトル", max_length=120)
     subtitle = models.CharField("サブタイトル", max_length=200, blank=True)
 
@@ -104,8 +110,10 @@ class HeroSlide(models.Model):
     def __str__(self):
         return f"{self.order}: {self.title}"
 
+
 # 1/12追加
 class Event(models.Model):
+    # # イベントモデル（季節イベント・定番イベントどちらもここに入れる）
     CATEGORY_CHOICES = [
         ("food", "食"),
         ("experience", "体験"),
@@ -113,8 +121,7 @@ class Event(models.Model):
         ("sale", "特売"),
         ("season", "季節"),
         ("other", "その他"),
-        
-        # ↓ 定番イベント用（URLの ?tag=xxx と一致させる）# 1/12追加
+
         ("night", "ナイト屋台"),
         ("tasting", "試食リレー"),
         ("retro", "レトロ歓迎"),
@@ -124,7 +131,13 @@ class Event(models.Model):
     title = models.CharField("タイトル", max_length=120)
     slug = models.SlugField("スラッグ", max_length=140, unique=True, blank=True)
 
-    start_date = models.DateField("開始日")
+    # ✅ここが今回の「施工」ポイント
+    # # いまは開始日が必須なので、定番イベントを保存すると「このフィールドは必須です」が出る
+    # # → 定番イベントは開始日なし運用にしたいので、start_date を任意に変更する
+    start_date = models.DateField("開始日", blank=True, null=True)
+    # # blank=True：フォーム（admin）で未入力OK
+    # # null=True：DB上もNULLを許可（DateFieldはこれがないと保存できない）
+
     end_date = models.DateField("終了日", blank=True, null=True)
 
     summary = models.CharField("一言説明", max_length=160, blank=True)
@@ -146,16 +159,55 @@ class Event(models.Model):
     created_at = models.DateTimeField("作成日", auto_now_add=True)
     updated_at = models.DateTimeField("更新日", auto_now=True)
 
+    # ✅ ここから追加（定番・告知期間）
+    is_regular = models.BooleanField(
+        "定番（繰り返し）",
+        default=False,
+        help_text="曜日イベントなど、常時表示したいもの"
+    )
+
+    schedule_text = models.CharField(
+        "開催パターン（表示用）",
+        max_length=120,
+        blank=True,
+        help_text="例：毎週金曜 17:00〜 / 毎月第2土曜 / 5の付く日"
+    )
+
+    announce_from = models.DateField(
+        "告知開始日",
+        null=True,
+        blank=True,
+        help_text="空なら即表示"
+    )
+
+    announce_until = models.DateField(
+        "告知終了日",
+        null=True,
+        blank=True,
+        help_text="空ならずっと表示"
+    )
+    # ✅ 追加ここまで
+
     class Meta:
+        # ✅ 注意：start_date が NULL になるので ordering に start_date を使うと
+        # # DBの並びがちょっと読みづらくなることがある
+        # # ただ「いま動いている並び」を崩したくないなら一旦このままでOK
         ordering = ["start_date", "-created_at"]
         verbose_name = "イベント"
         verbose_name_plural = "イベント"
+
+    # 差込場所：Event クラス内（str の上あたり推奨）
+    def clean(self):
+        # スポット（定番ではない）場合は開始日が必要
+        if not self.is_regular and not self.start_date:
+            from django.core.exceptions import ValidationError
+            raise ValidationError({"start_date": "スポット（期間/単発）のイベントは開始日が必要です。"})
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        # slugが空なら自動生成（日本語タイトルでも一旦 slugify で作る）
+        # # slugが空ならタイトルから自動生成
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
@@ -165,11 +217,35 @@ class Event(models.Model):
 
     @property
     def is_multi_day(self):
-        # 終了日が開始日より後のときだけ「複数日」
+        # ✅ start_date が None でも落ちないようにガード
+        if not self.start_date:
+            return False
         return bool(self.end_date and self.end_date > self.start_date)
 
     @property
     def is_upcoming(self):
+        # ✅ start_date が None の場合は「定番」とみなして True 扱いにしておくと運用が楽
+        # # （定番は開催日で期限切れにならないため）
         today = timezone.localdate()
+        if self.is_regular:
+            return True
+        if not self.start_date:
+            return False
         end = self.end_date or self.start_date
         return end >= today
+
+    @property
+    def display_date_text(self):
+        # ✅ テンプレ表示用：定番なら schedule_text を優先、季節なら日付
+        # # home.html の「開始日が出ちゃう問題」を、この1つで統一して解決できる
+        if self.is_regular:
+            return self.schedule_text or "定番イベント"
+        # スポット：開始日がないケースは想定外だが、念のため
+        if not self.start_date:
+            return ""
+        # 複数日
+        if self.end_date and self.end_date > self.start_date:
+            return f"{self.start_date} 〜 {self.end_date}"
+        # 単日
+        return f"{self.start_date}"
+

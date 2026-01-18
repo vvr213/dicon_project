@@ -122,8 +122,17 @@ def product_detail(request, pk):
 # 通り→店舗→商品
 # --------------------
 def street_list(request):
+    # ✅ 追加：相談プリセットの引き継ぎ（迷子防止）
+    preset = request.GET.get("preset")  # 例: "prep" / "sashimi" など
+
     streets = Street.objects.all().order_by("name")
-    return render(request, "dicon_app/street_list.html", {"streets": streets, "crumbs": []})
+
+    context = {
+        "streets": streets,
+        "crumbs": [],
+        "preset": preset,  # ✅ テンプレで ?preset= を付けられる
+    }
+    return render(request, "dicon_app/street_list.html", context)
 
 
 def shop_list_by_street(request, street_slug):

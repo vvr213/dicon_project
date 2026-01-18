@@ -815,3 +815,229 @@ body{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+/* =========================
+   Top: Consult Hero (shotengai know-how)
+   ========================= */
+
+   .consult-hero {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+  }
+  
+  .consult-hero-inner {
+    padding: 18px 16px;
+    background:
+      radial-gradient(900px 320px at 15% 10%, rgba(255, 209, 220, 0.55), transparent 60%),
+      radial-gradient(900px 360px at 85% 15%, rgba(205, 240, 255, 0.55), transparent 60%),
+      radial-gradient(900px 420px at 55% 120%, rgba(224, 255, 233, 0.60), transparent 60%),
+      rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(6px);
+  }
+  
+  .consult-hero-title {
+    letter-spacing: 0.02em;
+  }
+  
+  .consult-hero-sub {
+    max-width: 56ch;
+  }
+  
+  .consult-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .consult-hero-badges .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(40, 120, 90, 0.14);
+    color: rgba(20, 40, 32, 0.9);
+  }
+  
+  .consult-hero-cta {
+    box-shadow: 0 10px 20px rgba(25, 135, 84, 0.18);
+  }
+  
+  .consult-mini-card {
+    height: 100%;
+    border-radius: 18px;
+    padding: 14px 14px 12px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  
+  .consult-mini-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.10);
+  }
+  
+  .consult-mini-kicker {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(25, 135, 84, 0.10);
+    color: rgba(25, 135, 84, 0.95);
+    margin-bottom: 8px;
+  }
+  
+  .consult-mini-title {
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  
+  .consult-mini-desc {
+    font-size: 13px;
+    color: rgba(30, 30, 30, 0.72);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  
+  .consult-mini-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .consult-mini-tags .pill {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(235, 245, 255, 0.85);
+    border: 1px solid rgba(0, 90, 140, 0.14);
+    color: rgba(0, 70, 110, 0.85);
+  }
+  
+  .consult-mini-action {
+    font-weight: 700;
+    font-size: 13px;
+    color: rgba(25, 135, 84, 0.95);
+  }
+  
+  @media (min-width: 768px) {
+    .consult-hero-inner {
+      padding: 22px 20px;
+    }
+  }
+  
+
+
+  /* =========================
+   トップ：相談スポットライト（/consult/ の熱量をトップへ）
+========================= */
+.consult-spotlight {
+  background: rgba(255,255,255,.78);
+  border: 1px solid var(--dicon-border);
+  border-radius: var(--dicon-radius);
+  box-shadow: var(--dicon-shadow-soft);
+  overflow: hidden;
+}
+
+.consult-spotlight-inner {
+  padding: 14px;
+}
+
+.consult-spotlight-media {
+  position: relative;
+  border-radius: calc(var(--dicon-radius) - 6px);
+  overflow: hidden;
+  box-shadow: var(--dicon-shadow-soft);
+}
+
+.consult-spotlight-badge {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.consult-spotlight-title {
+  letter-spacing: .02em;
+}
+
+.consult-spotlight-body {
+  padding: 2px 2px 2px 2px;
+}
+
+.consult-spotlight-points {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.consult-spotlight-examples {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.consult-example-card {
+  background: rgba(255,255,255,.86);
+  border: 1px solid var(--dicon-border);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: var(--dicon-shadow-soft);
+}
+
+.consult-example-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-green { background: rgba(46, 204, 113, .16); }
+.badge-blue  { background: rgba(52, 152, 219, .16); }
+.badge-pink  { background: rgba(255, 107, 129, .16); }
+
+.consult-example-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(240, 248, 255, .9);
+  font-size: 12px;
+}
+
+.consult-example-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #1a7f37;
+  text-decoration: none;
+}
+
+.consult-example-link:hover {
+  text-decoration: underline;
+}
+
+/* PCで3枚横並びにして“派手”を作る */
+@media (min-width: 768px) {
+  .consult-spotlight-inner { padding: 16px; }
+  .consult-spotlight-examples {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

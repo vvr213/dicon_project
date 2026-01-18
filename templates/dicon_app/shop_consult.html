@@ -1,51 +1,123 @@
 {% extends "base.html" %}
-{% block title %}{{ shop.name }}に相談 | Dicon{% endblock %}
+{% load static %}
+{% block title %}相談｜{{ shop.name }}｜Dicon{% endblock %}
 
 {% block content %}
-<div class="container py-4" style="max-width: 720px;">
-  <h2 class="mb-3">{{ shop.name }} に相談</h2>
+<style>
+  .consult-shell { max-width: 980px; }
+  .card-soft {
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,.06);
+    background: #fff;
+    box-shadow: 0 10px 22px rgba(0,0,0,.05);
+  }
+  .guide-chip {
+    display:inline-flex; align-items:center;
+    padding:.32rem .55rem; border-radius:999px;
+    background: rgba(230,57,70,.10);
+    border: 1px solid rgba(230,57,70,.18);
+    font-size: .78rem;
+  }
+  .draft-area { width: 100%; min-height: 220px; border-radius: 14px; }
+  .btn-pill { border-radius: 999px; }
+</style>
 
-  {% if not shop.line_url %}
-    <div class="alert alert-warning">
-      この店舗はまだLINEリンクが登録されていません（管理画面で shop.line_url を設定してください）
+<div class="container py-4 consult-shell">
+
+  <div class="card-soft p-3 p-md-4 mb-3">
+    <div class="d-flex align-items-start justify-content-between gap-2 flex-wrap">
+      <div>
+        <h1 class="h4 mb-1">相談：{{ shop.name }}</h1>
+        <div class="text-muted small">
+          商店街のプロに、迷うところだけ相談。下ごしらえ／目利き／段取りを言語化して伝えます。
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap">
+        {# ここは今の固定チップのままでもOK。後で preset に応じて切替できます #}
+        <span class="guide-chip">段取り</span>
+        <span class="guide-chip">下ごしらえ</span>
+        <span class="guide-chip">予算内</span>
+        <span class="guide-chip">失敗しにくい</span>
+      </div>
     </div>
-  {% endif %}
 
-  <label class="form-label">送る文章（下書き）</label>
-  <textarea id="draftText" class="form-control" rows="8" readonly>{{ draft }}</textarea>
-
-  <div class="d-flex gap-2 mt-3">
-    <button type="button" class="btn btn-outline-secondary" id="copyBtn">
-      コピー
-    </button>
-
-    {% if shop.line_url %}
-      <a class="btn btn-success" href="{{ shop.line_url }}" target="_blank" rel="noopener">
-        LINEを開く
+    {# ✅ 追加：戻る導線（相談プリセットへ） #}
+    <div class="d-flex gap-2 flex-wrap mt-3">
+      <a class="btn btn-outline-primary btn-sm btn-pill"
+         href="{{ consult_home_url }}">
+        相談プリセットへ戻る
       </a>
-    {% else %}
-      <button class="btn btn-success" type="button" disabled>LINEを開く</button>
-    {% endif %}
 
-    <a class="btn btn-link" href="{% url 'dicon_app:shop_detail' shop.pk %}">
-      店詳細に戻る
-    </a>
+      <a class="btn btn-outline-dark btn-sm btn-pill"
+         href="{{ back_to_shop_detail_url }}">
+        お店詳細へ戻る
+      </a>
+    </div>
   </div>
 
-  <p class="text-muted small mt-3 mb-0">
-    ※「コピー」→「LINEを開く」→トークに貼り付け、の流れで使います。
-  </p>
+  <div class="card-soft p-3 p-md-4">
+    <div class="fw-bold mb-2">LINEに送る相談文（下書き）</div>
+    <div class="text-muted small mb-3">
+      下の文章をコピーして、LINEでお店に送ってください。必要ならこの場で書き直してOK。
+    </div>
+
+    <textarea id="draft" class="form-control draft-area" spellcheck="false">{{ draft }}</textarea>
+
+    <div class="d-flex gap-2 flex-wrap mt-3 align-items-center">
+      <button id="copyBtn" class="btn btn-success btn-pill">コピーする</button>
+
+      {% if line_url %}
+        <a class="btn btn-outline-success btn-pill" href="{{ line_url }}" target="_blank" rel="noopener">
+          LINEを開く
+        </a>
+      {% else %}
+        <span class="text-muted small">
+          このお店はLINEリンク未設定です（管理画面で line_url を入力してください）
+        </span>
+      {% endif %}
+
+      <button id="resetBtn" class="btn btn-outline-dark btn-pill">元に戻す</button>
+    </div>
+
+    <div id="copyMsg" class="text-muted small mt-2" style="display:none;">
+      コピーしました。LINEを開いて貼り付けて送ってください。
+    </div>
+
+    <hr class="my-4">
+
+    <div class="fw-bold mb-2">相談のコツ（おばちゃんの段取り）</div>
+    <ul class="small mb-0">
+      <li>人数と予算は“だいたい”でOK（500円刻みでもOK）</li>
+      <li>苦手・アレルギーは最優先で書く</li>
+      <li>「下ごしらえ希望（カット/あく抜き/下味）」を書くだけで一気に伝わる</li>
+      <li>受け取り時間は“幅”で書くと通りやすい（例：18:00〜18:30）</li>
+    </ul>
+  </div>
+
 </div>
 
 <script>
-  document.getElementById("copyBtn").addEventListener("click", async () => {
-    const text = document.getElementById("draftText").value;
-    try {
-      await navigator.clipboard.writeText(text);
-      alert("コピーしました！");
-    } catch (e) {
-      alert("コピーに失敗しました。手動で選択してコピーしてください。");
-    }
-  });
+  (function () {
+    const original = document.getElementById("draft").value;
+    const draft = document.getElementById("draft");
+    const copyBtn = document.getElementById("copyBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const copyMsg = document.getElementById("copyMsg");
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(draft.value);
+        copyMsg.style.display = "block";
+        setTimeout(() => { copyMsg.style.display = "none"; }, 2500);
+      } catch (e) {
+        alert("コピーに失敗しました。手動で選択してコピーしてください。");
+      }
+    });
+
+    resetBtn.addEventListener("click", () => {
+      draft.value = original;
+    });
+  })();
 </script>
 {% endblock %}

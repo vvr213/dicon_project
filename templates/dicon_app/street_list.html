@@ -9,9 +9,9 @@
       <li>
         <!-- <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}"> -->
         <!-- <slug> を手打ちする必要ゼロ -->
-        <a href="{% url 'dicon_app:shop_list_by_street' street.slug %}">
-          {{ street.name }}
-        </a>
+          <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}{% if preset %}?preset={{ preset }}{% endif %}">
+            {{ street.name }}
+          </a>
       </li>
     {% empty %}
       <li>通りがまだありません</li>

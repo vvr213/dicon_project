@@ -45,7 +45,7 @@
 
       <div class="collapse navbar-collapse" id="globalNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:street_list' %}">通り一覧</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:street_list' %}">店舗一覧</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:sale_list' %}">特売</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:set_list' %}">おすすめセット</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:product_list' %}">商品一覧</a></li>
@@ -55,6 +55,11 @@
           {% if dicon_nav_show_events|default:True %}
             <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:event_list' %}">イベント</a></li>
           {% endif %}
+
+          {# 追加：メニューに「相談」 #}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dicon_app:consult_home' %}">相談</a>
+          </li>
         </ul>
 
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -93,7 +98,31 @@
   ページ専用：ナビ下サブヘッダー（必要なページだけ使う）
   --------------------
   {% endcomment %}
-  {% block subheader %}{% endblock %}
+  {% block subheader %}
+  {% if crumbs %}
+    <nav class="bg-light border-bottom">
+      <div class="container py-2">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dicon_app:home' %}">ホーム</a>
+          </li>
+
+          {% for c in crumbs %}
+            {% if c.url %}
+              <li class="breadcrumb-item">
+                <a href="{{ c.url }}">{{ c.label }}</a>
+              </li>
+            {% else %}
+              <li class="breadcrumb-item active" aria-current="page">
+                {{ c.label }}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </div>
+    </nav>
+  {% endif %}
+{% endblock %}
 
   <main class="container py-4">
     {% if messages %}

@@ -74,9 +74,27 @@
           共有リンクをコピー
         </button>
 
-        {% if event.share_text %}
-          <span class="text-muted small">{{ event.share_text }}</span>
-        {% endif %}
+        {# 解説作戦：share_text の有無に関係なく「定番なら schedule_text / スポットなら日付」を必ず出す #}
+        <span class="text-muted small">
+          {% if event.is_regular %}
+            {% if event.schedule_text %}
+              {{ event.schedule_text }}
+            {% else %}
+              定番イベント
+            {% endif %}
+          {% else %}
+            {% if event.end_date and event.end_date > event.start_date %}
+              {{ event.start_date }} 〜 {{ event.end_date }}
+            {% else %}
+              {{ event.start_date }}
+            {% endif %}
+          {% endif %}
+
+          {# 解説作戦：share_text は “補足” として付けたい時だけ出す #}
+          {% if event.share_text %}
+            ／ {{ event.share_text }}
+          {% endif %}
+        </span>
       </div>
 
       <input type="text" id="shareUrl" value="{{ share_url }}" class="form-control mt-2" readonly>

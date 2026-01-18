@@ -3,29 +3,161 @@
 {% block title %}相談プリセット｜Dicon{% endblock %}
 
 {% block content %}
-<div class="container py-4" style="max-width: 980px;">
-  <h1 class="mb-2">お店にカスタム相談！</h1>
-  <p class="text-muted mb-4">まずは相談の種類を選んでください（あとで店を選べます）</p>
+<style>
+  .consult-wrap { max-width: 1040px; }
+  .consult-hero {
+    border-radius: 24px;
+    padding: 18px 18px;
+    background: linear-gradient(135deg, rgba(230,57,70,.08), rgba(69,123,157,.08));
+    border: 1px solid rgba(0,0,0,.06);
+  }
+  .consult-hero h1 { letter-spacing: .02em; }
+  .consult-sub { line-height: 1.6; }
+  .momiji-chip {
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.35rem .6rem; border-radius: 999px;
+    background: rgba(230,57,70,.10);
+    border: 1px solid rgba(230,57,70,.18);
+    font-size: .82rem;
+  }
+  .trust-block {
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 10px 24px rgba(0,0,0,.05);
+  }
+  .trust-title { font-weight: 800; }
+  .trust-bullets { margin: 0; padding-left: 1.2rem; }
+  .trust-bullets li { margin: .25rem 0; }
+  .preset-card {
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 10px 22px rgba(0,0,0,.05);
+    overflow: hidden;
+    background: #fff;
+    height: 100%;
+  }
+  .preset-img { width: 100%; height: 100%; object-fit: cover; }
+  .chip-row { display:flex; flex-wrap: wrap; gap: .35rem; }
+  .skill-chip {
+    display:inline-flex; align-items:center;
+    padding:.32rem .55rem; border-radius: 999px;
+    background: rgba(69,123,157,.10);
+    border: 1px solid rgba(69,123,157,.18);
+    font-size: .78rem;
+    color: #1d3557;
+  }
+  .ask-chip {
+    display:inline-flex; align-items:center;
+    padding:.32rem .55rem; border-radius: 999px;
+    background: rgba(46,196,182,.10);
+    border: 1px solid rgba(46,196,182,.18);
+    font-size: .78rem;
+    color: #0b3b38;
+  }
+  .btn-primary-soft {
+    border-radius: 999px;
+    padding: .55rem .9rem;
+    border: 1px solid rgba(46,125,50,.25);
+    background: rgba(46,125,50,.08);
+  }
+  .btn-primary-soft:hover { background: rgba(46,125,50,.14); }
+  .note-card {
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.06);
+  }
+</style>
+
+<div class="container py-4 consult-wrap">
+
+  <div class="consult-hero mb-4">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+      <div>
+        <h1 class="mb-2">お店にカスタム相談！</h1>
+        <p class="text-muted mb-0 consult-sub">
+          迷うところだけ相談でOK。人数・予算・苦手を入れると、商店街のプロの段取りで「買い方」が決まります。
+        </p>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <span class="momiji-chip">下ごしらえ</span>
+        <span class="momiji-chip">目利き</span>
+        <span class="momiji-chip">提案</span>
+        <span class="momiji-chip">LINE下書き</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-block p-3 p-md-4 mb-4">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+      <div>
+        <div class="trust-title h5 mb-2">主婦歴50年やで、まかしとき。</div>
+        <div class="text-muted small mb-3">
+          「誰が・何を・どこまで」やってくれるかを先に見せます。これがこのアプリの肝。
+        </div>
+        <ul class="trust-bullets small">
+          <li>予算と人数から、肉・魚・野菜を“ちょうど良く”組みます</li>
+          <li>家で面倒な工程（カット／あく抜き／下味）を、できる範囲で代行します</li>
+          <li>LINEに送れる相談文を、下書きとして自動で作ります</li>
+        </ul>
+      </div>
+      <div class="text-muted small">
+        <span class="skill-chip">不安を先に解消</span>
+        <span class="skill-chip">段取りが決まる</span>
+        <span class="skill-chip">失敗しにくい</span>
+      </div>
+    </div>
+  </div>
 
   <div class="row g-3">
     {% for p in presets %}
       <div class="col-12 col-md-6">
-        <div class="card h-100 shadow-sm">
+        <div class="preset-card">
           <div class="row g-0">
             <div class="col-5">
-              <img src="{% static p.image %}" class="img-fluid rounded-start" alt="{{ p.title }}">
+              <img src="{% static p.image %}" class="preset-img" alt="{{ p.title }}" loading="lazy" decoding="async">
             </div>
             <div class="col-7">
-              <div class="card-body">
-                <h5 class="card-title">{{ p.title }}</h5>
-                <p class="card-text text-muted small">{{ p.desc }}</p>
+              <div class="p-3">
+                <div class="fw-bold">{{ p.title }}</div>
+                <div class="text-muted small mt-1">{{ p.desc }}</div>
 
-                {# 次の拡張：ここから「店を選ぶ」or「最近の店」へ #}
-                <a class="btn btn-outline-success btn-sm"
-                   href="{% url 'dicon_app:street_list' %}">
-                  この相談で進める
-                </a>
-                <span class="text-muted small ms-2">（次にお店を選びます）</span>
+                {% if p.skills %}
+                  <div class="mt-2 small fw-bold">できること（技）</div>
+                  <div class="chip-row mt-1">
+                    {% for s in p.skills %}
+                      <span class="skill-chip">{{ s }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if p.ask %}
+                  <div class="mt-2 small fw-bold">お店に伝えるポイント</div>
+                  <div class="chip-row mt-1">
+                    {% for a in p.ask %}
+                      <span class="ask-chip">{{ a }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <div class="mt-3">
+
+                  {# ★ここが変更点：店が決まるなら「店の相談へ直行」、無ければ「通りへ」 #}
+                  {% if p.shop_pk %}
+                    <a class="btn btn-primary-soft btn-sm"
+                       href="{% url 'dicon_app:shop_consult' p.shop_pk %}?preset={{ p.key }}">
+                      この相談で進める
+                    </a>
+                    <div class="text-muted small mt-2">この相談は、おすすめの店に直行します</div>
+                  {% else %}
+                    <a class="btn btn-primary-soft btn-sm"
+                       href="{% url 'dicon_app:street_list' %}?preset={{ p.key }}">
+                      この相談で進める
+                    </a>
+                    <div class="text-muted small mt-2">次に「通り → お店」を選びます</div>
+                  {% endif %}
+
+                </div>
 
               </div>
             </div>
@@ -35,17 +167,13 @@
     {% endfor %}
   </div>
 
-  <hr class="my-4">
-
-  <div class="d-flex gap-2 flex-wrap">
-    <a class="btn btn-outline-success" href="{% url 'dicon_app:street_list' %}">店名から相談</a>
-    <a class="btn btn-outline-dark" href="{% url 'dicon_app:product_list' %}">商品から相談</a>
-    <span class="text-muted small align-self-center">
-      ※電話/FAX対応は次フェーズで追加（店ごとに表示切替）
-    </span>
+  <div class="note-card p-3 mt-4">
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <a class="btn btn-outline-success" href="{% url 'dicon_app:street_list' %}">店名から相談</a>
+      <a class="btn btn-outline-dark" href="{% url 'dicon_app:product_list' %}">商品から相談</a>
+      <span class="text-muted small">電話/FAX対応は次フェーズで追加（店ごとに表示切替）</span>
+    </div>
   </div>
+
 </div>
 {% endblock %}
-
-<!-- MVPは「まず相談の入口がある」ことが目的なので、ここでは次の遷移をいったん「通り一覧（店選び）」に、
-次のステップで、ここを “店選択ページ” や “最近使った店” に差し替えられるように作る -->

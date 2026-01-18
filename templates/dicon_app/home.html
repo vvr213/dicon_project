@@ -17,15 +17,15 @@
   <div class="card-soft mb-4">
     <div class="card-body">
       <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-2">
-        <h2 class="h5 section-title mb-0">今月のイベント</h2>
+        <h2 class="h5 section-title mb-0">商店街のワクワクイベント</h2>
         <a class="small text-decoration-none" href="{% url 'dicon_app:event_list' %}">一覧を見る →</a>
       </div>
-      <div class="text-muted small mb-3">「毎週なにかある」商店街を見える化。</div>
+      <div class="text-muted small mb-3">「毎週、毎月、季節限定、商店街のたのしいイベント」のご紹介</div>
 
-      {% if featured_events %}
+      {% if event_carousel_items %}
         <div id="eventCarousel" class="carousel slide rounded-4 overflow-hidden mb-3" data-bs-ride="carousel">
           <div class="carousel-inner">
-            {% for e in featured_events %}
+            {% for e in event_carousel_items %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <a href="{{ e.get_absolute_url }}" class="text-decoration-none text-dark">
                   <div class="event-hero p-3 p-md-4">
@@ -55,15 +55,29 @@
 
                       <div class="col-12 col-md-7">
                         <div class="d-flex align-items-center gap-2 flex-wrap">
-                          <span class="badge-soft badge-cat">{{ e.get_category_display }}</span>
-                          <span class="small text-muted">
-                            {{ e.start_date }}{% if e.is_multi_day %} 〜 {{ e.end_date }}{% endif %}
-                          </span>
-                          {# PICKUP は “ピックアップ指定された時だけ” 表示する #}
+
+                          {# ✅ カテゴリ表示：season のときは「季節」と被るので出さない #}
+                          {% if e.category != "season" %}
+                            <span class="badge-soft badge-cat">{{ e.get_category_display }}</span>
+                          {% endif %}
+
+                          {% if e.display_date_text %}
+                            <span class="small text-muted">
+                              {{ e.display_date_text }}
+                            </span>
+                          {% endif %}
+
                           {% if e.is_featured %}
                             <span class="badge-soft badge-hot">PICKUP</span>
                           {% endif %}
-                          
+
+                          {# ✅ 見分け用バッジ（これが欲しかったやつ） #}
+                          {% if e.is_regular %}
+                            <span class="badge-soft">定番イベント</span>
+                          {% else %}
+                            <span class="badge-soft">季節イベント</span>
+                          {% endif %}
+
                         </div>
 
                         <div class="fw-bold fs-5 mt-2">{{ e.title }}</div>
@@ -72,9 +86,8 @@
                           <div class="text-muted mt-2">{{ e.summary }}</div>
                         {% endif %}
 
-                        <div class="mt-3">
-                          <span class="btn btn-success btn-sm">詳細を見る</span>
-                        </div>
+                        {# ✅ 詳細ボタンは削除（カード全体リンクでOK） #}
+
                       </div>
                     </div>
                   </div>
@@ -96,86 +109,6 @@
         <div class="text-muted mb-3">イベントを追加すると、ここが一気に賑わいます。</div>
       {% endif %}
 
-      {# =========================
-         1/13追加 定番イベント（横スクロール固定）
-      ========================= #}
-      <div class="mt-2 mb-3">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <div class="small fw-bold">定番イベント</div>
-          <div class="small text-muted">毎週・毎月の“いつもの”</div>
-        </div>
-
-        <div class="fixed-events-scroll">
-          <!-- ①毎週金曜：ナイト屋台 -->
-          <a href="{% url 'dicon_app:event_list' %}?tag=night" class="fixed-event-chip">
-            <div class="fixed-event-thumb">
-              <img
-                src="{% static 'img/events/night-yatai.jpg' %}"
-                alt="ナイト屋台"
-                loading="lazy"
-                decoding="async"
-                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
-              >
-            </div>
-            <div class="fixed-event-meta">
-              <div class="fixed-event-title">毎週金曜：ナイト屋台＆BGMジャック</div>
-              <div class="fixed-event-sub">屋台 × DJ × ちょい飲み</div>
-            </div>
-          </a>
-
-          <!-- ②毎週土曜：試食リレー -->
-          <a href="{% url 'dicon_app:event_list' %}?tag=tasting" class="fixed-event-chip">
-            <div class="fixed-event-thumb">
-              <img
-                src="{% static 'img/events/kobachi-relay.jpg' %}"
-                alt="試食リレー"
-                loading="lazy"
-                decoding="async"
-                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
-              >
-            </div>
-            <div class="fixed-event-meta">
-              <div class="fixed-event-title">毎週土曜：試食（小鉢）リレー</div>
-              <div class="fixed-event-sub">1店1口、はしご試食</div>
-            </div>
-          </a>
-
-          <!-- ③毎月1回：レトロ/コスプレ歓迎 -->
-          <a href="{% url 'dicon_app:event_list' %}?tag=retro" class="fixed-event-chip">
-            <div class="fixed-event-thumb">
-              <img
-                src="{% static 'img/events/retro-day.jpg' %}"
-                alt="レトロ歓迎デー"
-                loading="lazy"
-                decoding="async"
-                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
-              >
-            </div>
-            <div class="fixed-event-meta">
-              <div class="fixed-event-title">毎月1回：レトロ服・コスプレ歓迎デー</div>
-              <div class="fixed-event-sub">撮影OK・特典あり</div>
-            </div>
-          </a>
-
-          <!-- ④雨の日限定：雨割 -->
-          <a href="{% url 'dicon_app:event_list' %}?tag=rainy" class="fixed-event-chip">
-            <div class="fixed-event-thumb">
-              <img
-                src="{% static 'img/events/rainy-sale.jpg' %}"
-                alt="雨の日限定"
-                loading="lazy"
-                decoding="async"
-                onerror="this.onerror=null;this.src='{{ event_placeholder }}';"
-              >
-            </div>
-            <div class="fixed-event-meta">
-              <div class="fixed-event-title">雨の日限定：雨割＆ポイント2倍</div>
-              <div class="fixed-event-sub">天気が悪い日ほどお得</div>
-            </div>
-          </a>
-        </div>
-      </div>
-
       {% if upcoming_events %}
         <div class="row g-3">
           {% for e in upcoming_events|slice:":6" %}
@@ -184,7 +117,9 @@
                 <div class="event-card p-3 h-100">
                   <div class="d-flex align-items-center gap-2 flex-wrap">
                     <span class="badge-soft badge-cat">{{ e.get_category_display }}</span>
-                    <span class="small text-muted">{{ e.start_date }}</span>
+                    {% if e.display_date_text %}
+                    <span class="text-muted small">{{ e.display_date_text }}</span>
+                    {% endif %}
                   </div>
                   <div class="fw-bold mt-2">{{ e.title }}</div>
                   {% if e.summary %}
@@ -201,12 +136,141 @@
     </div>
   </div>
 
+
+  <!-- =========================
+     ★商店街の相談（主役ブロック：トップ用スポットライト）
+     ねらい：/consult/ の華やかさをトップに “バーン” と持ち込む
+========================== -->
+<section class="consult-spotlight mb-4">
+  <div class="consult-spotlight-inner">
+
+    <div class="row g-3 align-items-stretch">
+
+      <!-- 左：どーんとビジュアル -->
+      <div class="col-12 col-md-5">
+        <div class="consult-spotlight-media">
+          <div class="ratio ratio-1x1">
+            <img
+              src="{% static 'img/consult/hero_top.jpg' %}"
+              alt="商店街のおばちゃん相談"
+              class="w-100 h-100 object-fit-cover"
+              loading="lazy"
+              decoding="async"
+              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
+            >
+          </div>
+
+          <!-- 角に“安心”の小タグ（若年層の不安を先に潰す） -->
+          <div class="consult-spotlight-badge">
+            <span class="badge-soft">売りつけません</span>
+            <span class="badge-soft">迷う所だけOK</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右：コピー＋導線＋相談例 -->
+      <div class="col-12 col-md-7">
+        <div class="consult-spotlight-body">
+
+          <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-2">
+            <div>
+              <h2 class="h4 mb-1 consult-spotlight-title">
+                商店街のプロのおばちゃんら、<br class="d-none d-md-block">
+                主婦歴50年やで。まかしとき。
+              </h2>
+              <div class="text-muted small consult-spotlight-sub">
+                迷うところだけ相談でOK。人数・予算・苦手を入れると、<b>段取り（下ごしらえ/目利き/提案）</b>で「買い方」が決まります。
+              </div>
+            </div>
+
+            <a class="btn btn-success btn-sm consult-spotlight-cta"
+               href="{% url 'dicon_app:consult_home' %}">
+              相談をはじめる →
+            </a>
+          </div>
+
+          <!-- “何をやってくれるか”を先に見せる（肝） -->
+          <ul class="consult-spotlight-points small mb-3">
+            <li>予算と人数で、肉・魚・野菜を <b>ちょうど良く組む</b></li>
+            <li>面倒な工程（カット/あく抜き/下味）を <b>できる範囲で代行</b></li>
+            <li>LINEに送れる相談文を <b>下書きとして自動作成</b></li>
+          </ul>
+
+          <!-- 相談プリセット（トップでは“例”として見せる：4枠じゃなく “1枠内の例” ） -->
+          <div class="consult-spotlight-examples">
+            <div class="consult-example-card">
+              <div class="consult-example-head">
+                <span class="badge-soft badge-green">刺身・盛り・段取り</span>
+              </div>
+              <div class="fw-bold mt-1">刺身盛り、予算で作るよ！まかせてや！</div>
+              <div class="text-muted small mt-1">人数・予算・苦手を入れるだけ。見映えまで段取り。</div>
+              <div class="consult-example-tags">
+                <span class="chip">旬の目利き</span>
+                <span class="chip">盛りの段取り</span>
+                <span class="chip">苦手調整</span>
+              </div>
+              <!-- <a class="consult-example-link" href="{% url 'dicon_app:consult_home' %}">この相談で進める →</a> -->
+            </div>
+
+            <div class="consult-example-card">
+              <div class="consult-example-head">
+                <span class="badge-soft badge-blue">下ごしらえ代行</span>
+              </div>
+              <div class="fw-bold mt-1">ささがき・あく抜き…手間だけ任せて！</div>
+              <div class="text-muted small mt-1">帰ったらすぐ調理。面倒工程を先に片付ける。</div>
+              <div class="consult-example-tags">
+                <span class="chip">カット指定</span>
+                <span class="chip">あく抜き</span>
+                <span class="chip">下味</span>
+              </div>
+              <!-- <a class="consult-example-link" href="{% url 'dicon_app:consult_home' %}">この相談で進める →</a> -->
+            </div>
+
+            <div class="consult-example-card">
+              <div class="consult-example-head">
+                <span class="badge-soft badge-pink">献立の不安を消す</span>
+              </div>
+              <div class="fw-bold mt-1">今夜のおかず、相談して決めよ〜</div>
+              <div class="text-muted small mt-1">好み・予算・作り置きまで含めて提案。</div>
+              <div class="consult-example-tags">
+                <span class="chip">献立提案</span>
+                <span class="chip">予算内</span>
+                <span class="chip">作り置き</span>
+              </div>
+              <!-- <a class="consult-example-link" href="{% url 'dicon_app:consult_home' %}">この相談で進める →</a> -->
+            </div>
+          </div>
+
+          <!-- 下：2導線（迷わせない） -->
+          <div class="d-flex gap-2 flex-wrap mt-3">
+            <a class="btn btn-outline-primary" href="{% url 'dicon_app:consult_home' %}">
+              相談プリセットを全部見る
+            </a>
+            <a class="btn btn-outline-dark btn-sm"
+               href="{% url 'dicon_app:street_list' %}">
+              店を選んで相談する
+            </a>
+          </div>
+
+          <div class="text-muted small mt-2">
+            ※ 相談文は自動で下書きにして、LINEでお店へ送れます（「どこまで頼める？」の不安を先に解消）
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
   <!-- =========================
        Hero（カルーセル＋4導線）
   ========================== -->
   <div class="hero-shell p-3 p-md-4 mb-4">
-    <h1 class="h3 mb-1">トップ</h1>
-    <div class="text-muted small mb-3">今日のごはん、商店街でパパっと。</div>
+    <h1 class="h3 mb-1">diconアプリで下ごしらえ済みの今夜のごはんセット注文🎶</h1>
+    <div class="text-muted small mb-3">お仕事、保育園お迎えの帰り、好きな時間にロッカーから持ち帰り🎶</div>
 
     <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
       <div class="carousel-inner rounded-4 overflow-hidden">
@@ -261,224 +325,10 @@
     </div>
   </div>
 
-  <!-- =========================
-      刺さる「華やか＋説得力」ブロック
-  ========================== -->
-  <div class="card-soft mb-4">
-    <div class="card-body">
-      <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
-        <div>
-          <h2 class="h5 section-title mb-2">主婦歴50年やで、まかしとき。</h2>
-          <div class="section-sub small mb-3">
-            商店街のプロが「何を買えばいい？」の不安を、最短で解消します。
-          </div>
-        </div>
-        <div class="small text-muted">
-          <span class="badge-soft">相談→下書き自動作成</span>
-        </div>
-      </div>
-
-      <div class="feature-chips">
-        <span class="badge-soft">旬の目利き</span>
-        <span class="badge-soft">予算内で提案</span>
-        <span class="badge-soft">下ごしらえ代行</span>
-        <span class="badge-soft">アレルギー配慮</span>
-        <span class="badge-soft">LINEで相談</span>
-        <span class="badge-soft">特売で時短</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================
-       相談プリセット入口（5枚）
-  ========================== -->
-  <div id="consultCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-      <button type="button" data-bs-target="#consultCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
-    </div>
-
-    <div class="carousel-inner consult-shell rounded-4 overflow-hidden">
-
-      <!-- 1 刺身 -->
-      <div class="carousel-item active">
-        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
-          <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img
-              src="{% static 'img/consult/sashimi.jpg' %}"
-              class="img-fluid rounded"
-              alt="刺身盛り"
-              loading="lazy"
-              decoding="async"
-              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
-            >
-          </div>
-          <div>
-            <h3 class="mb-1">刺身盛り、予算で作れます</h3>
-            <p class="text-muted mb-3">人数 / 予算 / 苦手食材を入れて相談</p>
-            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">お店にカスタム相談！</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2 BBQ -->
-      <div class="carousel-item">
-        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
-          <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img
-              src="{% static 'img/consult/bbq.jpg' %}"
-              class="img-fluid rounded"
-              alt="BBQセット"
-              loading="lazy"
-              decoding="async"
-              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
-            >
-          </div>
-          <div>
-            <h3 class="mb-1">BBQ用に、肉と野菜まとめて</h3>
-            <p class="text-muted mb-3">人数 / 予算 / 焼き方（厚切り等）</p>
-            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">この相談で進める</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3 下ごしらえ -->
-      <div class="carousel-item">
-        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
-          <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img
-              src="{% static 'img/consult/prep.jpg' %}"
-              class="img-fluid rounded"
-              alt="下ごしらえ"
-              loading="lazy"
-              decoding="async"
-              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
-            >
-          </div>
-          <div>
-            <h3 class="mb-1">下ごしらえだけお願いしたい</h3>
-            <p class="text-muted mb-3">ささがき / あく抜き / カット</p>
-            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">下書きを作る</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4 おかず -->
-      <div class="carousel-item">
-        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
-          <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img
-              src="{% static 'img/consult/okazu.jpg' %}"
-              class="img-fluid rounded"
-              alt="おかず"
-              loading="lazy"
-              decoding="async"
-              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
-            >
-          </div>
-          <div>
-            <h3 class="mb-1">今夜のおかず、相談して決める</h3>
-            <p class="text-muted mb-3">好み / 予算 / 作り置きもOK</p>
-            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">おかずで相談</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5 スムージー -->
-      <div class="carousel-item">
-        <div class="d-flex align-items-center p-4" style="min-height: 220px;">
-          <div class="me-3 flex-shrink-0" style="width: 180px;">
-            <img
-              src="{% static 'img/consult/smoothie.jpg' %}"
-              class="img-fluid rounded"
-              alt="スムージー"
-              loading="lazy"
-              decoding="async"
-              onerror="this.onerror=null;this.src='{{ consult_placeholder }}';"
-            >
-          </div>
-          <div>
-            <h3 class="mb-1">スムージー用に、果物と野菜をセット</h3>
-            <p class="text-muted mb-3">甘さ / アレルギー / 量を相談</p>
-            <a class="btn btn-success" href="{% url 'dicon_app:consult_home' %}">スムージーで相談</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#consultCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">前へ</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#consultCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">次へ</span>
-    </button>
-  </div>
-
-  <!-- =========================
-       お知らせ（横スクロール・チップ帯）
-  ========================== -->
-  <div class="card-soft mb-3">
-    <div class="card-body">
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-        <h2 class="h5 mb-0 section-title">お知らせ</h2>
-      </div>
-
-      {% if notices %}
-        <div class="notice-strip" aria-label="お知らせ">
-          {% for n in notices %}
-            <a class="notice-chip" href="{{ n.url }}">{{ n.title }}</a>
-          {% endfor %}
-        </div>
-      {% else %}
-        <p class="mb-0 text-muted">お知らせは準備中です</p>
-      {% endif %}
-    </div>
-  </div>
-
-  <!-- =========================
-       おすすめセット（主役）
-  ========================== -->
-  <div class="card-soft mb-3">
-    <div class="card-body">
-      <div class="d-flex align-items-center justify-content-between gap-3 mb-3 flex-wrap">
-        <h2 class="h5 section-title mb-0">おすすめセット</h2>
-        <a class="small text-decoration-none" href="{% url 'dicon_app:set_list' %}">もっと見る →</a>
-      </div>
-
-      <div class="row g-3">
-        {% for set in sets %}
-          <div class="col-12 col-md-4">
-            <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
-              <div class="set-tile p-3 h-100">
-                <div class="ratio ratio-16x9 rounded-4 overflow-hidden">
-                  <img
-                    src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
-                    alt="{{ set.name }}"
-                    class="w-100 h-100 object-fit-cover"
-                    loading="lazy"
-                    decoding="async"
-                    onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
-                  >
-                </div>
-                <div class="fw-bold mt-2">{{ set.name }}</div>
-                {% if set.description %}
-                  <div class="text-muted small">{{ set.description }}</div>
-                {% endif %}
-              </div>
-            </a>
-          </div>
-        {% empty %}
-          <p class="mb-0">おすすめセットはまだありません</p>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
+  <!-- （以下、あなたの元のコードの続きがあるならそのまま下に置いてOK）
+       ※あなたの貼ってくれた home.html はここで途切れてたので、
+         手元のファイルの残り部分は一切いじらず、そのまま残してOKです。
+  -->
 
 </div>
 {% endblock %}

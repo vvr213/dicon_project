@@ -5,16 +5,20 @@
 <h1>{{ street.name }} の店舗</h1>
 
 <ul>
-    {% for shop in shops %}
-      <li>
-        <a href="{% url 'dicon_app:shop_detail' shop_pk=shop.pk %}">
-          {{ shop.name }}
-        </a>
-      </li>
-    {% empty %}
-      <li>この通りにはまだ店舗がありません</li>
-    {% endfor %}
-  </ul>
+  {% for shop in shops %}
+    <li>
+      <a href="{% url 'dicon_app:shop_detail' shop_pk=shop.pk %}{% if preset %}?preset={{ preset }}{% endif %}">
+        {{ shop.name }}
+      </a>
+    </li>
+  {% empty %}
+    <li>この通りにはまだ店舗がありません</li>
+  {% endfor %}
+</ul>
 
-<p><a href="{% url 'dicon_app:street_list' %}">通り一覧へ</a></p>
+<p>
+  <a href="{% url 'dicon_app:street_list' %}{% if preset %}?preset={{ preset }}{% endif %}">
+    通り一覧へ
+  </a>
+</p>
 {% endblock %}
