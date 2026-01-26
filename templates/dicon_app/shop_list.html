@@ -1,24 +1,163 @@
 {% extends "base.html" %}
-{% block title %}{{ street.name }} の店舗{% endblock %}
+{% load static %}
+
+{% block title %}お店一覧・マップ{% endblock %}
 
 {% block content %}
-<h1>{{ street.name }} の店舗</h1>
 
-<ul>
-  {% for shop in shops %}
-    <li>
-      <a href="{% url 'dicon_app:shop_detail' shop_pk=shop.pk %}{% if preset %}?preset={{ preset }}{% endif %}">
-        {{ shop.name }}
+<section class="container py-5 text-center">
+  <h2 class="fw-bold mb-4">商店街マップ</h2>
+  
+  <div id="shop-map" class="rounded-4 shadow-sm border border-2 border-white mx-auto" style="width: 100%; max-width: 800px; height: 400px; z-index: 1;"></div>
+
+  <p class="mt-3 text-muted small">
+    <i class="fa-solid fa-location-dot me-1 text-danger"></i>
+    登録されているお店の位置を表示しています
+  </p>
+</section>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. 地図の初期設定（とりあえず中心を東大阪あたりにセット）
+    var map = L.map('shop-map').setView([34.6631, 135.5862], 15);
+
+    // 2. 地図のデザイン（OpenStreetMapを使用）
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // 3. Djangoからお店データを渡すためのリスト
+    var markers = [];
+
+    // Djangoのループ機能を使って、お店の数だけピンを作る
+    {% for shop in shops %}
+        {% if shop.latitude and shop.longitude %}
+            // ピンを立てる
+            var marker = L.marker([{{ shop.latitude }}, {{ shop.longitude }}]).addTo(map);
+            
+            // クリックした時の吹き出し
+            marker.bindPopup(`
+                <div class="text-center">
+                    <b>{{ shop.name }}</b><br>
+                    <span class="badge bg-secondary">{{ shop.get_category_display }}</span><br>
+                    <a href="{% url 'dicon_app:shop_detail' shop.pk %}" class="btn btn-sm btn-danger mt-2">詳細を見る</a>
+                </div>
+            `);
+            markers.push(marker);
+        {% endif %}
+    {% endfor %}
+
+    // 4. 全部のピンが入るように地図のズームを自動調整
+    if (markers.length > 0) {
+        var group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds());
+    }
+});
+</script>
+
+
+<section class="container pb-5">
+  <div class="text-center mb-5">
+    <h3 class="fw-bold">商店街のプロフェッショナルたち</h3>
+    <p class="text-muted">「いらっしゃい！」元気な声でお待ちしています。</p>
+
+    <div class="container mb-5">
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        
+        <a href="{% url 'dicon_app:shop_list' %}" 
+           class="btn rounded-pill px-4 fw-bold {% if not current_category %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          すべて
+        </a>
+    
+        <a href="?category=vegetable" 
+           class="btn rounded-pill px-4 fw-bold {% if current_category == 'vegetable' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          野菜・果物
+        </a>
+    
+        <a href="?category=meat" 
+           class="btn rounded-pill px-4 fw-bold {% if current_category == 'meat' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          お肉・惣菜
+        </a>
+    
+        <a href="?category=fish" 
+           class="btn rounded-pill px-4 fw-bold {% if current_category == 'fish' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          お魚
+        </a>
+    
+        <a href="?category=bread" 
+           class="btn rounded-pill px-4 fw-bold {% if current_category == 'bread' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          パン・菓子
+        </a>
+    
+        <a href="?category=dry" 
+           class="btn rounded-pill px-4 fw-bold {% if current_category == 'dry' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          乾物・お茶
+        </a>
+    
+        <a href="?category=other" 
+           class="btn rounded-pill px-4 fw-bold {% if current_category == 'other' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+          その他
+        </a>
+    
+      </div>
+    </div>
+    </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    
+    {% for shop in shops %}
+    <div class="col">
+      <a href="{% url 'dicon_app:shop_detail' shop.pk %}" class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-card text-decoration-none text-dark">
+        <div class="d-flex p-3 align-items-center bg-white border-bottom">
+          <div class="flex-shrink-0 position-relative">
+            <div class="rounded-circle overflow-hidden border border-2 border-danger p-1" style="width: 70px; height: 70px;">
+              <img src="{% if shop.image %}{{ shop.image.url }}{% else %}https://api.dicebear.com/7.x/micah/svg?seed={{ shop.name }}&backgroundColor=f0f0f0{% endif %}" 
+                   alt="店主" class="w-100 h-100 rounded-circle object-fit-cover">
+            </div>
+          </div>
+          <div class="ms-3">
+            <h5 class="fw-bold mb-0">{{ shop.name }}</h5>
+            {% if shop.street %}
+              <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>{{ shop.street.name }}</small>
+            {% else %}
+              <small class="text-muted">商店街の有名店</small>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body bg-light">
+          <p class="small text-secondary mb-3">
+             {% if shop.description %}
+               {{ shop.description|truncatechars:50 }}
+             {% else %}
+               「いらっしゃい！今日は何にする？美味しいもん揃ってるで！」
+             {% endif %}
+          </p>
+          <div class="d-flex gap-2 mb-3">
+            <span class="badge bg-white text-danger border">おすすめ</span>
+            <span class="badge bg-white text-success border">相談OK</span>
+          </div>
+          <div class="btn btn-outline-dark w-100 rounded-pill btn-sm">お店の商品を見る</div>
+        </div>
       </a>
-    </li>
-  {% empty %}
-    <li>この通りにはまだ店舗がありません</li>
-  {% endfor %}
-</ul>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <p class="text-muted">まだお店が登録されていません。</p>
+    </div>
+    {% endfor %} 
+  </div>
+</section>
 
-<p>
-  <a href="{% url 'dicon_app:street_list' %}{% if preset %}?preset={{ preset }}{% endif %}">
-    通り一覧へ
+<style>
+.hover-card { transition: transform 0.2s; }
+.hover-card:hover { transform: translateY(-5px); }
+</style>
+<div class="text-center mt-5 mb-5">
+  <a href="{% url 'dicon_app:home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+    <i class="fa-solid fa-house me-2"></i>トップページに戻る
   </a>
-</p>
+</div>
 {% endblock %}

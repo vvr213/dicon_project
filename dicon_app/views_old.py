@@ -1,237 +1,300 @@
-from django.shortcuts import render, get_object_or_404
+from typing import Optional, Dict
+from urllib.parse import urlencode
+
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q
+from .models import Shop, Product, Event, Set, HeroSlide, Street
 
-from .models import Product, Street, Shop, Set, HeroSlide, Event
+# ==========================================
+# 1. 便利な道具（ヘルパー関数）
+# ==========================================
+
+def bc(label: str, url: Optional[str] = None) -> Dict[str, Optional[str]]:
+    """パンくずリスト作成（必要に応じて使用）"""
+    return {"label": label, "url": url}
+
+def _with_preset(url: str, preset: str) -> str:
+    """URLに相談プリセットパラメータを付与"""
+    preset = (preset or "").strip()
+    if not preset:
+        return url
+    join = "&" if "?" in url else "?"
+    return f"{url}{join}{urlencode({'preset': preset})}"
+
+def _get_consult_presets():
+    """相談メニューのデータ定義"""
+    return [
+        {"key": "fish", "title": "刺身盛り、予算で作れます", "desc": "人数・予算・苦手を言うだけ...", "image": "img/consult/sashimi.jpg"},
+        {"key": "bbq", "title": "BBQ用に、肉と野菜まとめて", "desc": "焼きやすい厚さに切って...", "image": "img/consult/bbq.jpg"},
+        {"key": "sasagaki", "title": "ささがき、必要な分だけ", "desc": "用途と量を言うだけ。太さも合わせて...", "image": "img/consult/prep.jpg"},
+        {"key": "curry", "title": "カレーの材料にしてほしい", "desc": "じゃがいも・にんじん・玉ねぎを皮むき＆カット済みで...", "image": "img/consult/curry_prep.jpg"},
+        {"key": "okazu", "title": "今夜のおかず、提案して", "desc": "好みと予算を言えば、プロが提案...", "image": "img/consult/okazu.jpg"},
+    ]
 
 
-def shop_consult(request, shop_pk):
-    shop = get_object_or_404(Shop.objects.select_related("street"), pk=shop_pk)
-
-    product = request.GET.get("product", "")
-    qty = request.GET.get("qty", "")
-    set_name = request.GET.get("set", "")
-    order_id = request.GET.get("order", "")
-
-    lines = []
-    lines.append(f"【相談】{shop.name} さんへ")
-    lines.append("")
-    if product:
-        lines.append(f"商品：{product}")
-        if qty:
-            lines.append(f"数量：{qty}")
-        lines.append("")
-    if set_name:
-        lines.append(f"セット：{set_name}")
-        lines.append("")
-    if order_id:
-        lines.append(f"注文番号：{order_id}")
-        lines.append("（この注文について相談です）")
-        lines.append("")
-
-    lines += ["希望：", "受取希望日時：", "その他："]
-    draft = "\n".join(lines)
-
-    return render(request, "dicon_app/shop_consult.html", {
-        "shop": shop,
-        "draft": draft,
-        "line_url": getattr(shop, "line_url", ""),
-    })
-
+# ==========================================
+# 2. ビュー関数（メイン機能）
+# ==========================================
 
 # --------------------
 # トップページ
 # --------------------
 def home(request):
-    slides = HeroSlide.objects.filter(is_active=True).order_by("order")
-    sets = Set.objects.filter(is_active=True).order_by("-created_at")[:6]
-    sale_products = Product.objects.filter(is_sale=True).order_by("-id")[:6]
-    streets = Street.objects.all().order_by("name")[:3]
-    products = Product.objects.all().order_by("-id")[:6]
+    """トップページ：特売、献立、イベント、告知を集めて表示"""
+    
+    # 1. ヒーロースライド（上部の大きな画像）
+    slides = HeroSlide.objects.filter(is_active=True).order_by('order')
 
-    notices = [
-        {"title": "時短：おすすめセットで10分ごはん", "url": reverse("dicon_app:set_list")},
-        {"title": "商店街体験：通りからお店へ", "url": reverse("dicon_app:street_list")},
-        {"title": "本日の特売：お得な商品をチェック", "url": reverse("dicon_app:sale_list")},
-    ]
+    # 2. 本日の特売品（特売フラグがONの商品を8個まで）
+    sale_products = Product.objects.filter(is_sale=True).order_by('?')[:8]
 
-    # ✅ ここが「最重要」：home にイベント2種類を足す
+    # 3. おすすめ献立セット
+    recommended_sets = Set.objects.filter(is_active=True).order_by('-created_at')[:3]
+
+    # 4. 近日開催のイベント（今日以降のものを日付順で）
     today = timezone.localdate()
-
-    # 未来だけ見せたい（おすすめ）
-    base_upcoming = Event.objects.filter(
-        is_active=True,
+    upcoming_events = Event.objects.filter(
+        is_active=True, 
         start_date__gte=today
-    ).order_by("start_date")
+    ).order_by('start_date')[:4]
 
-    featured_events = base_upcoming.filter(is_featured=True)[:5]
-
-    # ✅ 保険：PICKUPが0件なら、直近のイベントを自動でPICKUPに回す
-    # （is_featured を付け忘れても「イベント枠が寂しくならない」）
-    if not featured_events:
-        featured_events = base_upcoming[:5]
-
-    upcoming_events = base_upcoming[:12]
-
-    # 過去も混ぜたいなら：↑の start_date__gte を消すだけでOK
-
-    context = {
-        "slides": slides,
-        "sets": sets,
-        "sale_products": sale_products,
-        "streets": streets,
-        "products": products,
-        "notices": notices,
-        "crumbs": [],
-
-        # ✅ これを追加するだけ
-        "featured_events": featured_events,
-        "upcoming_events": upcoming_events,
-        "today": today,
-    }
-    return render(request, "dicon_app/home.html", context)
-
-
-# --------------------
-# 商品一覧・詳細
-# --------------------
-def product_list(request):
-    products = Product.objects.select_related("shop", "shop__street").all()
-    return render(request, "dicon_app/product_list.html", {
-        "products": products,
-        "crumbs": [{"label": "商品一覧", "url": None}],
+    return render(request, 'dicon_app/home.html', {
+        'slides': slides,
+        'sale_products': sale_products,
+        'recommended_sets': recommended_sets,
+        'upcoming_events': upcoming_events,
     })
 
+# --------------------
+# お店一覧
+# --------------------
+def shop_list(request):
+    """店舗一覧＆カテゴリ絞り込み"""
+    shops = Shop.objects.all()
+    
+    # URLから 'category' パラメータを受け取る
+    category_slug = request.GET.get('category')
 
-def product_detail(request, pk):
-    product = get_object_or_404(
-        Product.objects.select_related("shop", "shop__street"),
-        pk=pk
-    )
-    return render(request, "dicon_app/product_detail.html", {
-        "product": product,
-        "crumbs": [
-            {"label": "商品一覧", "url": reverse("dicon_app:product_list")},
-            {"label": product.name, "url": None},
-        ],
+    # もしカテゴリ指定があれば、そのカテゴリのお店だけで絞り込む
+    if category_slug:
+        shops = shops.filter(category=category_slug)
+
+    return render(request, 'dicon_app/shop_list.html', {
+        'shops': shops,
+        'current_category': category_slug, 
     })
 
-
 # --------------------
-# 通り→店舗→商品
+# お店詳細
 # --------------------
-def street_list(request):
-    # ✅ 追加：相談プリセットの引き継ぎ（迷子防止）
-    preset = request.GET.get("preset")  # 例: "prep" / "sashimi" など
-
-    streets = Street.objects.all().order_by("name")
-
-    context = {
-        "streets": streets,
-        "crumbs": [],
-        "preset": preset,  # ✅ テンプレで ?preset= を付けられる
-    }
-    return render(request, "dicon_app/street_list.html", context)
-
-
-def shop_list_by_street(request, street_slug):
-    street = get_object_or_404(Street, slug=street_slug)
-    shops = Shop.objects.filter(street=street).order_by("name")
-    return render(request, "dicon_app/shop_list.html", {
-        "street": street,
-        "shops": shops,
-        "crumbs": [
-            {"label": "通り一覧", "url": reverse("dicon_app:street_list")},
-            {"label": street.name, "url": None},
-        ],
-    })
-
-
 def shop_detail(request, shop_pk):
     shop = get_object_or_404(Shop.objects.select_related("street"), pk=shop_pk)
     products = Product.objects.filter(shop=shop).order_by("name")
     return render(request, "dicon_app/shop_detail.html", {
         "shop": shop,
         "products": products,
-        "crumbs": [
-            {"label": "通り一覧", "url": reverse("dicon_app:street_list")},
-            {"label": shop.street.name, "url": reverse("dicon_app:shop_list_by_street", kwargs={"street_slug": shop.street.slug})},
-            {"label": shop.name, "url": None},
-        ],
     })
 
+# --------------------
+# 商品一覧
+# --------------------
+def product_list(request):
+    """商品一覧＆カテゴリ絞り込み"""
+    products = Product.objects.all()
+    
+    # URLから 'category' というパラメータを受け取る (例: ?category=meat)
+    category_slug = request.GET.get('category')
+
+    # もしカテゴリ指定があれば、そのカテゴリだけで絞り込む
+    if category_slug:
+        products = products.filter(category=category_slug)
+
+    return render(request, 'dicon_app/product_list.html', {
+        'products': products,
+        'current_category': category_slug,
+    })
 
 # --------------------
-# おすすめセット
+# 商品詳細
 # --------------------
+def product_detail(request, pk):
+    product = get_object_or_404(Product.objects.select_related("shop"), pk=pk)
+    return render(request, "dicon_app/product_detail.html", {"product": product})
+
+
+# ==========================
+# 🛒 買い物・カート機能
+# ==========================
+
+def add_to_cart(request, product_id):
+    """商品をカートに入れる（セッション使用）"""
+    cart = request.session.get('cart', {})
+    cart[str(product_id)] = cart.get(str(product_id), 0) + 1
+    request.session['cart'] = cart
+    return redirect('dicon_app:cart_detail')
+
+def remove_from_cart(request, product_id):
+    """カートから商品を削除する"""
+    cart = request.session.get('cart', {})
+    product_id_str = str(product_id)
+
+    if product_id_str in cart:
+        del cart[product_id_str]
+        request.session['cart'] = cart  # 変更を保存
+        
+    return redirect('dicon_app:cart_detail')
+
+def cart_detail(request):
+    """カートの中身を表示（裏メニュー対応版）"""
+    cart = request.session.get('cart', {})
+    items = []
+    total_price = 0
+    
+    for product_id, quantity in cart.items():
+        # 裏メニュー（ID=999）の特別処理
+        if str(product_id) == '999':
+            class DummyProduct:
+                id = 999
+                name = '【特別】店長の焼肉おまかせセット(4人前)'
+                price = 5000
+                is_sale = False
+                image = None 
+                
+            product = DummyProduct()
+            subtotal = product.price * quantity
+        else:
+            # 通常商品
+            # 万が一削除された商品IDがセッションに残っていた場合のエラー回避
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                continue
+
+            subtotal = product.price * quantity
+            if product.is_sale and product.sale_price:
+                 subtotal = product.sale_price * quantity
+        
+        total_price += subtotal
+        items.append({
+            'product': product,
+            'quantity': quantity,
+            'subtotal': subtotal,
+        })
+
+    return render(request, 'dicon_app/cart.html', {
+        'items': items,
+        'total_price': total_price
+    })
+
+def checkout(request):
+    """レジ画面（確認画面）"""
+    return render(request, 'dicon_app/checkout.html')
+
+def checkout_done(request):
+    """注文完了＆QRコード表示"""
+    if 'cart' in request.session:
+        del request.session['cart']
+    return render(request, 'dicon_app/checkout_done.html')
+
+
+# ==========================
+# 💬 相談・チャット機能
+# ==========================
+
+def consult_menu(request):
+    return render(request, 'dicon_app/consult_menu.html')
+
+def consult_home(request):
+    """相談ホーム（プリセット選択時）"""
+    preset_key = request.GET.get('preset')
+    all_presets = _get_consult_presets()
+    target_preset = next((p for p in all_presets if p["key"] == preset_key), None)
+    
+    context = {}
+    if target_preset:
+        context['preset_title'] = target_preset['title']
+        context['preset_desc'] = target_preset['desc']
+    elif preset_key: 
+        context['preset_title'] = f"{preset_key} についての相談"
+        context['preset_desc'] = "この商品について店主に相談します。"
+        
+    return render(request, 'dicon_app/consult_chat.html', context)
+
+def shop_consult(request, shop_pk):
+    """店舗詳細から相談へ"""
+    shop = get_object_or_404(Shop, pk=shop_pk)
+    context = {
+        'preset_title': f"{shop.name} への相談",
+        'preset_desc': "在庫の確認や取り置きなど、お気軽に話しかけてください。",
+    }
+    return render(request, 'dicon_app/consult_chat.html', context)
+
+def consult_from_product(request, product_pk):
+    """商品詳細から相談へ"""
+    product = get_object_or_404(Product, pk=product_pk)
+    # チャットデモへ誘導（商品名を添えて）
+    return redirect(f"{reverse('dicon_app:chat_demo')}?product={product.name}")
+
+def chat_demo(request):
+    """プレゼン用：自動返信チャットデモ"""
+    return render(request, 'dicon_app/chat_demo.html')
+
+
+# ==========================
+# 📅 イベント・特売・その他
+# ==========================
+
+def sale_list(request):
+    products = Product.objects.filter(is_sale=True).order_by("-id")
+    return render(request, "dicon_app/sale_list.html", {"products": products})
+
 def set_list(request):
-    sets = Set.objects.filter(is_active=True).order_by("-created_at")
-    return render(request, "dicon_app/set_list.html", {"sets": sets, "crumbs": [{"label": "おすすめセット", "url": None}]})
-
+    sets = Set.objects.filter(is_active=True).order_by("-id")
+    return render(request, "dicon_app/set_list.html", {"sets": sets})
 
 def set_detail(request, slug):
     set_obj = get_object_or_404(Set, slug=slug, is_active=True)
-    return render(request, "dicon_app/set_detail.html", {
-        "set": set_obj,
-        "crumbs": [
-            {"label": "おすすめセット", "url": reverse("dicon_app:set_list")},
-            {"label": set_obj.name, "url": None},
-        ],
-    })
+    return render(request, "dicon_app/set_detail.html", {"set": set_obj})
 
-
-# --------------------
-# 特売
-# --------------------
-def sale_list(request):
-    products = Product.objects.filter(is_sale=True).order_by("-id")
-    return render(request, "dicon_app/sale_list.html", {"products": products, "crumbs": [{"label": "特売情報", "url": None}]})
-
-
-def consult_home(request):
-    presets = [
-        {"key": "sashimi", "title": "刺身盛り、予算で作れます", "desc": "人数 / 予算 / 苦手食材を入れて相談", "image": "img/consult/sashimi.jpg"},
-        {"key": "bbq", "title": "BBQ用に、肉と野菜まとめて", "desc": "人数 / 予算 / 焼き方（厚切り等）", "image": "img/consult/bbq.jpg"},
-        {"key": "prep", "title": "下ごしらえだけお願いしたい", "desc": "ささがき / あく抜き / カット", "image": "img/consult/prep.jpg"},
-        {"key": "okazu", "title": "今夜のおかず、相談して決める", "desc": "好み / 予算 / 作り置きもOK", "image": "img/consult/okazu.jpg"},
-        {"key": "smoothie", "title": "スムージー用にセットしてほしい", "desc": "甘さ / アレルギー / 量", "image": "img/consult/smoothie.jpg"},
-    ]
-    return render(request, "dicon_app/consult_home.html", {"presets": presets})
-
-
-# --------------------
-# イベント
-# --------------------
 def event_list(request):
-    today = timezone.localdate()
-    tag = (request.GET.get("tag") or "").strip()
-    q = (request.GET.get("q") or "").strip()
-
-    # ✅ home.html と整合：start_date / end_date ベースで「今日以降」を表示
-    qs = Event.objects.filter(is_active=True).filter(
-        Q(start_date__gte=today) |
-        Q(end_date__gte=today, end_date__isnull=False)
-    ).order_by("start_date")
-
-    if tag:
-        # ↓ここはあなたのEventモデルに合わせてどちらか
-        qs = qs.filter(tag=tag)            # tag が CharField の場合
-        # qs = qs.filter(tags__slug=tag)   # tags が多対多/Taggit の場合
-
-    if q:
-        qs = qs.filter(Q(title__icontains=q) | Q(summary__icontains=q))
-
-    # ✅ テンプレは dicon_app 配下に統一（他のrenderと揃える）
-    return render(request, "dicon_app/event_list.html", {
-        "events": qs,
-        "tag": tag,
-        "q": q,
-        "crumbs": [{"label": "イベント一覧", "url": None}],
-    })
-
+    events = Event.objects.filter(is_active=True).order_by("start_date")
+    return render(request, "dicon_app/event_list.html", {"events": events})
 
 def event_detail(request, slug):
     event = get_object_or_404(Event, slug=slug, is_active=True)
-    share_url = request.build_absolute_uri(event.get_absolute_url())
-    return render(request, "dicon_app/event_detail.html", {"event": event, "share_url": share_url})
+    return render(request, "dicon_app/event_detail.html", {"event": event})
+
+def locker_guide(request):
+    return render(request, 'dicon_app/locker_guide.html')
+
+def partner_list(request):
+    return render(request, 'dicon_app/partner_list.html')
+
+def vacant_store(request):
+    return render(request, 'dicon_app/vacant_store.html')
+
+def street_list(request):
+    streets = Street.objects.all()
+    return render(request, "dicon_app/street_list.html", {"streets": streets})
+
+def profile(request):
+    return render(request, 'dicon_app/profile.html')
+
+def qa(request):
+    return render(request, 'dicon_app/qa.html')
+
+def partner_list(request):
+    return render(request, 'dicon_app/partner_list.html')
+
+def vacant_store(request):
+    return render(request, 'dicon_app/vacant_store.html')
+
+def set_detail(request, pk):
+    """セット商品の詳細ページを表示する"""
+    # URLから受け取ったpk(ID)に該当するセット商品をデータベースから探す。
+    # 見つからなければ404エラーページを表示する。
+    set_item = get_object_or_404(Set, pk=pk)
+    
+    return render(request, 'dicon_app/set_detail.html', {'set': set_item})

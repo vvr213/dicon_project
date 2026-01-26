@@ -5,26 +5,33 @@
 
 {% block content %}
 <div class="container py-3">
-  <h1 class="h3 mb-3">おすすめセット</h1>
+  <h1 class="h3 mb-3">管理栄養士監修 おすすめ献立セット</h1>
 
   <div class="row g-3">
     {% for set in sets %}
       <div class="col-12 col-md-4">
         <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
           <div class="card h-100">
-            
-            <!-- セット画像（slugで自動読込 / 無ければplaceholder） -->
-
-              <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+                       
+            <!-- 管理画面の画像を使う -->
+            <div class="ratio ratio-16x9 rounded-top overflow-hidden">
+              {% if set.image %}
+                {# ▼ 管理画面で登録した画像があれば、それを表示 #}
                 <img
-                  src="{% static 'img/sets/' %}{{ set.slug }}.jpg"
+                  src="{{ set.image.url }}"
                   alt="{{ set.name }}"
                   class="w-100 h-100 object-fit-cover"
                   loading="lazy"
-                  decoding="async"
-                  onerror="this.onerror=null;this.src='{{ placeholder_img }}';"
                 >
-              </div>
+              {% else %}
+                {# ▼ 画像がない場合は、プレースホルダー（ダミー画像）を表示 #}
+                <img
+                  src="{{ placeholder_img }}"
+                  alt="NO IMAGE"
+                  class="w-100 h-100 object-fit-cover bg-light text-muted"
+                >
+              {% endif %}
+            </div>
 
             <div class="card-body">
               <div class="fw-bold">{{ set.name }}</div>
@@ -39,5 +46,10 @@
       <p>セットがまだありません</p>
     {% endfor %}
   </div>
+</div>
+<div class="text-center mt-5 mb-5">
+  <a href="{% url 'dicon_app:home' %}#recommended-sets" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+    <i class="fa-solid fa-arrow-left me-2"></i>トップページの献立コーナーに戻る
+  </a>
 </div>
 {% endblock %}

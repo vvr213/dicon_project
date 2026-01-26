@@ -1,128 +1,86 @@
-{# templates/dicon_app/event_detail.html #}
-{% extends "dicon_app/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
-{# イベントページだけ events.css を読み込む（事故防止） #}
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/events.css' %}">
-{% endblock %}
-
-{% block title %}{{ event.title }} | Dicon{% endblock %}
+{% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
-<div class="dicon-event-detail">
-
-  <a href="{% url 'dicon_app:event_list' %}" class="text-decoration-none">← 一覧へ戻る</a>
-
-  <div class="card shadow-sm border-0 mt-3" style="border-radius:18px;">
-    <div class="card-body p-4">
-
-      <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
-        <span class="badge rounded-pill text-bg-primary">{{ event.get_category_display }}</span>
-
-        {% if event.is_featured %}
-          <span class="badge rounded-pill text-bg-warning">PICKUP</span>
-        {% endif %}
-
-        <span class="text-muted small">
-          {% if event.end_date and event.end_date > event.start_date %}
-            {{ event.start_date }} 〜 {{ event.end_date }}
-          {% else %}
-            {{ event.start_date }}
-          {% endif %}
-        </span>
-      </div>
-
-      <h1 class="h4 mb-3">{{ event.title }}</h1>
+<div class="container my-5">
+  
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          {% for crumb in crumbs %}
+            {% if crumb.url %}
+              <li class="breadcrumb-item"><a href="{{ crumb.url }}">{{ crumb.label }}</a></li>
+            {% else %}
+              <li class="breadcrumb-item active" aria-current="page">{{ crumb.label }}</li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </nav>
 
       {% if event.image %}
-        <img src="{% static event.image %}" alt="{{ event.title }}"
-             class="w-100 mb-3"
-             style="border-radius:14px;object-fit:cover;max-height:420px;">
+      <div class="mb-4 shadow-sm rounded overflow-hidden">
+        <img src="{{ event.image.url }}" class="w-100" alt="{{ event.title }}" style="object-fit: cover;">
+      </div>
       {% endif %}
 
-      {% if event.body %}
-        <div class="mb-4 event-body">
+      <h1 class="fw-bold mb-3">{{ event.title }}</h1>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <span class="badge bg-primary fs-6">{{ event.get_category_display }}</span>
+        {% if event.is_regular %}
+          <span class="badge bg-warning text-dark fs-6">{{ event.schedule_text }}</span>
+        {% else %}
+          <span class="badge bg-light text-dark border fs-6">
+            <i class="fa-regular fa-clock me-1"></i>{{ event.display_date_text }}
+          </span>
+        {% endif %}
+      </div>
+
+      <div class="bg-white p-4 rounded shadow-sm border mb-4">
+        <p class="lead fw-bold mb-4">{{ event.summary }}</p>
+        <div class="mb-4" style="line-height: 1.8;">
           {{ event.body|linebreaksbr }}
         </div>
-      {% endif %}
 
-      {% if event.location %}
-        <div class="mb-3">
-          <span class="text-danger">📍</span> {{ event.location }}
+        {% if event.location %}
+        <hr>
+        <div class="d-flex align-items-start mt-3">
+          <i class="fa-solid fa-location-dot text-danger mt-1 me-2"></i>
+          <div>
+            <strong>場所：</strong> {{ event.location }}
+            {% if event.map_url %}
+              <div class="mt-1">
+                <a href="{{ event.map_url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                  <i class="fa-solid fa-map me-1"></i>地図を見る
+                </a>
+              </div>
+            {% endif %}
+          </div>
         </div>
-      {% endif %}
-
-      <div class="d-flex flex-wrap gap-2 mb-3 event-actions">
-        {% if event.map_url %}
-          <a class="btn btn-outline-secondary" href="{{ event.map_url }}" target="_blank" rel="noopener">
-            地図を見る
-          </a>
         {% endif %}
+      </div>
 
+      <div class="d-flex gap-2 justify-content-center">
+        <a href="{% url 'dicon_app:event_list' %}" class="btn btn-outline-secondary rounded-pill px-4">
+          一覧に戻る
+        </a>
         {% if event.apply_url %}
-          <a class="btn btn-primary" href="{{ event.apply_url }}" target="_blank" rel="noopener">
-            申し込む
-          </a>
+        <a href="{{ event.apply_url }}" target="_blank" class="btn btn-primary rounded-pill px-4">
+          申し込み / 公式サイト
+        </a>
         {% endif %}
       </div>
-
-      <hr>
-
-      <div class="d-flex flex-wrap gap-2 align-items-center">
-        <button class="btn btn-outline-dark btn-sm" type="button" id="copyLinkBtn">
-          共有リンクをコピー
-        </button>
-
-        {# 解説作戦：share_text の有無に関係なく「定番なら schedule_text / スポットなら日付」を必ず出す #}
-        <span class="text-muted small">
-          {% if event.is_regular %}
-            {% if event.schedule_text %}
-              {{ event.schedule_text }}
-            {% else %}
-              定番イベント
-            {% endif %}
-          {% else %}
-            {% if event.end_date and event.end_date > event.start_date %}
-              {{ event.start_date }} 〜 {{ event.end_date }}
-            {% else %}
-              {{ event.start_date }}
-            {% endif %}
-          {% endif %}
-
-          {# 解説作戦：share_text は “補足” として付けたい時だけ出す #}
-          {% if event.share_text %}
-            ／ {{ event.share_text }}
-          {% endif %}
-        </span>
-      </div>
-
-      <input type="text" id="shareUrl" value="{{ share_url }}" class="form-control mt-2" readonly>
 
     </div>
   </div>
-
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-  (function() {
-    const btn = document.getElementById("copyLinkBtn");
-    const input = document.getElementById("shareUrl");
+<div class="mt-4 mb-5 text-center">
+  <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+      <i class="fa-solid fa-arrow-left me-2"></i>前のページに戻る
+  </a>
+</div>
 
-    btn?.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(input.value);
-        btn.textContent = "コピーしました！";
-        setTimeout(() => (btn.textContent = "共有リンクをコピー"), 1500);
-      } catch (e) {
-        input.select();
-        document.execCommand("copy");
-        btn.textContent = "コピーしました！";
-        setTimeout(() => (btn.textContent = "共有リンクをコピー"), 1500);
-      }
-    });
-  })();
-</script>
 {% endblock %}

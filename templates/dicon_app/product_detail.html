@@ -1,21 +1,112 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}{{ product.name }}｜商品詳細{% endblock %}
+{% block title %}{{ product.name }} - 商品詳細{% endblock %}
 
 {% block content %}
-<h1>{{ product.name }}</h1>
 
-<p>価格：{{ product.price }} 円</p>
+<nav aria-label="breadcrumb" class="container mt-3">
+  <ol class="breadcrumb small">
+    <li class="breadcrumb-item"><a href="{% url 'dicon_app:home' %}" class="text-muted text-decoration-none">トップ</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dicon_app:product_list' %}" class="text-muted text-decoration-none">商品一覧</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+  </ol>
+</nav>
 
-<!-- <a href="#">購入する</a> -->
+<section class="container py-4 mb-5">
+  <div class="row g-5">
+    
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden position-relative">
+        {% if product.is_sale %}
+        <span class="position-absolute top-0 start-0 bg-danger text-white px-3 py-2 m-3 rounded-pill fw-bold shadow">
+          <i class="fa-solid fa-fire me-1"></i>本日の特売
+        </span>
+        {% endif %}
+        
+        <div class="bg-light d-flex align-items-center justify-content-center" style="min-height: 400px;">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid w-100 object-fit-cover" style="max-height: 500px;">
+          {% else %}
+            <div class="text-center text-muted opacity-50">
+              <i class="fa-solid fa-camera fa-4x mb-3"></i>
+              <p>No Image</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-<p>
-  <!-- <a href="{% url 'dicon_app:product_list' %}"> -->
-    <a class="btn btn-outline-success"
-   href="{% url 'dicon_app:shop_consult' shop_pk=product.shop_id %}?product={{ product.name|urlencode }}&qty=1">
-  LINEでこの商品を相談
-    </a>
-    <a class="btn btn-dark" href="{% url 'payments:checkout' product.id %}">購入する</a> 
-    <a href="{% url 'dicon_app:product_list' %}">← 商品一覧に戻る</a>
-</p>
+    <div class="col-md-6 d-flex flex-column justify-content-center">
+      
+      <a href="{% url 'dicon_app:shop_detail' product.shop.pk %}" class="text-decoration-none text-secondary mb-2 d-inline-block">
+        <i class="fa-solid fa-store me-1"></i>{{ product.shop.name }}
+      </a>
+
+      <h1 class="fw-bold display-6 mb-3">{{ product.name }}</h1>
+
+      <div class="mb-4">
+        {% if product.is_sale %}
+          <span class="text-danger fs-2 fw-bold me-2">¥{{ product.sale_price }}</span>
+          <span class="text-muted small text-decoration-line-through me-2">¥{{ product.price }}</span>
+          <span class="badge bg-danger bg-opacity-10 text-danger border border-danger rounded-pill">SALE</span>
+        {% else %}
+          <span class="fs-2 fw-bold">¥{{ product.price }}</span>
+          <span class="text-muted small ms-1">(税込)</span>
+        {% endif %}
+      </div>
+
+      <p class="text-muted mb-4 lead" style="font-size: 1rem; line-height: 1.8;">
+        {{ product.description|default:"店主が自信を持っておすすめする一品です。詳細はお気軽にお問い合わせください。"|linebreaksbr }}
+      </p>
+
+      <hr class="text-secondary opacity-25 mb-4">
+
+      <div class="d-grid gap-3">
+        <a href="{% url 'dicon_app:consult_home' %}?preset={{ product.name }}&shop={{ product.shop.pk }}" class="btn btn-danger btn-lg rounded-pill shadow-sm py-3 hover-scale">
+          <i class="fa-regular fa-comments me-2"></i>この商品について相談・取り置き
+        </a>
+        
+        <a href="{% url 'dicon_app:shop_detail' product.shop.pk %}" class="btn btn-outline-dark rounded-pill py-2">
+          お店のページを見る
+        </a>
+      </div>
+
+      <div class="mt-4 p-3 bg-light rounded-3 small text-secondary">
+        <div class="d-flex align-items-center mb-2">
+          <i class="fa-solid fa-clock text-success me-2"></i>
+          <span>ロッカー受取なら <strong>23:00まで</strong> OK</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="fa-solid fa-shield-halved text-primary me-2"></i>
+          <span>商店街品質保証付き</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="container text-center mb-5">
+  <a href="{% url 'dicon_app:product_list' %}" class="text-muted text-decoration-none hover-underline">
+    <i class="fa-solid fa-arrow-left me-1"></i>商品一覧に戻る
+  </a>
+</div>
+
+<style>
+.hover-scale { transition: transform 0.2s; }
+.hover-scale:hover { transform: scale(1.02); }
+.hover-underline:hover { text-decoration: underline !important; }
+</style>
+
+<div class="mt-5 d-flex gap-3 justify-content-center">
+  <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-arrow-left me-2"></i>前のページに戻る
+  </a>
+
+  <a href="{% url 'dicon_app:product_list' %}" class="btn btn-outline-primary rounded-pill px-4">
+      商品一覧へ <i class="fa-solid fa-list ms-2"></i>
+  </a>
+</div>
+
 {% endblock %}

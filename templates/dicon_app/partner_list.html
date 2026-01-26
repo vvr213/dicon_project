@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}認定パートナー一覧{% endblock %}
+
+{% block content %}
+
+<section class="mb-5 text-center text-white py-5 rounded-4 position-relative overflow-hidden shadow" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+  <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10" 
+       style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+  <div class="position-relative container px-3" style="z-index: 1;">
+    <span class="badge bg-warning text-dark fs-6 mb-3 px-3 py-2 rounded-pill shadow-sm animate-pulse">
+      <i class="fa-solid fa-certificate me-1"></i>商店街公認
+    </span>
+    <h1 class="fw-bold display-5 mb-3" style="font-family: 'Mochiy Pop One', sans-serif; text-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+        暮らしの「困った」、<br>地元のプロが解決します。
+    </h1>
+    <p class="lead opacity-90 mx-auto" style="max-width: 600px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+      エアコン掃除、PC修理、洋服のお直し…。<br>
+      知らない人を家に入れるのは不安だけど、<br>
+      「商店街のあの人」なら安心。
+    </p>
+  </div>
+</section>
+
+<section class="container mb-5">
+  <div class="row g-4 text-center">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm p-4 rounded-4 hover-scale">
+        <div class="text-primary mb-3"><i class="fa-solid fa-user-check fa-3x"></i></div>
+        <h5 class="fw-bold">1. 厳格な審査と認定</h5>
+        <p class="text-muted small mb-0">技術はもちろん、人柄やマナーまで。商店街理事会が面接を行い、合格したプロだけを登録しています。</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm p-4 rounded-4 hover-scale">
+        <div class="text-primary mb-3"><i class="fa-solid fa-file-shield fa-3x"></i></div>
+        <h5 class="fw-bold">2. もしもの時も安心</h5>
+        <p class="text-muted small mb-0">全パートナーが賠償責任保険に加入。万が一のトラブル時も、商店街事務局が窓口になります。</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm p-4 rounded-4 hover-scale">
+        <div class="text-primary mb-3"><i class="fa-solid fa-yen-sign fa-3x"></i></div>
+        <h5 class="fw-bold">3. 明朗会計</h5>
+        <p class="text-muted small mb-0">「出張費コミコミ」の地元価格。作業前に必ず見積もりを提示するので、追加料金の心配はありません。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="d-flex flex-wrap justify-content-center gap-2">
+  <a href="{% url 'dicon_app:partner_list' %}" 
+     class="btn rounded-pill px-4 {% if not current_category %}btn-dark{% else %}btn-outline-secondary{% endif %}">
+     すべて
+  </a>
+
+  {% for slug, name in categories %}
+  <a href="?category={{ slug }}" 
+     class="btn rounded-pill px-4 {% if current_category == slug %}btn-dark{% else %}btn-outline-secondary{% endif %}">
+     {{ name }}
+  </a>
+  {% endfor %}
+</div>
+
+<section class="container mb-5">
+  <div class="row g-4">
+    
+    {% for partner in partners %}
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 hover-scale">
+        <div class="row g-0 h-100">
+          <div class="col-md-4 bg-light position-relative">
+            {% if partner.image %}
+              <img src="{{ partner.image.url }}" class="img-fluid h-100 w-100" style="object-fit: cover; object-position: top center; min-height: 220px;" alt="{{ partner.name }}">
+            {% else %}
+              <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white opacity-25" style="min-height: 220px;">
+                <i class="fa-solid fa-camera fa-3x"></i>
+              </div>
+            {% endif %}
+            
+            <span class="position-absolute top-0 start-0 bg-warning text-dark fw-bold px-2 py-1 small rounded-bottom-end shadow-sm">
+              <i class="fa-solid fa-star me-1"></i>認定 No.{{ partner.order }}
+            </span>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body p-4 d-flex flex-column h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-info text-dark">{{ partner.get_category_display }}</span>
+              </div>
+              <h4 class="fw-bold mb-1">{{ partner.name }}</h4>
+              <p class="small text-muted mb-4 border-start border-3 border-info ps-3 mt-3">
+                {{ partner.description|linebreaksbr }}
+              </p>
+              <div class="mt-auto d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
+                <div>
+                  <div class="small fw-bold text-muted">地域密着</div>
+                  <div class="fw-bold text-primary">小阪商店街公認</div>
+                </div>
+                <a href="{% url 'dicon_app:consult_home' %}?shop={{ partner.pk }}" class="btn btn-primary rounded-pill btn-sm px-4 fw-bold shadow-sm">
+                  相談する
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+</section>
+
+<div class="container pb-5">
+  <div class="mt-5 d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
+      
+      <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm fw-bold hover-scale">
+          <i class="fa-solid fa-arrow-left me-2"></i>前のページに戻る
+      </a>
+
+      <a href="{% url 'dicon_app:home' %}" class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm fw-bold hover-scale">
+          トップページへ <i class="fa-solid fa-house ms-2"></i>
+      </a>
+
+  </div>
+</div>
+
+<style>
+/* 統一感のあるアニメーション設定 */
+.hover-scale { transition: transform 0.2s; }
+.hover-scale:hover { transform: scale(1.03); }
+</style>
+{% endblock %}

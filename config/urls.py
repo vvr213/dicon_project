@@ -16,11 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-#config/urls.pyにincludeする（接続ポイント）
+# ↓ 画像を表示するために必要な2行を追加
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("dicon_app.urls")),
-    path("payments/", include("payments.urls")),
-    path("orders/", include("orders.urls")),
-    path("accounts/", include("accounts.urls")),  # ← 追加12/29
-]
+    path('admin/', admin.site.urls),
+    path('', include('dicon_app.urls')),
+    path('payments/', include('payments.urls')),
+    path('orders/', include('orders.urls')),
+    path('accounts/', include('accounts.urls')),
+] # ← ★この「閉じカッコ」が抜けていたのがエラーの原因でした！
+
+# ↓ 画像表示用の設定（デバッグモードの時だけ有効）
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

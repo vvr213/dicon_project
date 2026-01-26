@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}マイページ{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+  <div class="row g-5">
+
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden text-white mb-4" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+        <div class="card-body p-4 position-relative">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold m-0"><i class="fa-solid fa-seedling me-2"></i>Dicon Member</h5>
+            <span class="badge bg-white text-success rounded-pill">ゴールド会員</span>
+          </div>
+          
+          <div class="mb-4">
+            <small class="opacity-75">お名前</small>
+            <h3 class="fw-bold">{{ user.username|default:"Diconユーザー" }} 様</h3>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-end">
+            <div>
+              <small class="opacity-75">現在のポイント</small>
+              <div class="fs-2 fw-bold">1,250 <span class="fs-6">pt</span></div>
+            </div>
+            <i class="fa-solid fa-barcode fa-3x opacity-50"></i>
+          </div>
+          
+          <i class="fa-solid fa-leaf position-absolute top-0 end-0 opacity-25 p-3" style="font-size: 8rem; transform: rotate(20deg);"></i>
+        </div>
+      </div>
+
+      <div class="list-group shadow-sm rounded-4 overflow-hidden border-0 mb-4">
+        <a href="#" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-user-pen me-3 text-secondary"></i>プロフィール編集</span>
+          <i class="fa-solid fa-chevron-right small text-muted"></i>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-credit-card me-3 text-secondary"></i>お支払い方法</span>
+          <i class="fa-solid fa-chevron-right small text-muted"></i>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-bell me-3 text-secondary"></i>通知設定</span>
+          <i class="fa-solid fa-chevron-right small text-muted"></i>
+        </a>
+        <a href="{% url 'dicon_app:locker_guide' %}" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
+          <span><i class="fa-solid fa-box-open me-3 text-secondary"></i>ロッカーの使い方</span>
+          <i class="fa-solid fa-chevron-right small text-muted"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      
+      <div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden">
+        <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold m-0"><i class="fa-solid fa-key me-2 text-warning"></i>現在のロッカーキー</h5>
+          <span class="badge bg-danger animate-pulse">受取可能</span>
+        </div>
+        <div class="card-body p-4 text-center bg-light">
+          <p class="text-muted mb-3">以下のQRコードをロッカーのリーダーにかざしてください。</p>
+          
+          <div class="bg-white p-3 rounded-4 shadow-sm d-inline-block border mb-3 position-relative">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=DICON_LOCKER_OPEN_KEY_12345" alt="解錠QR" width="200" height="200">
+            <div class="mt-2 fw-bold font-monospace text-secondary">KEY: 8823-5656</div>
+            
+            <div class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill shadow">
+                あと 4時間
+            </div>
+          </div>
+
+          <div class="alert alert-warning d-flex align-items-center mt-3 text-start" role="alert">
+            <i class="fa-solid fa-triangle-exclamation fs-4 me-3"></i>
+            <div>
+              <strong>受取場所：西地区 コミュニティセンター前</strong><br>
+              <span class="small">本日の 23:00 を過ぎるとロッカーはロックされます。ご注意ください。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="fw-bold mb-3">注文・相談履歴</h5>
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        
+        <div class="p-3 border-bottom hover-bg-light">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 bg-light rounded-3 p-2 text-center" style="width: 60px;">
+              <div class="small fw-bold text-danger">TODAY</div>
+              <div class="h5 fw-bold m-0">21</div>
+            </div>
+            <div class="ms-3 flex-grow-1">
+              <div class="d-flex justify-content-between">
+                <h6 class="fw-bold mb-1">おまかせ刺身盛り合わせ（4人前）</h6>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success">ロッカー受取待ち</span>
+              </div>
+              <p class="text-muted small mb-0"><i class="fa-solid fa-store me-1"></i>なにわ鮮魚店</p>
+            </div>
+            <div class="ms-3 text-end">
+              <div class="fw-bold">¥3,500</div>
+              <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill mt-1" style="font-size: 0.75rem;">チャットを見る</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 border-bottom hover-bg-light">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 bg-light rounded-3 p-2 text-center" style="width: 60px;">
+              <div class="small fw-bold text-muted">1/15</div>
+            </div>
+            <div class="ms-3 flex-grow-1">
+              <div class="d-flex justify-content-between">
+                <h6 class="fw-bold mb-1">国産牛コロッケ 5個</h6>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary">受取完了</span>
+              </div>
+              <p class="text-muted small mb-0"><i class="fa-solid fa-store me-1"></i>精肉のタナカ</p>
+            </div>
+            <div class="ms-3 text-end">
+              <div class="fw-bold">¥500</div>
+              <button class="btn btn-sm btn-light rounded-pill mt-1 text-muted" style="font-size: 0.75rem;">再度相談する</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 hover-bg-light">
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 bg-light rounded-3 p-2 text-center" style="width: 60px;">
+              <div class="small fw-bold text-muted">1/08</div>
+            </div>
+            <div class="ms-3 flex-grow-1">
+              <div class="d-flex justify-content-between">
+                <h6 class="fw-bold mb-1">ささがきごぼう（豚汁用）</h6>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary">受取完了</span>
+              </div>
+              <p class="text-muted small mb-0"><i class="fa-solid fa-store me-1"></i>八百屋山田</p>
+            </div>
+            <div class="ms-3 text-end">
+              <div class="fw-bold">¥350</div>
+              <button class="btn btn-sm btn-light rounded-pill mt-1 text-muted" style="font-size: 0.75rem;">再度相談する</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.hover-bg-light:hover { background-color: #f8f9fa; transition: background-color 0.2s; }
+.animate-pulse { animation: pulse 2s infinite; }
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+</style>
+
+{% endblock %}

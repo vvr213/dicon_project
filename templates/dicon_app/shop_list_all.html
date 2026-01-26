@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}お店一覧{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 fw-bold m-0"><i class="fa-solid fa-store text-primary me-2"></i>お店一覧</h1>
+    <span class="text-muted small">{{ shops.count }}店舗</span>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for shop in shops %}
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0 overflow-hidden">
+        {% if shop.image %}
+          <img src="{{ shop.image.url }}" class="card-img-top" alt="{{ shop.name }}" style="height: 200px; object-fit: cover;">
+        {% else %}
+        <div class="card-img-top d-flex align-items-center justify-content-center text-white" 
+            style="height: 200px; background-color: {{ shop.street.color }};">
+            <i class="fa-solid fa-store fa-3x opacity-50"></i>
+        </div>
+        {% endif %}
+
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title fw-bold m-0">{{ shop.name }}</h5>
+            <span class="badge bg-white text-secondary border rounded-pill">{{ shop.street.name }}</span>
+          </div>
+          <p class="card-text text-muted small mb-3">
+            {{ shop.description|truncatechars:60 }}
+          </p>
+          <div class="d-grid gap-2">
+            <a href="{% url 'dicon_app:shop_detail' shop.pk %}" class="btn btn-outline-primary btn-sm">
+              お店を見る
+            </a>
+            <a href="{% url 'dicon_app:shop_consult' shop.pk %}" class="btn btn-light btn-sm text-dark border">
+              <i class="fa-regular fa-comment-dots me-1"></i>相談する
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,19 +1,154 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}商品一覧{% endblock %}
+{% block title %}本日の商品一覧{% endblock %}
 
 {% block content %}
-<h1>商品一覧</h1>
 
-<ul>
-  {% for product in products %}
-    <li>
-      <!-- 商品詳細いらない、一覧だけでOK」なら削除 今ページがないのでエラー表示12/24 -->
-      <a href="{% url 'dicon_app:product_detail' pk=product.pk %}">
-        {{ product.name }}（{{ product.price }}円）
-      </a>
-    </li>
-  {% endfor %}
-</ul>
+<section class="py-5 text-center text-white position-relative overflow-hidden" style="background-color: #d35400;">
+  <div class="position-relative z-1">
+    <span class="badge bg-warning text-dark mb-2 px-3 py-1 rounded-pill shadow-sm">
+      <i class="fa-solid fa-carrot me-1"></i>Fresh Market
+    </span>
+    <h1 class="fw-bold display-6">今日の「ええもん」揃ってます！</h1>
+    <p class="opacity-90">
+      毎朝仕入れる新鮮野菜から、お肉屋さんの絶品揚げ物まで。<br>
+      スーパーにはない「旬」に出会える場所。
+    </p>
+  </div>
+  <i class="fa-solid fa-lemon position-absolute top-0 start-0 text-white opacity-10" style="font-size: 10rem; transform: rotate(-20deg);"></i>
+  <i class="fa-solid fa-fish position-absolute bottom-0 end-0 text-white opacity-10" style="font-size: 10rem; transform: rotate(10deg);"></i>
+</section>
+
+<div class="container mb-5">
+  <div class="d-flex flex-wrap justify-content-center gap-2">
+    <div class="container mb-5 mt-5">
+      <div class="d-flex flex-wrap justify-content-center gap-2">  
+    <a href="{% url 'dicon_app:product_list' %}" 
+       class="btn rounded-pill px-4 fw-bold {% if not current_category %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      すべて
+    </a>
+
+    <a href="?category=vegetable" 
+       class="btn rounded-pill px-4 fw-bold {% if current_category == 'vegetable' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      野菜・果物
+    </a>
+
+    <a href="?category=meat" 
+       class="btn rounded-pill px-4 fw-bold {% if current_category == 'meat' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      お肉・惣菜
+    </a>
+
+    <a href="?category=fish" 
+       class="btn rounded-pill px-4 fw-bold {% if current_category == 'fish' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      お魚
+    </a>
+
+    <a href="?category=bread" 
+       class="btn rounded-pill px-4 fw-bold {% if current_category == 'bread' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      パン・ケーキ・菓子
+    </a>
+
+    <a href="?category=dry" 
+       class="btn rounded-pill px-4 fw-bold {% if current_category == 'dry' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      乾物・お茶
+    </a>
+
+    <a href="?category=other" 
+       class="btn rounded-pill px-4 fw-bold {% if current_category == 'other' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
+      その他
+    </a>
+
+  </div>
+</div>
+
+<section class="container mb-5">
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4">
+    
+    {% for product in products %}
+    <div class="col">
+      <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-shadow product-card">
+        
+        <div class="position-relative overflow-hidden bg-light" style="padding-top: 100%;">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-img" alt="{{ product.name }}">
+          {% else %}
+            {% if "肉" in product.name or "牛" in product.name or "豚" in product.name or "鶏" in product.name or "ハム" in product.name %}
+              <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=400&q=80" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-img" alt="肉">
+            {% elif "魚" in product.name or "刺身" in product.name or "サバ" in product.name or "鮭" in product.name %}
+              <img src="https://images.unsplash.com/photo-1534483509878-b9ca48520621?auto=format&fit=crop&w=400&q=80" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-img" alt="魚">
+            {% elif "野菜" in product.name or "トマト" in product.name or "きゅうり" in product.name or "大根" in product.name or "芋" in product.name %}
+              <img src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=400&q=80" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-img" alt="野菜">
+            {% elif "パン" in product.name or "サンド" in product.name %}
+              <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-img" alt="パン">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover transition-img" alt="食材">
+            {% endif %}
+          {% endif %}
+          
+          {% if product.is_sale %}
+          <div class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 m-2 rounded shadow-sm fw-bold small">
+            <i class="fa-solid fa-fire me-1"></i>特売
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="card-body p-3 text-center">
+          <h5 class="fw-bold mb-1 fs-6">{{ product.name }}</h5>
+          <p class="text-muted small mb-2 text-truncate">{{ product.description|default:"お店の自慢の一品です！" }}</p>
+          
+          <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+            <span class="fs-5 fw-bold text-danger">¥{{ product.price }}</span>
+            <span class="small text-muted text-decoration-line-through"></span>
+          </div>
+          
+          <div class="d-grid gap-2">
+            <a href="{% url 'dicon_app:product_detail' product.pk %}" class="btn btn-outline-dark btn-sm rounded-pill">
+              詳しく見る
+            </a>
+            <a href="{% url 'dicon_app:add_to_cart' product.id %}" class="btn btn-danger w-100 rounded-pill fw-bold shadow-sm hover-scale mt-2">
+              <i class="fa-solid fa-cart-plus me-1"></i>カートに入れる
+            </a>
+            <!-- <a href="{% url 'dicon_app:consult_home' %}?preset={{ product.name }}" class="btn btn-warning btn-sm rounded-pill text-dark fw-bold">
+              <i class="fa-regular fa-comment-dots me-1"></i>これで相談
+            </a> -->
+            <button class="btn btn-warning ...">
+              <i class="fa-solid fa-comment-dots me-1"></i>これで相談
+            </button>
+            
+            <a href="{% url 'dicon_app:chat_demo' %}" class="btn btn-warning w-100 rounded-pill fw-bold shadow-sm mb-2 text-dark">
+              <i class="fa-solid fa-comment-dots me-1"></i>店主に相談する
+            </a>
+          </div>
+        </div>
+        
+        <div class="card-footer bg-white border-top-0 pt-0 pb-3 text-center">
+            <small class="text-muted border rounded-pill px-2 py-1">
+                <i class="fa-solid fa-store me-1"></i>{{ product.shop.name }}
+            </small>
+        </div>
+
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <div class="bg-light rounded-4 p-5">
+        <i class="fa-solid fa-basket-shopping fa-3x text-muted mb-3"></i>
+        <p class="text-muted">本日の商品は売り切れか、まだ入荷していません。</p>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+
+<style>
+/* ホバー時の浮き上がり＆画像拡大 */
+.hover-shadow { transition: transform 0.2s, box-shadow 0.2s; }
+.hover-shadow:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+.product-card:hover .transition-img { transform: scale(1.1); }
+.transition-img { transition: transform 0.5s ease; }
+.mt-n4 { margin-top: -1.5rem; }
+</style>
+
 {% endblock %}
-<!-- URLを 文字列で直書きしていない urls.py とちゃんとつながっている、将来URLを変えても壊れない -->

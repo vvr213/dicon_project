@@ -1,125 +1,63 @@
 from django.contrib import admin
-from .models import Street, Shop, Product, Set, HeroSlide, Event
+from .models import Street, Shop, Product, Event, HeroSlide, Set, HomePickup, Partner, ConsultationItem
 
-
+# 通り（Street）の管理設定
 @admin.register(Street)
 class StreetAdmin(admin.ModelAdmin):
-    # 通りマスタ
-    list_display = ("name", "slug")
-    search_fields = ("name", "slug")
-    prepopulated_fields = {"slug": ("name",)}
+    list_display = ('name', 'color')
 
-
+# 店舗（Shop）の管理設定
 @admin.register(Shop)
 class ShopAdmin(admin.ModelAdmin):
-    # 店舗マスタ
-    list_display = ("id", "name", "street", "line_url")
-    list_filter = ("street",)
-    search_fields = ("name",)
-    autocomplete_fields = ("street",)
+    # 🆕 ここに 'category' を追加！
+    list_display = ('name', 'category', 'street', 'latitude', 'longitude')
+    # 🆕 ここにも 'category' を追加！
+    fields = ('category', 'name', 'street', 'description', 'image', 'line_url', 'latitude', 'longitude')
+    # 🆕 右側のフィルターにも追加！
+    list_filter = ('category', 'street')
 
-
+# 商品（Product）の管理設定
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # 商品（特売含む）
-    list_display = ("name", "price", "shop", "is_sale", "sale_price")
-    list_filter = ("is_sale", "shop__street")
-    search_fields = ("name",)
-    autocomplete_fields = ("shop",)
+    list_display = ('name', 'category', 'price', 'shop', 'is_sale')
+    fields = ('category', 'name', 'price', 'shop', 'image', 'is_sale', 'sale_price')
+    list_filter = ('category', 'shop', 'is_sale')
+    search_fields = ('name', 'category')
 
-
-@admin.register(Set)
-class SetAdmin(admin.ModelAdmin):
-    # おすすめセット（献立）
-    list_display = ("name", "slug", "is_active", "created_at")
-    list_filter = ("is_active",)
-    search_fields = ("name", "slug")
-    prepopulated_fields = {"slug": ("name",)}
-    autocomplete_fields = ("products",)
-
-
-@admin.register(HeroSlide)
-class HeroSlideAdmin(admin.ModelAdmin):
-    # トップページ告知スライド
-    list_display = ("order", "title", "is_active", "link_url")
-    list_filter = ("is_active",)
-    search_fields = ("title",)
-    ordering = ("order",)
-
-
+# イベント（Event）の管理設定
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    """
-    イベント管理画面
+    list_display = ('title', 'start_date', 'category', 'is_active')
+    list_filter = ('category', 'is_active')
+    search_fields = ('title', 'body')
 
-    ・季節イベント（開始日あり）
-    ・定番イベント（開始日なし、schedule_textで表現）
+# トップ画像スライド（HeroSlide）の管理設定
+@admin.register(HeroSlide)
+class HeroSlideAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_active', 'order')
 
-    の両立を前提にした構成
-    """
+# セット（Set）の管理設定
+@admin.register(Set)
+class SetAdmin(admin.ModelAdmin):
+    # 一覧画面で見える項目（名前、価格、表示状態）
+    list_display = ('name', 'price', 'is_active')
+    
+    # 編集画面で入力する項目（ここに 'image' を入れることで入力欄が出ます！）
+    fields = ('name', 'slug', 'image', 'price', 'description', 'products', 'is_active')
 
-    # 一覧画面（何のイベントかを一瞬で判断できる並び）
-    list_display = (
-        "title",
-        "category",
-        "is_regular",
-        "schedule_text",
-        "announce_from",
-        "announce_until",
-        "start_date",
-        "end_date",
-        "is_featured",
-        "is_active",
-    )
+@admin.register(HomePickup)
+class HomePickupAdmin(admin.ModelAdmin):
+    list_display = ('title', 'price_text', 'order', 'is_active')
+    list_editable = ('order', 'is_active') # 一覧画面で直接編集可能にする
+    ordering = ('order',)
 
-    # 左側フィルタ
-    list_filter = (
-        "category",
-        "is_regular",
-        "is_featured",
-        "is_active",
-    )
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url', 'order', 'is_active')
+    list_editable = ('order', 'is_active')
 
-    # 検索対象
-    search_fields = (
-        "title",
-        "summary",
-        "body",
-        "location",
-        "schedule_text",
-    )
-
-    # スラッグ自動生成
-    prepopulated_fields = {"slug": ("title",)}
-
-    # 編集画面の表示順
-    fields = (
-        "title",
-        "slug",
-        "category",
-
-        "is_regular",
-        "schedule_text",
-
-        "announce_from",
-        "announce_until",
-
-        "start_date",
-        "end_date",
-
-        "summary",
-        "body",
-
-        "location",
-        "map_url",
-        "apply_url",
-
-        "image",
-        "share_text",
-
-        "is_featured",
-        "is_active",
-    )
-
-    # 管理画面の並び順（新しいものが上）
-    ordering = ("-created_at",)
+# 一番上の import に ConsultationItem を追加
+@admin.register(ConsultationItem)
+class ConsultationItemAdmin(admin.ModelAdmin):
+    list_display = ('title', 'preset_id', 'color_theme', 'order', 'is_active')
+    list_editable = ('order', 'is_active')

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # これを追加！
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -163,5 +164,43 @@ LOGIN_URL = "accounts:login"
 
 AUTHENTICATION_BACKENDS = [
     # "accounts.backends.EmailBackend",
-    "django.contrib.auth.backends.ModelBackend",  # 一応残しておくと安心12/30
+    "django.contrib.auth.backends.ModelBackend", # 一応残しておくと安心12/30
 ]
+
+
+# ========================
+# 画像アップロード用の設定1/20
+# ========================
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# ==========================================
+# 本番環境（Render）用の設定
+# ==========================================
+import os
+import dj_database_url
+
+# データベース設定（RenderではPostgreSQL、手元ではSQLiteを使う自動切替）
+default_db_config = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'db.sqlite3',
+}
+
+DATABASES = {
+    'default': dj_database_url.config(default='sqlite:///db.sqlite3', conn_max_age=600)
+}
+
+# 静的ファイルと画像の設定（WhiteNoise対応）
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# 画像ファイル（media）の設定
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Render環境でのセキュリティ設定
+if 'RENDER' in os.environ:
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']

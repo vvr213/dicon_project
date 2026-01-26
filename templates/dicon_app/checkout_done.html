@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}注文完了{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  
+  <div class="mb-4 animate-bounce-in">
+    <i class="fa-solid fa-circle-check text-success fa-5x"></i>
+  </div>
+  
+  <h2 class="fw-bold display-6 mb-3">ご注文ありがとうございます！</h2>
+  <p class="text-muted mb-5">
+    ロッカーの準備ができました。<br>
+    以下のQRコードで解錠してください。
+  </p>
+
+  <div class="d-inline-block bg-dark p-2 rounded-4 shadow-lg" style="width: 300px;">
+    <div class="bg-white rounded-3 p-4 overflow-hidden position-relative">
+      <div class="badge bg-danger position-absolute top-0 end-0 m-2 animate-pulse">LOCKER KEY</div>
+      
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=DICON_ORDER_SUCCESS" alt="Unlock QR" class="img-fluid mb-3">
+      
+      <div class="fw-bold font-monospace fs-4 text-dark mb-1">KEY: 4649</div>
+      <p class="small text-muted mb-0">有効期限: 本日 23:59まで</p>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a href="{% url 'dicon_app:home' %}" class="btn btn-outline-secondary rounded-pill px-4">トップへ戻る</a>
+  </div>
+
+</div>
+
+<style>
+  .animate-bounce-in { animation: bounceIn 0.8s; }
+  @keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); opacity: 1; }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+</style>
+{% endblock %}

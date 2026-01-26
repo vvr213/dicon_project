@@ -1,17 +1,40 @@
 {% extends "base.html" %}
-{% block title %}特売一覧{% endblock %}
+{% block title %}特売情報{% endblock %}
 
 {% block content %}
-<h1>特売一覧</h1>
+<div class="container my-5">
+  <h1 class="mb-4">特売情報</h1>
+  <p class="mb-4">お得な商品をチェック！</p>
 
-<ul>
-  {% for product in products %}
-    <li>
-      <a href="{% url 'dicon_app:product_detail' product.id %}">{{ product.name }}</a>
-      （{% if product.sale_price %}{{ product.sale_price }}円{% else %}特売{% endif %}）
-    </li>
-  {% empty %}
-    <li>特売商品はまだありません</li>
-  {% endfor %}
-</ul>
+  {% if products %}
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for product in products %}
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <a href="{% url 'dicon_app:product_detail' product.pk %}" class="text-decoration-none text-dark">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+          {% else %}
+            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+              <span class="text-muted">No Image</span>
+            </div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title h6 fw-bold">{{ product.name }}</h5>
+            <p class="card-text text-danger fw-bold">¥{{ product.sale_price }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p>現在、特売商品はありません。</p>
+  {% endif %}
+</div>
+<div class="text-center mt-5 mb-4">
+  <a href="{% url 'dicon_app:home' %}#sale" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+    <i class="fa-solid fa-arrow-left me-2"></i>トップページの特売コーナーに戻る
+  </a>
+</div>
 {% endblock %}

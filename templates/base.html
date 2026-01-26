@@ -4,148 +4,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>{% block title %}Dicon Project{% endblock %}</title>
 
-  {# Bootstrap / FontAwesome #}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  {# 共通CSS #}
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-  {# ★ページごとにCSS差し込み（events.css等） #}
-  {% block extra_css %}{% endblock %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap" rel="stylesheet">
 
-  {# ★head側に追加したい時用（meta/OGPなど） #}
-  {% block head_extra %}{% endblock %}
+  <style>
+  /* ▼▼▼ これを追加してください ▼▼▼ */
+  html {
+    scroll-padding-top: 100px; /* ヘッダーの高さ分、スクロール位置をずらす設定 */
+  }
+  /* ▲▲▲ ここまで ▲▲▲ */
+  /* ======== ヘッダー改造計画 ======== */
+    
+    /* 1. バー全体を赤く！ */
+    nav.navbar {
+      background-color: #b71c1c !important; /* 広島レッド */
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* 2. ロゴ（Dicon）をポップに大きく！ */
+    .navbar-brand {
+      font-family: 'Mochiy Pop One', sans-serif;
+      color: #fff !important;
+      font-size: 2rem !important; /* ガツンと大きく */
+      text-shadow: 2px 2px 0px #000; /* 黒い影をつけて漫画っぽく */
+      transform: rotate(-2deg); /* ちょっと傾けて遊ぶ */
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+    .navbar-brand:hover {
+      transform: rotate(0deg) scale(1.1);
+    }
+
+    /* 3. メニュー文字（商品一覧など）もポップに！ */
+    .nav-link {
+      font-family: 'Mochiy Pop One', sans-serif;
+      color: #fff !important;
+      font-size: 1.1rem !important;
+      margin-left: 1rem;
+      position: relative;
+    }
+
+    /* ホバーした時に下線を引くアニメーション */
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      background: #ffc107; /* 黄色い線 */
+      bottom: 0;
+      left: 0;
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* カートやログイン情報などの文字色調整 */
+    .navbar-text, .nav-item i {
+      color: rgba(255,255,255,0.9) !important;
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+<body class="pt-5">
 
-  {% comment %}
-  --------------------
-  ナビ
-  --------------------
-  {% endcomment %}
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <div class="container">
+  {% include "partials/header.html" %}
 
-      <a class="navbar-brand fw-bold" href="{% url 'dicon_app:home' %}">Dicon</a>
+  <div class="site-fixed-spacer"></div>
 
-      {% if user.is_authenticated %}
-        <span class="navbar-text small text-muted ms-auto me-2 d-lg-none">
-          ログイン中：{{ user.first_name|default:user.username }}さん
-        </span>
-      {% endif %}
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#globalNav"
-              aria-controls="globalNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="globalNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:street_list' %}">店舗一覧</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:sale_list' %}">特売</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:set_list' %}">おすすめセット</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:product_list' %}">商品一覧</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'orders:order_list' %}">注文履歴</a></li>
-
-          {# イベント導線（必要なら常設） #}
-          {% if dicon_nav_show_events|default:True %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:event_list' %}">イベント</a></li>
-          {% endif %}
-
-          {# 追加：メニューに「相談」 #}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'dicon_app:consult_home' %}">相談</a>
-          </li>
-        </ul>
-
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="#" title="カート"><i class="fa-solid fa-cart-shopping"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" title="お気に入り"><i class="fa-solid fa-heart"></i></a>
-          </li>
-
-          {% if user.is_authenticated %}
-            <li class="nav-item d-none d-lg-block">
-              <span class="nav-link text-muted">
-                ログイン中：{{ user.first_name|default:user.username }}さん
-              </span>
-            </li>
-
-            <li class="nav-item">
-              <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="nav-link btn btn-link p-0">ログアウト</button>
-              </form>
-            </li>
+  {% if crumbs %}
+  <nav class="bg-light border-bottom">
+    <div class="container py-2">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="{% url 'dicon_app:home' %}">ホーム</a></li>
+        {% for c in crumbs %}
+          {% if c.url %}
+            <li class="breadcrumb-item"><a href="{{ c.url }}">{{ c.label }}</a></li>
           {% else %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">会員登録</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a></li>
+            <li class="breadcrumb-item active">{{ c.label }}</li>
           {% endif %}
-        </ul>
-
-      </div>
+        {% endfor %}
+      </ol>
     </div>
   </nav>
-
-  {% comment %}
-  --------------------
-  ページ専用：ナビ下サブヘッダー（必要なページだけ使う）
-  --------------------
-  {% endcomment %}
-  {% block subheader %}
-  {% if crumbs %}
-    <nav class="bg-light border-bottom">
-      <div class="container py-2">
-        <ol class="breadcrumb mb-0 small">
-          <li class="breadcrumb-item">
-            <a href="{% url 'dicon_app:home' %}">ホーム</a>
-          </li>
-
-          {% for c in crumbs %}
-            {% if c.url %}
-              <li class="breadcrumb-item">
-                <a href="{{ c.url }}">{{ c.label }}</a>
-              </li>
-            {% else %}
-              <li class="breadcrumb-item active" aria-current="page">
-                {{ c.label }}
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ol>
-      </div>
-    </nav>
   {% endif %}
-{% endblock %}
 
   <main class="container py-4">
-    {% if messages %}
-      <div class="mb-3">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags|default:'info' }} mb-2" role="alert">
-            {{ message }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
-
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="border-top py-3">
+<footer class="text-white pt-5 pb-3" style="background-color: #333;">
     <div class="container">
-      <small>© 2025 Dicon Project</small>
+      <div class="row g-4 mb-4">
+        
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center mb-3">
+            <div class="me-2 position-relative" style="width: 24px; height: 24px;">
+              <div style="width: 10px; height: 16px; background: white; border-radius: 0 0 8px 8px; position: absolute; bottom: 0; left: 6px; transform: rotate(-10deg);"></div>
+              <div style="width: 6px; height: 10px; background: #8bc34a; border-radius: 8px 8px 0 0; position: absolute; top: 0; left: 3px; transform: rotate(-30deg);"></div>
+              <div style="width: 6px; height: 10px; background: #8bc34a; border-radius: 8px 8px 0 0; position: absolute; top: 0; left: 14px; transform: rotate(30deg);"></div>
+            </div>
+            <h5 class="fw-bold m-0" style="font-family: 'Mochiy Pop One', sans-serif;">Dicon</h5>
+          </div>
+          
+          <p class="text-white small">
+            あなたのまちのコンシェルジュ商店街。<br>
+            スマホひとつで、毎日の献立をもっと自由に。
+          </p>
+          
+          <div class="d-flex gap-3 mt-3">
+            <a href="#" class="text-white bg-danger bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center hover-scale" style="width: 40px; height: 40px; text-decoration: none;">
+              <i class="fa-brands fa-instagram fs-5"></i>
+            </a>
+            <a href="#" class="text-white bg-primary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center hover-scale" style="width: 40px; height: 40px; text-decoration: none;">
+              <i class="fa-brands fa-x-twitter fs-5"></i>
+            </a>
+            <a href="#" class="text-white bg-success bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center hover-scale" style="width: 40px; height: 40px; text-decoration: none;">
+              <i class="fa-brands fa-line fs-5"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h6 class="fw-bold text-white mb-3 small">お買い物</h6>
+          <ul class="list-unstyled small space-y-2">
+            <li class="mb-2"><a href="{% url 'dicon_app:shop_list' %}" class="text-white text-decoration-none hover-white">お店を探す</a></li>
+            <li class="mb-2"><a href="{% url 'dicon_app:product_list' %}" class="text-white text-decoration-none hover-white">商品一覧</a></li>
+            <li class="mb-2"><a href="{% url 'dicon_app:sale_list' %}" class="text-white text-decoration-none hover-white">本日の特売</a></li>
+            <li class="mb-2"><a href="{% url 'dicon_app:set_list' %}" class="text-white text-decoration-none hover-white">献立セット</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h6 class="fw-bold text-white mb-3 small">サービス</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="{% url 'dicon_app:consult_home' %}" class="text-white text-decoration-none hover-white">おせっかい相談</a></li>
+            <li class="mb-2"><a href="{% url 'dicon_app:event_list' %}" class="text-white text-decoration-none hover-white">イベント情報</a></li>
+            <li class="mb-2"><a href="{% url 'dicon_app:locker_guide' %}" class="text-white text-decoration-none hover-white">ロッカーの使い方</a></li>
+            <li class="mb-2"><a href="{% url 'dicon_app:partner_list' %}" class="text-white text-decoration-none hover-white">パートナー制度</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="bg-white bg-opacity-10 rounded-4 p-3 border border-white border-opacity-10 text-center">
+            <p class="small fw-bold mb-2">アプリでもっと便利に！</p>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-light btn-sm w-50 fw-bold"><i class="fa-brands fa-apple me-1"></i>App Store</button>
+              <button class="btn btn-outline-light btn-sm w-50 fw-bold"><i class="fa-brands fa-google-play me-1"></i>Google Play</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="border-top border-secondary pt-3 text-center">
+        <small class="text-white">© 2026 Dicon Project / Higashiosaka Shopping Street.</small>
+      </div>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .hover-white:hover { opacity: 1 !important; text-decoration: underline !important; }
+    .space-y-2 > li { margin-bottom: 0.5rem; }
+  </style>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

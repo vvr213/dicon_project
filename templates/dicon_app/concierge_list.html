@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}商店街コンシェルジュのおすすめ一覧{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="h3 fw-bold text-dark">
+      <i class="fa-solid fa-bell-concierge text-danger me-2"></i>商店街コンシェルジュ
+    </h1>
+    <p class="text-muted">
+      「忙しい！ごはん何しよ？！」その悩み、商店街のおばちゃんにお任せあれ。<br>
+      人気の定番メニューから、プロへの無料相談まで、あなたの食卓をサポートします。
+    </p>
+  </div>
+
+  <div class="row g-4">
+    {% for item in items %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="position-relative">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 250px; object-fit: cover;">
+          {% else %}
+            <div class="bg-light" style="height: 250px;"></div>
+          {% endif %}
+          
+          {% if item.badge_text %}
+            <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-2 rounded-pill small fw-bold">
+              {{ item.badge_text }}
+            </span>
+          {% endif %}
+        </div>
+        
+        <div class="card-body p-4">
+          <h5 class="fw-bold">{{ item.title }}</h5>
+          <p class="text-muted small">{{ item.description }}</p>
+          
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <span class="h5 fw-bold text-danger mb-0">{{ item.price_text }}</span>
+            
+            {% if item.link_url %}
+              <a href="{{ item.link_url }}" class="btn btn-outline-danger rounded-pill btn-sm">
+                詳細を見る <i class="fa-solid fa-chevron-right ms-1"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p>現在準備中です。</p>
+    {% endfor %}
+  </div>
+
+  <div class="text-center mt-5">
+    <a href="{% url 'dicon_app:home' %}#concierge" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-arrow-left me-2"></i>トップページのコンシェルジュに戻る
+    </a>
+  </div>
+</div>
+{% endblock %}

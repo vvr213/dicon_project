@@ -1,0 +1,66 @@
+{% load static %}
+
+<header class="site-header site-fixed">
+  
+  <nav class="navbar navbar-expand-lg navbar-dark mainnav">
+    <div class="container">
+      
+      <a class="navbar-brand p-0" href="{% url 'dicon_app:home' %}">
+        <img src="{% static 'img/logo.png' %}" alt="Dicon商店街アプリ" height="80"
+             style="border: 3px solid white; border-radius: 10px; padding: 5px; background-color: rgba(255,255,255,0.1);">
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#globalNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="globalNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:shop_list' %}">お店一覧</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:product_list' %}">商品一覧</a></li>
+          
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#sale">特売</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#event">イベント</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#consult">相談</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" href="{% url 'dicon_app:qa' %}">よくある質問</a>
+        </li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          
+          <li class="nav-item me-2">
+            <a href="{% url 'dicon_app:cart_detail' %}" class="nav-link text-white position-relative hover-scale">
+              <i class="fa-solid fa-cart-shopping fs-5"></i>
+              <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden">Items</span>
+              </span>
+            </a>
+          </li>
+
+          {% if user.is_authenticated %}
+            <li class="nav-item d-none d-lg-block">
+              <a href="{% url 'dicon_app:profile' %}" class="nav-link text-white small me-2 fw-bold">
+                <i class="fa-solid fa-user me-1"></i>{{ user.username }}さん
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-light rounded-pill px-3">ログアウト</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-light text-danger fw-bold rounded-pill px-3">ログイン</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <style>
+    /* 不要になったCSS大根アイコンのスタイルを削除しました */
+    
+    /* カートアイコンなどのホバーエフェクトは残します */
+    .hover-scale { transition: transform 0.2s; }
+    .hover-scale:hover { transform: scale(1.1); }
+  </style>
+</header>

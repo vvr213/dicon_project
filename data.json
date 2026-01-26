@@ -1,0 +1,804 @@
+[
+{
+  "model": "dicon_app.street",
+  "pk": 1,
+  "fields": {
+    "name": "中央通り",
+    "color": "#6c757d"
+  }
+},
+{
+  "model": "dicon_app.street",
+  "pk": 2,
+  "fields": {
+    "name": "東商店街",
+    "color": "#6c757d"
+  }
+},
+{
+  "model": "dicon_app.street",
+  "pk": 3,
+  "fields": {
+    "name": "西レトロ通り",
+    "color": "#6c757d"
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 1,
+  "fields": {
+    "category": "vegetable",
+    "latitude": null,
+    "longitude": null,
+    "street": 1,
+    "name": "八百屋山田",
+    "description": "新鮮な地元野菜",
+    "line_url": null,
+    "image": ""
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 2,
+  "fields": {
+    "category": "meat",
+    "latitude": 34.66293,
+    "longitude": 135.572,
+    "street": 1,
+    "name": "精肉のタナカ",
+    "description": "国産和牛専門",
+    "line_url": null,
+    "image": "shops/nikuya.jpg"
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 3,
+  "fields": {
+    "category": "bread",
+    "latitude": null,
+    "longitude": null,
+    "street": 2,
+    "name": "パン工房こむぎ",
+    "description": "朝焼きパン",
+    "line_url": null,
+    "image": "shops/pan.jpg"
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 4,
+  "fields": {
+    "category": "dry",
+    "latitude": null,
+    "longitude": null,
+    "street": 2,
+    "name": "お茶の佐藤",
+    "description": "日本茶専門店",
+    "line_url": null,
+    "image": ""
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 5,
+  "fields": {
+    "category": "vegetable",
+    "latitude": null,
+    "longitude": null,
+    "street": 3,
+    "name": "昭和青果",
+    "description": "昔ながらの八百屋",
+    "line_url": null,
+    "image": ""
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 6,
+  "fields": {
+    "category": "meat",
+    "latitude": 34.66,
+    "longitude": 135.57,
+    "street": 3,
+    "name": "内田鶏肉店",
+    "description": "焼き鳥が美味しくて昔ながらのファンが多い",
+    "line_url": "https://lin.ee/Zamf7T9",
+    "image": "shops/yakitori-banshaku.jpg"
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 7,
+  "fields": {
+    "category": "fish",
+    "latitude": null,
+    "longitude": null,
+    "street": 1,
+    "name": "なにわ鮮魚店",
+    "description": "新鮮な旬の魚をいっぱい取り揃えてるよ！\r\n刺身の盛り合わせ、3枚おろし、なんでも相談してやー",
+    "line_url": null,
+    "image": "shops/sakanaya.jpg"
+  }
+},
+{
+  "model": "dicon_app.shop",
+  "pk": 8,
+  "fields": {
+    "category": "meat",
+    "latitude": 34.66293,
+    "longitude": 135.57196,
+    "street": 2,
+    "name": "惣菜の近藤",
+    "description": "化学調味料なしのおいしくて安心安全なお惣菜を心込めて作っています。\r\n野菜、揚げ物、和風、イタリアン、時にもフレンチも🎶\r\n今夜のおかずから、集まりのおしゃれなお惣菜、なんでも相談してね🎶",
+    "line_url": null,
+    "image": "shops/okazu.jpg"
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 1,
+  "fields": {
+    "category": "vegetable",
+    "name": "トマト",
+    "price": 100,
+    "shop": 1,
+    "image": "products/tomato_Jy7jyct.jpg",
+    "is_sale": true,
+    "sale_price": 80
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 2,
+  "fields": {
+    "category": "vegetable",
+    "name": "きゅうり3本",
+    "price": 150,
+    "shop": 1,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 5,
+  "fields": {
+    "category": "vegetable",
+    "name": "じゃがいも中3個",
+    "price": 200,
+    "shop": 1,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 6,
+  "fields": {
+    "category": "meat",
+    "name": "国産牛コロッケ1個",
+    "price": 100,
+    "shop": 2,
+    "image": "products/korokke.jpg",
+    "is_sale": true,
+    "sale_price": 70
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 7,
+  "fields": {
+    "category": "meat",
+    "name": "国産A5牛すき焼き用スライス100グラム",
+    "price": 800,
+    "shop": 2,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 8,
+  "fields": {
+    "category": "meat",
+    "name": "豚バラ100グラム",
+    "price": 220,
+    "shop": 2,
+    "image": "products/butabara.jpg",
+    "is_sale": true,
+    "sale_price": 180
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 9,
+  "fields": {
+    "category": "bread",
+    "name": "食パン",
+    "price": 300,
+    "shop": 3,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 10,
+  "fields": {
+    "category": "bread",
+    "name": "メロンパン",
+    "price": 180,
+    "shop": 3,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 11,
+  "fields": {
+    "category": "dry",
+    "name": "煎茶",
+    "price": 500,
+    "shop": 4,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 12,
+  "fields": {
+    "category": "dry",
+    "name": "ほうじ茶",
+    "price": 450,
+    "shop": 4,
+    "image": "products/houjitya.jpg",
+    "is_sale": true,
+    "sale_price": 400
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 13,
+  "fields": {
+    "category": "vegetable",
+    "name": "みかん中1袋",
+    "price": 380,
+    "shop": 5,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 14,
+  "fields": {
+    "category": "vegetable",
+    "name": "りんご1個",
+    "price": 150,
+    "shop": 5,
+    "image": "products/apple.jpg",
+    "is_sale": true,
+    "sale_price": 100
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 15,
+  "fields": {
+    "category": "meat",
+    "name": "鍋・唐揚げ用もも肉100グラム",
+    "price": 150,
+    "shop": 6,
+    "image": "",
+    "is_sale": false,
+    "sale_price": null
+  }
+},
+{
+  "model": "dicon_app.product",
+  "pk": 16,
+  "fields": {
+    "category": "meat",
+    "name": "焼きたて焼き鳥：どれでも1本",
+    "price": 100,
+    "shop": 6,
+    "image": "products/yakitori.jpg",
+    "is_sale": true,
+    "sale_price": 80
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 2,
+  "fields": {
+    "name": "朝ごはんセット",
+    "slug": "morning-set",
+    "image": "sets/morning-set.jpg",
+    "price": 300,
+    "description": "1人前200円から。朝の定番をセットでどうぞ。鮭はレンジで温め、味噌汁は具材たっぷり、お湯を注ぐだけ。",
+    "is_active": true,
+    "created_at": "2025-12-25T14:43:48.818Z",
+    "products": [
+      6,
+      14
+    ]
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 4,
+  "fields": {
+    "name": "週末はお家で居酒屋！おつまみ満喫セット",
+    "slug": "weekend-izakaya-set",
+    "image": "sets/kanrieiyou_bannsyaku.jpg",
+    "price": 500,
+    "description": "1人前500円から。週末はお家居酒屋。ビールが進むおかずやおつまみをセレクト。お父さんも大喜び！",
+    "is_active": true,
+    "created_at": "2026-01-24T16:00:38.525Z",
+    "products": [
+      5
+    ]
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 5,
+  "fields": {
+    "name": "野菜不足解消！季節の彩り温野菜セット",
+    "slug": "seasonal-steamed-veggies",
+    "image": "sets/huyuyasaiseiro_3uQCgz7.jpg",
+    "price": 500,
+    "description": "1人前500円から。旬の野菜を食べやすくカット済。レンジでチンするだけで、栄養満点の温野菜サラダが完成。",
+    "is_active": true,
+    "created_at": "2026-01-24T16:01:22.121Z",
+    "products": [
+      5
+    ]
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 6,
+  "fields": {
+    "name": "【平日15分】包丁いらず！働くママ応援の時短おかずセット",
+    "slug": "jitan-moms-support",
+    "image": "",
+    "price": 1850,
+    "description": "「今日のご飯、何にしよう…」と悩む時間をゼロに。 内田鶏肉店の特製ダレ漬け鶏もも肉と、昭和青果でカット済みの季節の野菜をセットにしました。フライパンで焼くだけで、栄養バランス満点のメインディッシュが完成します。内田鶏肉店：味付け鶏もも肉、昭和青果：ミックスカット野菜（大）",
+    "is_active": true,
+    "created_at": "2026-01-25T11:51:42.920Z",
+    "products": [
+      2
+    ]
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 7,
+  "fields": {
+    "name": "【肝機能UP】飲み過ぎた翌朝もシャキッと！「肝臓レスキューセット」",
+    "slug": "liver-care-rescue",
+    "image": "",
+    "price": 1600,
+    "description": "管理栄養士からの新提案！お酒を愛する商店街の皆さんのための「メンテナンス食」です。 魚屋さんの新鮮な**あさり（オルニチン）と、八百屋さんのほうれん草（葉酸）を組み合わせ、アルコールの分解を助けるミネラルを凝縮。さらに、お肉屋さんの良質なレバー（鉄分・ビタミンA）**を添えて、疲れた肝臓を強力サポートします。Products（選択例）:魚屋（鮮魚のXX）：あさりのパック八百屋（昭和青果）：旬のほうれん草お肉屋（精肉のタナカ）：特製レバー煮",
+    "is_active": true,
+    "created_at": "2026-01-25T11:56:11.539Z",
+    "products": [
+      8
+    ]
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 8,
+  "fields": {
+    "name": "【糖質制限】お豆腐屋さんの底力！「夜食でも罪悪感ゼロ麺セット」",
+    "slug": "zero-guilt-midnight-noodle",
+    "image": "",
+    "price": 1100,
+    "description": "「夜中に食べても太りたくない」を叶える驚きの献立。 お豆腐屋さんの厚揚げを麺に見立てて刻むか、ヘルシーな豆腐麺を主役に。お肉屋さんの自家製チャーシューと、お惣菜屋さんの煮卵をトッピングすれば、満足感はラーメンそのもの！高タンパク・低糖質で、管理栄養士が夜食に太鼓判を押す最強のセットです。\r\nProducts（選択例）:豆腐屋（XX豆腐店）：豆腐麺または厚揚げ、お肉屋（内田鶏肉店）：自家製焼豚惣菜（惣菜の近藤）：半熟煮卵",
+    "is_active": true,
+    "created_at": "2026-01-25T11:57:43.052Z",
+    "products": [
+      2
+    ]
+  }
+},
+{
+  "model": "dicon_app.set",
+  "pk": 9,
+  "fields": {
+    "name": "【快眠サポート】ぐっすり眠って明日も元気に。「セロトニン爆上げセット」",
+    "slug": "good-sleep-support",
+    "image": "",
+    "price": 1400,
+    "description": "「最近、寝付きが悪い…」そんなあなたへ。 睡眠ホルモンの材料となる「トリプトファン」を豊富に含むお魚（マグロやカツオ）と、精神を安定させる大豆製品（豆腐や味噌）、さらに吸収を助ける**バナナ（果物屋）**をセットにしました。商店街の食材を食べるだけで、心と体がリラックスモードへ切り替わります。Products（選択例）:魚屋（鮮魚のXX）：マグロの刺身豆腐屋（XX豆腐店）：こだわりの木綿、果物屋（XXフルーツ）：甘熟バナナ",
+    "is_active": true,
+    "created_at": "2026-01-25T11:59:51.886Z",
+    "products": [
+      14
+    ]
+  }
+},
+{
+  "model": "dicon_app.event",
+  "pk": 1,
+  "fields": {
+    "title": "小阪商店街でいちご狩り（ホテル風）",
+    "slug": "kosaka-ichigo-2026",
+    "start_date": "2026-02-01",
+    "end_date": "2026-03-31",
+    "summary": "商店街が“いちご農園”になる。食べ歩きOK、写真映え全振り。",
+    "body": "商店街内の複数店を“いちごスポット”にしてスタンプ方式で回遊\r\n\r\n\r\n参加パス提示で「いちごスイーツ」「いちご小鉢」「いちごドリンク」特典\r\n\r\n\r\n週末はフォトブース＆ミニ抽選会",
+    "category": "season",
+    "image": "events/ichigo-hotelstyle.jpg",
+    "location": "小阪商店街（メイン通り）",
+    "map_url": "https://maps.app.goo.gl/UA1Z3ekJYCmZo1HKA",
+    "apply_url": "",
+    "share_text": "「商店街でいちご狩り」やってる。映え全振りで回遊できる！",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-01-12T15:57:31.323Z",
+    "updated_at": "2026-01-20T12:28:32.947Z",
+    "is_regular": false,
+    "schedule_text": "2/1〜3/31 期間限定 商店街でいちご狩り",
+    "announce_from": "2026-01-15",
+    "announce_until": "2026-03-31"
+  }
+},
+{
+  "model": "dicon_app.event",
+  "pk": 2,
+  "fields": {
+    "title": "毎週金曜：ナイト屋台＆BGMジャック",
+    "slug": "night-yatai",
+    "start_date": null,
+    "end_date": null,
+    "summary": "毎週金曜17時〜。屋台食べ歩き＋BGMでにぎわう夜。",
+    "body": "開催日：毎週金曜\r\n\r\n\r\n時間：17:00〜\r\n\r\n\r\n内容：屋台、食べ歩き、BGM\r\n\r\n\r\n注意：雨天時は縮小の場合あり",
+    "category": "night",
+    "image": "events/night-yatai.jpg",
+    "location": "小阪商店街（メイン通り）",
+    "map_url": "https://maps.app.goo.gl/UA1Z3ekJYCmZo1HKA",
+    "apply_url": "",
+    "share_text": "#小阪商店街 #ナイト屋台",
+    "is_featured": false,
+    "is_active": true,
+    "created_at": "2026-01-14T00:24:34.457Z",
+    "updated_at": "2026-01-20T12:28:06.979Z",
+    "is_regular": true,
+    "schedule_text": "毎週金曜 17:00〜",
+    "announce_from": null,
+    "announce_until": null
+  }
+},
+{
+  "model": "dicon_app.event",
+  "pk": 3,
+  "fields": {
+    "title": "バレンタインフェア（商店街）",
+    "slug": "valentine",
+    "start_date": "2026-01-15",
+    "end_date": "2026-02-14",
+    "summary": "各お店からバレンタインデーのおすすめ商品が🎶",
+    "body": "参加店の「推しチョコ」「限定スイーツ」「ギフト雑貨」を特集\r\n無料ラッピング（数量限定）\r\n友チョコ/自分チョコ/家族チョコにも\r\n\r\nチョコレートやお菓子以外のお店もバレンタイン商品があるよ！\r\n詳しい対象店舗・商品は「詳細を見る」からチェック",
+    "category": "season",
+    "image": "events/valentine.jpg",
+    "location": "小阪商店街（周辺一帯）",
+    "map_url": "https://maps.app.goo.gl/UA1Z3ekJYCmZo1HKA",
+    "apply_url": "",
+    "share_text": "商店街バレンタインフェア開催中！推しチョコ見つけよう🍫",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-01-15T06:39:03.728Z",
+    "updated_at": "2026-01-20T12:22:52.736Z",
+    "is_regular": false,
+    "schedule_text": "2/1〜2/14 期間限定（ギフト＆スイーツ＆いろいろ）",
+    "announce_from": "2026-01-15",
+    "announce_until": "2026-02-14"
+  }
+},
+{
+  "model": "dicon_app.event",
+  "pk": 4,
+  "fields": {
+    "title": "ヒーロー商店街デー（ショー＆撮影会）",
+    "slug": "hero-shotengai-day-2026",
+    "start_date": "2026-05-03",
+    "end_date": "2026-05-03",
+    "summary": "子どもが主役の日。買い物が“冒険”になる。",
+    "body": "ヒーロー風ステージ／キッズミッション（店で合言葉）／限定シール配布",
+    "category": "kids",
+    "image": "events/hero-day.jpg",
+    "location": "小阪商店街（特設ステージ）",
+    "map_url": "",
+    "apply_url": "",
+    "share_text": "子どもが主役！商店街に歴代ヒーローが。パパもワクワク？",
+    "is_featured": true,
+    "is_active": true,
+    "created_at": "2026-01-21T04:16:08.420Z",
+    "updated_at": "2026-01-21T04:23:02.343Z",
+    "is_regular": false,
+    "schedule_text": "こどもの日企画",
+    "announce_from": "2026-01-21",
+    "announce_until": "2026-05-03"
+  }
+},
+{
+  "model": "dicon_app.heroslide",
+  "pk": 1,
+  "fields": {
+    "title": "① 時短：おすすめセットで10分ごはん",
+    "subtitle": "",
+    "link_url": "/sets/",
+    "image": "",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.heroslide",
+  "pk": 2,
+  "fields": {
+    "title": "② 商店街体験：通りからお店へ",
+    "subtitle": "",
+    "link_url": "/streets/",
+    "image": "",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.heroslide",
+  "pk": 3,
+  "fields": {
+    "title": "③ 本日の特売：お得な商品をチェック",
+    "subtitle": "",
+    "link_url": "/sale/",
+    "image": "",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 1,
+  "fields": {
+    "title": "【定番】とろとろ牛すじカレーセット",
+    "description": "今はもうないけど、黒門市場のパジャマラマっていう人気のカレー屋さんのレシピを教えてもらいました。隠し味は八角。商店街の肉屋が本気で作った、煮込むだけのプロの味。",
+    "image": "home_pickup/gyusuji.jpg",
+    "badge_text": "1人前〜",
+    "price_text": "¥500〜",
+    "link_button_text": "セット一覧を見る",
+    "link_url_name": "dicon_app:set_list",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 2,
+  "fields": {
+    "title": "【季節限定】鮮魚店の海鮮鍋セット",
+    "description": "特製出汁付き！魚も野菜（八百屋山田）もセットで全部カット済みやから、お鍋に入れるだけ。〆のラーメンと餅巾着で満足満腹間違いなし！！",
+    "image": "home_pickup/kaisennabe.jpg",
+    "badge_text": "3人前・冬季限定",
+    "price_text": "¥2,500",
+    "link_button_text": "セット一覧を見る",
+    "link_url_name": "dicon_app:set_list",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 3,
+  "fields": {
+    "title": "【無料】プロになんでも献立相談",
+    "description": "「今日子どものお誕生日やねん、今夜は予算2000円で子どもが喜ぶオードブルお願い！」「イカの掃除して、胴は輪切りにして、ゲソは天ぷらにしといて〜」など、チャットでお気軽にご相談ください。",
+    "image": "home_pickup/party.jpg",
+    "badge_text": "相談無料",
+    "price_text": "プライスレス",
+    "link_button_text": "相談メニューを見る",
+    "link_url_name": "dicon_app:consult_menu",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 4,
+  "fields": {
+    "title": "【イベント】週末は商店街で縁日気分！",
+    "description": "射的、輪投げ、焼きそばなど、昔ながらの屋台が並びます。ご家族でどうぞ！",
+    "image": "home_pickup/ennichi.jpg",
+    "badge_text": "7月末の土日開催！",
+    "price_text": "入場無料",
+    "link_button_text": "イベント一覧へ",
+    "link_url_name": "dicon_app:event_list",
+    "order": 5,
+    "is_active": false
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 5,
+  "fields": {
+    "title": "【旬の味覚】採れたて完熟いちご入荷",
+    "description": "甘さと酸味のバランスが絶妙。そのままはもちろん、デザート作りにも最適です。\r\n「商店街でいちご狩り」も絶賛開催中！商店街はいちごまみれ中！",
+    "image": "home_pickup/ichigo.jpg",
+    "badge_text": "数量限定",
+    "price_text": "¥580〜",
+    "link_button_text": "詳しく見る",
+    "link_url_name": "dicon_app:product_list",
+    "order": 4,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 6,
+  "fields": {
+    "title": "朝ごはんセット",
+    "description": "朝の定番もまとめ買い。朝の準備もゆとりができる！朝ごはんは大事やで〜",
+    "image": "home_pickup/morning-set.jpg",
+    "badge_text": "1人前〜",
+    "price_text": "¥400〜",
+    "link_button_text": "一覧を見る",
+    "link_url_name": "dicon_app:set_list",
+    "order": 6,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 7,
+  "fields": {
+    "title": "焼き鳥晩酌セット",
+    "description": "晩酌にぴったり！焼き鳥４本＋野菜の惣菜１品＋350ml缶ビールか缶チューハイ１本",
+    "image": "home_pickup/yakitori_bansyaku_nQsSN4e.jpg",
+    "badge_text": "1人前〜",
+    "price_text": "¥600〜",
+    "link_button_text": "すべてを見る",
+    "link_url_name": "dicon_app:set_list",
+    "order": 7,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.homepickup",
+  "pk": 8,
+  "fields": {
+    "title": "【下処理済み】骨取りサバの味噌煮用",
+    "description": "魚屋の大将が丁寧に骨を抜きました。お子様でも安心してパクパク食べられます。臭み取りの下処理も完了済み！添付の味噌だれで煮るだけでプロの味。",
+    "image": "home_pickup/sabani.jpg",
+    "badge_text": "2切れ〜",
+    "price_text": "* ¥450（2切れ）",
+    "link_button_text": "詳しく見る",
+    "link_url_name": "dicon_app:product_list",
+    "order": 4,
+    "is_active": true
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 1,
+  "fields": {
+    "name": "おそうじ本舗 東大阪店",
+    "category": "cleaning",
+    "description": "【ハウスクリーニング / 代表：田中 健一】 頑固な油汚れ、私が落とします！商店街の裏で生まれ育ちました。エアコン、換気扇、お風呂場まで。主婦の皆さんの「あと少し手が届かない」を解決します。 【基本料金】¥6,000〜/1箇所　見積もり無料です。",
+    "image": "partners/tanaka.jpg",
+    "url": "",
+    "order": 1,
+    "is_active": true,
+    "created_at": "2026-01-25T08:06:25.525Z"
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 2,
+  "fields": {
+    "name": "デジタルサポート 鈴木",
+    "category": "repair",
+    "description": "【PC・スマホ修理 / 代表：鈴木 誠】 元大手エンジニア。「パソコンが遅い」「Wi-Fiが繋がらない」など、電気屋さんに聞くほどでもない小さなお悩み、即日解決します。高齢者向けスマホ教室も開催中。 【出張診断】¥3,000/回",
+    "image": "partners/suzuki.jpg",
+    "url": "",
+    "order": 2,
+    "is_active": true,
+    "created_at": "2026-01-25T08:07:33.715Z"
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 3,
+  "fields": {
+    "name": "グリーンケア 佐藤",
+    "category": "garden",
+    "description": "【庭木・力仕事 / 代表：佐藤 剛】 伸びすぎた庭木の剪定から、重たい家具の移動、電球交換ひとつでも駆けつけます。「男手が必要なとき」に思い出してください。 【作業料】¥5,000〜/1時間",
+    "image": "partners/sato.jpg",
+    "url": "",
+    "order": 3,
+    "is_active": true,
+    "created_at": "2026-01-25T08:08:08.533Z"
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 4,
+  "fields": {
+    "name": "洋服リフォーム山下",
+    "category": "clothing",
+    "description": "【洋服・お直し / 代表：山下 佳子】 「保育園のスモックのゴム交換」から「旦那様のスーツの破れ」まで。捨てようと思ったその服、おばちゃんが蘇らせるで！ボタン1個でも遠慮せんと来てや。 【お直し】¥500〜/1点",
+    "image": "partners/yamashita.jpg",
+    "url": "",
+    "order": 4,
+    "is_active": true,
+    "created_at": "2026-01-25T08:08:52.430Z"
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 5,
+  "fields": {
+    "name": "親の見守り・介護サポート",
+    "category": "helper",
+    "description": "「実家の親、元気かな？」お弁当配達のついでに、顔を見て安否確認します。離れて暮らす家族も安心。",
+    "image": "",
+    "url": "",
+    "order": 5,
+    "is_active": true,
+    "created_at": "2026-01-25T11:11:30.375Z"
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 6,
+  "fields": {
+    "name": "住まいのSOS・修理",
+    "category": "repair",
+    "description": "水漏れ、鍵の紛失、網戸の張り替え。地元の職人が「すぐ」駆けつけます。",
+    "image": "",
+    "url": "",
+    "order": 7,
+    "is_active": true,
+    "created_at": "2026-01-25T11:12:14.840Z"
+  }
+},
+{
+  "model": "dicon_app.partner",
+  "pk": 7,
+  "fields": {
+    "name": "力仕事・スマホ相談",
+    "category": "others",
+    "description": "家具の移動、電球交換、スマホの操作。「誰に頼めば？」を解決します。",
+    "image": "",
+    "url": "",
+    "order": 8,
+    "is_active": true,
+    "created_at": "2026-01-25T11:13:06.802Z"
+  }
+},
+{
+  "model": "dicon_app.consultationitem",
+  "pk": 1,
+  "fields": {
+    "title": "刺身盛り、予算で作れます",
+    "description": "「大人4人で3000円くらい」「サーモン多めで」など、スーパーのパックにはない柔軟さで対応します。",
+    "image": "consult/sashimi.jpg",
+    "preset_id": "fish",
+    "color_theme": "primary",
+    "order": 1,
+    "is_active": true
+  }
+}
+]

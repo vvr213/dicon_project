@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}注文確認{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">注文内容の確認</h2>
+    <p class="text-muted">以下の内容で注文を確定します。</p>
+  </div>
+
+  <div class="card border-0 shadow rounded-4 mb-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold border-bottom pb-2 mb-3">受取情報</h5>
+      <div class="mb-3">
+        <label class="small text-muted">お名前</label>
+        <div class="fw-bold">{{ user.username|default:"Diconユーザー" }} 様</div>
+      </div>
+      <div class="mb-3">
+        <label class="small text-muted">受取場所</label>
+        <div class="fw-bold"><i class="fa-solid fa-box-open me-1 text-success"></i>西地区 コミュニティセンター前ロッカー</div>
+      </div>
+      <div class="mb-0">
+        <label class="small text-muted">お支払い方法</label>
+        <div class="fw-bold"><i class="fa-brands fa-cc-visa me-1 text-primary"></i>登録済みクレジットカード (****-1234)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <a href="{% url 'dicon_app:checkout_done' %}" class="btn btn-success btn-lg rounded-pill w-100 py-3 shadow hover-scale fw-bold">
+      <i class="fa-solid fa-check me-2"></i>注文を確定する
+    </a>
+    <p class="small text-muted mt-2">※これはデモです。実際の決済は発生しません。</p>
+  </div>
+</div>
+{% endblock %}

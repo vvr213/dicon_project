@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}空き店舗活用プロジェクト{% endblock %}
+
+{% block content %}
+
+<section class="mb-5 text-center text-white py-5 rounded-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+  <div class="position-relative z-1">
+    <span class="badge bg-white text-success fs-6 mb-2 px-3 py-2 rounded-pill shadow-sm">
+      <i class="fa-solid fa-hammer me-1"></i>RENOVATION PROJECT
+    </span>
+    <h1 class="fw-bold display-5 mb-3">シャッターを開けたら、<br>街の「新しい景色」が生まれた。</h1>
+    <p class="lead opacity-90">
+      古い金物屋が古着バーに。時計屋がネオン喫茶に。<br>
+      商店街の空き店舗は、あなたの夢を叶える「宝箱」です。
+    </p>
+  </div>
+  <i class="fa-solid fa-paint-roller position-absolute top-50 start-50 translate-middle text-white opacity-10" style="font-size: 15rem;"></i>
+</section>
+
+<section class="container mb-5">
+  <h2 class="fw-bold text-center mb-5">
+    <span class="border-bottom border-4 border-success pb-2">現在の活用事例</span>
+  </h2>
+
+  <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5">
+    <div class="row g-0">
+      <div class="col-lg-6 bg-dark text-white d-flex flex-column justify-content-center p-5 position-relative">
+        <span class="badge bg-white text-dark position-absolute top-0 start-0 m-4 px-3 py-2 rounded-pill shadow">Case.01</span>
+        <h3 class="fw-bold mb-2">古着＆リメイク "Garage"</h3>
+        <p class="text-white-50 mb-4">元・金物屋さん → 古着バーへ</p>
+        <p class="mb-4">
+          「古い棚やカウンター、金物屋時代の看板もそのまま活かしました。逆にそれが『エモい』って言われます。」<br>
+          服飾専門学校の学生3人が共同で立ち上げ。昼はリメイク工房、夜はバーとして、若者が集まる秘密基地に。
+        </p>
+        <div class="d-flex gap-2">
+          <span class="badge border border-light fw-normal">DIY改装</span>
+          <span class="badge border border-light fw-normal">学生起業</span>
+          <span class="badge border border-light fw-normal">夜営業</span>
+        </div>
+      </div>
+      <div class="col-lg-6 bg-secondary d-flex align-items-center justify-content-center" style="min-height: 300px;">
+        <i class="fa-solid fa-shirt fa-5x text-white opacity-25"></i>
+        </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5">
+    <div class="row g-0 flex-lg-row-reverse">
+      <div class="col-lg-6 text-white d-flex flex-column justify-content-center p-5 position-relative" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
+        <span class="badge bg-white text-primary position-absolute top-0 start-0 m-4 px-3 py-2 rounded-pill shadow">Case.02</span>
+        <h3 class="fw-bold mb-2">純喫茶 "ネオ・トーキョー"</h3>
+        <p class="text-white-50 mb-4">元・時計屋さん → 喫茶店へ</p>
+        <p class="mb-4">
+          「壁一面の古時計をそのままディスプレイにしました。昭和の雰囲気に、ネオン管を組み合わせた『サイバーレトロ』がテーマです。」<br>
+          推し活スポットとしてSNSでバズり中。放課後の高校生たちが、クリームソーダ片手に語り合う場所になりました。
+        </p>
+        <div class="d-flex gap-2">
+          <span class="badge border border-light fw-normal">推し活</span>
+          <span class="badge border border-light fw-normal">SNS映え</span>
+          <span class="badge border border-light fw-normal">学割あり</span>
+        </div>
+      </div>
+      <div class="col-lg-6 bg-light d-flex align-items-center justify-content-center" style="min-height: 300px;">
+        <i class="fa-solid fa-martini-glass-citrus fa-5x text-secondary opacity-25"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5">
+    <div class="row g-0">
+      <div class="col-lg-6 bg-warning text-dark d-flex flex-column justify-content-center p-5 position-relative">
+        <span class="badge bg-white text-warning position-absolute top-0 start-0 m-4 px-3 py-2 rounded-pill shadow">Case.03</span>
+        <h3 class="fw-bold mb-2">おやこ基地 "HUG"</h3>
+        <p class="opacity-75 mb-4">元・書店 → キッズスペース＆カフェへ</p>
+        <p class="mb-4">
+          「商店街で買い物中、子どもがグズると大変で…。だから『親子で逃げ込める場所』を作りました。」<br>
+          元書店の本棚を活かして絵本コーナーに。木のボールプールや授乳室も完備。ママたちのワークショップも開催されています。
+        </p>
+        <div class="d-flex gap-2">
+          <span class="badge bg-white bg-opacity-50 fw-normal">子育て支援</span>
+          <span class="badge bg-white bg-opacity-50 fw-normal">持ち込みOK</span>
+          <span class="badge bg-white bg-opacity-50 fw-normal">授乳室あり</span>
+        </div>
+      </div>
+      <div class="col-lg-6 bg-light d-flex align-items-center justify-content-center" style="min-height: 300px;">
+        <i class="fa-solid fa-shapes fa-5x text-secondary opacity-25"></i>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="container mb-5">
+  <div class="bg-light rounded-4 p-5 text-center border border-success border-2 border-opacity-25">
+    <h3 class="fw-bold mb-3">次は、あなたの番です。</h3>
+    <p class="text-muted mb-4">
+      「1日だけのポップアップ」から「本格出店」まで。<br>
+      商店街は、新しい挑戦を全力で応援します。
+    </p>
+    
+    <div class="row justify-content-center g-3 mb-4">
+      <div class="col-md-3">
+        <div class="bg-white p-3 rounded shadow-sm">
+          <div class="fw-bold text-success mb-1">貸しスペースA</div>
+          <small class="text-muted">元和菓子屋 / 5坪</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="bg-white p-3 rounded shadow-sm">
+          <div class="fw-bold text-success mb-1">貸しスペースB</div>
+          <small class="text-muted">元倉庫 / 10坪 / 防音</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="bg-white p-3 rounded shadow-sm">
+          <div class="fw-bold text-success mb-1">チャレンジワゴン</div>
+          <small class="text-muted">移動販売 / 1日〜OK</small>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" class="btn btn-success btn-lg rounded-pill px-5 shadow hover-scale">
+      <i class="fa-solid fa-paper-plane me-2"></i>内見・出店相談をする
+    </a>
+  </div>
+</section>
+
+{% endblock %}

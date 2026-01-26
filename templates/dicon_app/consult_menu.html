@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}おせっかい相談メニュー{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <span class="badge bg-danger px-3 py-2 rounded-pill mb-3">商店街のプロにお任せ</span>
+    <h1 class="fw-bold">相談メニュー一覧</h1>
+    <p class="text-muted">献立の悩みから下処理まで。気になるメニューを選んでください。</p>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    
+    {% for item in items %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-scale">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ item.title }}">
+            {% else %}
+            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fa-solid fa-image fa-3x text-muted"></i>
+            </div>
+            {% endif %}
+
+            <div class="card-body p-4 text-center">
+                <h5 class="fw-bold mb-3">{{ item.title }}</h5>
+                <p class="text-muted small mb-4">
+                    {{ item.description }}
+                </p>
+                <a href="{% url 'dicon_app:consult_home' %}?preset={{ item.preset_id }}" 
+                   class="btn btn-outline-danger rounded-pill px-5 py-2 fw-bold w-100">
+                    相談する
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="col">
+        <div class="card h-100 border-2 border-secondary border-opacity-10 shadow-none rounded-4 overflow-hidden" style="border-style: dashed !important;">
+            <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-center">
+                <div class="mb-3 bg-light rounded-circle p-4">
+                    <i class="fa-solid fa-pen fa-2x text-muted"></i>
+                </div>
+                <h5 class="fw-bold mb-2">その他なんでも</h5>
+                <p class="text-muted small mb-4">
+                    メニューにないことも、<br>とりあえず聞いてみよう！
+                </p>
+                <a href="{% url 'dicon_app:consult_home' %}" class="btn btn-secondary rounded-pill px-4 py-2 fw-bold w-100">
+                    チャットを開く
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+  
+  <div class="mt-5 text-center">
+    <a href="{% url 'dicon_app:home' %}" class="btn btn-link text-muted text-decoration-none">
+      <i class="fa-solid fa-arrow-left me-2"></i>トップへ戻る
+    </a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}よくある質問 - Dicon{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    
+    <div class="text-center mb-5">
+        <span class="badge bg-danger bg-opacity-10 text-danger mb-2 px-3 py-2 rounded-pill fw-bold">Q & A</span>
+        <h1 class="fw-bold display-5 text-dark" style="font-family: 'Mochiy Pop One', sans-serif;">よくあるご質問</h1>
+        <p class="text-muted mt-3">
+            Dicon（ダイコン）の使い方や、サービスについて。<br>
+            迷ったときは、こちらをご覧ください。
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="accordion shadow-sm rounded-4 overflow-hidden" id="faqAccordion">
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Q. Dicon（ダイコン）って、どんなサービスですか？
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            商店街の鮮魚店・精肉店・青果店が、あなたの「専属コンシェルジュ」になるアプリです。<br>
+                            プロが目利きした食材を、ご希望に合わせて「下ごしらえ（皮むき・カット・骨抜きなど）」した状態でお届けします。<br>
+                            ネットスーパーの手軽さと、専門店の品質をいいとこ取りしたサービスです。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Q. 「下ごしらえ」はどこまでやってくれますか？
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            基本は「加熱直前」の状態まで準備します。<br>
+                            例えば、野菜は皮をむいてカット、魚は骨を抜いて切り身に、ハンバーグはこねて成形まで行います。<br>
+                            ご家庭では「焼く」「煮る」などの仕上げ調理だけで、出来立ての味が楽しめます。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Q. 忙しいので、焼いておいてほしいのですが...
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            はい、可能です。<br>
+                            チャットでのご注文時に「焼いておいて」「揚げておいて」とお伝えいただければ、商店街のお惣菜として調理済みの状態でもご用意できます。<br>
+                            その日の気分や忙しさに合わせて、自由に使い分けてください。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Q. 献立が決まっていなくても注文できますか？
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            もちろんです！それがDiconの一番の強みです。<br>
+                            チャットで「予算2000円で魚料理」「子供が喜ぶガッツリ系」など、ざっくりとしたリクエストを投げてください。<br>
+                            プロがその日一番の食材で、あなたにぴったりの献立を提案します。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Q. ロッカー受取の使い方を教えてください。
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            商品が出来上がると、アプリに「QRコード」と「ロッカー番号」が届きます。<br>
+                            商店街に設置された専用冷蔵ロッカーのリーダーにQRコードをかざすだけで、扉が開きます。<br>
+                            お店の営業時間外でも受け取れるので、残業帰りでも安心です。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            Q. 子供が小さいので、添加物や産地が気になります。
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            ご安心ください。お届けするのは「工場で作られた加工品」ではなく、「商店街の店頭に並ぶ新鮮な食材」そのものです。<br>
+                            保存料などの添加物は一切使用していません。産地についても、目利きのプロが選んだ確かなものだけを使用しています。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            Q. 支払い方法は何がありますか？
+                        </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            現在は、アプリ内でのクレジットカード決済に対応しています。<br>
+                            商品は事前決済済みですので、ロッカーでは受け取るだけでスムーズにお帰りいただけます。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingEight">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                            Q. アレルギーや苦手な食材があるのですが...
+                        </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            ぜひ、チャットでお伝えください。<br>
+                            「卵抜きで」「パクチーは入れないで」といった細かなご要望にも、個別に柔軟に対応できるのが商店街の良さです。<br>
+                            あなただけの「カスタム注文」として承ります。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingNine">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                            Q. Can I order in English? (英語での注文はできますか？)
+                        </button>
+                    </h2>
+                    <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            Yes, absolutely! The chat supports basic translation.<br>
+                            簡単な英語でのオーダーも大歓迎です。写真を使ってのリクエストも可能ですので、お気軽にご利用ください。
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header" id="headingTen">
+                        <button class="accordion-button collapsed fw-bold py-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                            Q. 毎回チャットで相談しないとダメですか？
+                        </button>
+                    </h2>
+                    <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted pb-4" style="line-height: 1.8;">
+                            いいえ、そんなことはありません。<br>
+                            会話なしでタップするだけの「特売品」や「献立セット」の購入だけでも大歓迎です。<br>
+                            疲れている時はサッと購入、余裕がある時は相談など、ご自身のペースで自由に使ってください。
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-5">
+                <p class="text-muted mb-3">その他、ご不明な点はチャットでお気軽にお聞きください。</p>
+                <a href="{% url 'dicon_app:consult_menu' %}" class="btn btn-danger rounded-pill px-5 py-3 fw-bold shadow hover-scale">
+                    <i class="fa-regular fa-comments me-2"></i>チャットで質問する
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -2,21 +2,18 @@
 {% block title %}通り一覧{% endblock %}
 
 {% block content %}
-<h1>通り一覧</h1>
+<h1 class="mb-4">通り一覧</h1>
 
-<ul>
-    {% for street in streets %}
-      <li>
-        <!-- <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}"> -->
-        <!-- <slug> を手打ちする必要ゼロ -->
-          <a href="{% url 'dicon_app:shop_list_by_street' street_slug=street.slug %}{% if preset %}?preset={{ preset }}{% endif %}">
-            {{ street.name }}
-          </a>
-      </li>
-    {% empty %}
-      <li>通りがまだありません</li>
-    {% endfor %}
-  </ul>
-
-<p><a href="{% url 'dicon_app:product_list' %}">商品一覧へ</a></p>
+<div class="row g-3">
+  {% for street in streets %}
+  <div class="col-md-4">
+    <a href="{% url 'dicon_app:shop_list_by_street' street.slug %}"
+       class="text-decoration-none text-dark">
+      <div class="dicon-card">
+        <strong>{{ street.name }}</strong>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

@@ -1,47 +1,88 @@
-<!-- 「LINEで相談する」は shop.line_url 直リンクをやめて、shop_consult に行く。 -->
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}{{ shop.name }}{% endblock %}
 
 {% block content %}
-<h1>{{ shop.name }}</h1>
 
-{% if shop.description %}
-  <p>{{ shop.description }}</p>
-{% endif %}
-
-<p>{{ shop.street.name }} のお店</p>
-
-{# ✅ LINEで相談する：まずは相談文生成ページへ（preset引き継ぎ） #}
-<a class="btn btn-success"
-href="{{ consult_url }}">LINEで相談する
-</a>
-
-<h2 class="h5 mt-4">商品</h2>
-
-<div class="list-group">
-  {% for product in products %}
-    <div class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
-        <div class="fw-bold">{{ product.name }}</div>
-        <div class="text-muted small">{{ product.price }}円</div>
-      </div>
-
-      <div class="d-flex gap-2">
-        <a class="btn btn-outline-secondary btn-sm"
-           href="{% url 'dicon_app:product_detail' product.id %}">
-          詳細
-        </a>
-        <a class="btn btn-sm btn-dark" href="{% url 'payments:checkout' product.id %}">購入</a>
-      </div>
+<div class="bg-light py-5 mb-4 border-bottom">
+  <div class="container text-center">
+    <span class="badge bg-secondary mb-2">{{ shop.street.name }}</span>
+    <h1 class="display-5 fw-bold mb-3">{{ shop.name }}</h1>
+    <p class="text-muted" style="max-width: 600px; margin: 0 auto;">{{ shop.description|linebreaksbr }}</p>
+    
+    <div class="mt-4 d-flex gap-2 justify-content-center">
+      <a href="{% url 'dicon_app:chat_demo' %}?shop={{ shop.name }}" class="btn btn-primary rounded-pill fw-bold px-4 py-2">
+        <i class="fa-solid fa-comments me-2"></i>このお店に相談する
+      </a>
+      {% if shop.line_url %}
+      <a href="{{ shop.line_url }}" target="_blank" class="btn btn-success rounded-pill px-4">
+        <i class="fa-brands fa-line me-2"></i>LINEで見る
+      </a>
+      {% endif %}
     </div>
-  {% empty %}
-    <div class="list-group-item">このお店にはまだ商品がありません</div>
-  {% endfor %}
+  </div>
 </div>
 
-<p>
-  <a href="{% url 'dicon_app:shop_list_by_street' street_slug=shop.street.slug %}{% if preset %}?preset={{ preset }}{% endif %}">
-    店舗一覧へ戻る
-  </a>
-</p>
+<div class="container mb-5">
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      {% for crumb in crumbs %}
+        {% if crumb.url %}
+          <li class="breadcrumb-item"><a href="{{ crumb.url }}">{{ crumb.label }}</a></li>
+        {% else %}
+          <li class="breadcrumb-item active" aria-current="page">{{ crumb.label }}</li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </nav>
+
+  <h2 class="h4 fw-bold mb-3 border-start border-4 border-primary ps-3">取り扱い商品</h2>
+  
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for product in products %}
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <a href="{% url 'dicon_app:product_detail' product.pk %}" class="text-decoration-none text-dark">
+          
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top bg-light" alt="{{ product.name }}" style="height: 160px; object-fit: cover;">
+          {% else %}
+            <div class="bg-light d-flex align-items-center justify-content-center text-secondary" style="height: 160px;">
+              <i class="fa-solid fa-basket-shopping fa-3x opacity-25"></i>
+            </div>
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title h6 fw-bold mb-1">{{ product.name }}</h5>
+            
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              {% if product.is_sale and product.sale_price %}
+                <span class="text-danger fw-bold">{{ product.sale_price }}円</span>
+              {% else %}
+                <span class="fw-bold">{{ product.price }}円</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+        <div class="card-footer bg-white border-top-0 pt-0 pb-3">
+            <a href="{% url 'dicon_app:consult_from_product' product.pk %}" class="btn btn-sm btn-outline-secondary w-100 rounded-pill">
+                相談する
+            </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="mt-4 mb-5 text-center">
+    <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+        <i class="fa-solid fa-arrow-left me-2"></i>前のページに戻る
+    </a>
+</div>
+
+  {% if not products %}
+    <p class="text-muted py-5 text-center">商品情報はまだありません。</p>
+  {% endif %}
+</div>
 {% endblock %}
