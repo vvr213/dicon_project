@@ -14,5 +14,5 @@ python manage.py migrate
 # 4. データの読み込み（data.jsonがあれば）
 if [ -f data.json ]; then
     echo "Loading data from data.json..."
-    python manage.py loaddata data.json
+    # python manage.py loaddata data.json
 fi
