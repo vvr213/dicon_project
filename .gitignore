@@ -20,3 +20,5 @@ venv/
 
 # Media images
 # media/
+
+data.json
