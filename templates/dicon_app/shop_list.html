@@ -21,24 +21,18 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. 地図の初期設定（とりあえず中心を東大阪あたりにセット）
     var map = L.map('shop-map').setView([34.6631, 135.5862], 15);
 
-    // 2. 地図のデザイン（OpenStreetMapを使用）
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // 3. Djangoからお店データを渡すためのリスト
     var markers = [];
 
-    // Djangoのループ機能を使って、お店の数だけピンを作る
     {% for shop in shops %}
         {% if shop.latitude and shop.longitude %}
-            // ピンを立てる
             var marker = L.marker([{{ shop.latitude }}, {{ shop.longitude }}]).addTo(map);
             
-            // クリックした時の吹き出し
             marker.bindPopup(`
                 <div class="text-center">
                     <b>{{ shop.name }}</b><br>
@@ -50,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {% endif %}
     {% endfor %}
 
-    // 4. 全部のピンが入るように地図のズームを自動調整
     if (markers.length > 0) {
         var group = new L.featureGroup(markers);
         map.fitBounds(group.getBounds());
@@ -58,46 +51,47 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
 <section class="container pb-5">
   <div class="text-center mb-5">
+    <div id="shop-list-target" style="padding-top: 20px;"></div>
+    
     <h3 class="fw-bold">商店街のプロフェッショナルたち</h3>
     <p class="text-muted">「いらっしゃい！」元気な声でお待ちしています。</p>
 
     <div class="container mb-5">
       <div class="d-flex flex-wrap justify-content-center gap-2">
         
-        <a href="{% url 'dicon_app:shop_list' %}" 
+        <a href="{% url 'dicon_app:shop_list' %}#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if not current_category %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           すべて
         </a>
     
-        <a href="?category=vegetable" 
+        <a href="?category=vegetable#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if current_category == 'vegetable' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           野菜・果物
         </a>
     
-        <a href="?category=meat" 
+        <a href="?category=meat#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if current_category == 'meat' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           お肉・惣菜
         </a>
     
-        <a href="?category=fish" 
+        <a href="?category=fish#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if current_category == 'fish' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           お魚
         </a>
     
-        <a href="?category=bread" 
+        <a href="?category=bread#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if current_category == 'bread' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           パン・菓子
         </a>
     
-        <a href="?category=dry" 
+        <a href="?category=dry#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if current_category == 'dry' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           乾物・お茶
         </a>
     
-        <a href="?category=other" 
+        <a href="?category=other#shop-list-target" 
            class="btn rounded-pill px-4 fw-bold {% if current_category == 'other' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
           その他
         </a>
@@ -107,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    
     {% for shop in shops %}
     <div class="col">
       <a href="{% url 'dicon_app:shop_detail' shop.pk %}" class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-card text-decoration-none text-dark">
@@ -155,9 +148,16 @@ document.addEventListener('DOMContentLoaded', function() {
 .hover-card { transition: transform 0.2s; }
 .hover-card:hover { transform: translateY(-5px); }
 </style>
-<div class="text-center mt-5 mb-5">
-  <a href="{% url 'dicon_app:home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-    <i class="fa-solid fa-house me-2"></i>トップページに戻る
+
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
   </a>
 </div>
 {% endblock %}

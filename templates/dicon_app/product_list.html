@@ -20,41 +20,44 @@
   <i class="fa-solid fa-fish position-absolute bottom-0 end-0 text-white opacity-10" style="font-size: 10rem; transform: rotate(10deg);"></i>
 </section>
 
+<div id="product-list-target"></div>
+
 <div class="container mb-5">
   <div class="d-flex flex-wrap justify-content-center gap-2">
     <div class="container mb-5 mt-5">
       <div class="d-flex flex-wrap justify-content-center gap-2">  
-    <a href="{% url 'dicon_app:product_list' %}" 
+    
+    <a href="{% url 'dicon_app:product_list' %}#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if not current_category %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       すべて
     </a>
 
-    <a href="?category=vegetable" 
+    <a href="?category=vegetable#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if current_category == 'vegetable' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       野菜・果物
     </a>
 
-    <a href="?category=meat" 
+    <a href="?category=meat#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if current_category == 'meat' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       お肉・惣菜
     </a>
 
-    <a href="?category=fish" 
+    <a href="?category=fish#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if current_category == 'fish' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       お魚
     </a>
 
-    <a href="?category=bread" 
+    <a href="?category=bread#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if current_category == 'bread' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       パン・ケーキ・菓子
     </a>
 
-    <a href="?category=dry" 
+    <a href="?category=dry#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if current_category == 'dry' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       乾物・お茶
     </a>
 
-    <a href="?category=other" 
+    <a href="?category=other#product-list-target" 
        class="btn rounded-pill px-4 fw-bold {% if current_category == 'other' %}btn-dark text-white{% else %}btn-outline-dark bg-white text-dark{% endif %}">
       その他
     </a>
@@ -109,10 +112,8 @@
             <a href="{% url 'dicon_app:add_to_cart' product.id %}" class="btn btn-danger w-100 rounded-pill fw-bold shadow-sm hover-scale mt-2">
               <i class="fa-solid fa-cart-plus me-1"></i>カートに入れる
             </a>
-            <!-- <a href="{% url 'dicon_app:consult_home' %}?preset={{ product.name }}" class="btn btn-warning btn-sm rounded-pill text-dark fw-bold">
-              <i class="fa-regular fa-comment-dots me-1"></i>これで相談
-            </a> -->
-            <button class="btn btn-warning ...">
+            
+            <button class="btn btn-warning btn-sm rounded-pill text-dark fw-bold">
               <i class="fa-solid fa-comment-dots me-1"></i>これで相談
             </button>
             
@@ -150,5 +151,17 @@
 .transition-img { transition: transform 0.5s ease; }
 .mt-n4 { margin-top: -1.5rem; }
 </style>
+
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
+  </a>
+</div>
 
 {% endblock %}

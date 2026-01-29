@@ -14,16 +14,61 @@
       </button>
 
       <div class="collapse navbar-collapse" id="globalNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:shop_list' %}">お店一覧</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:product_list' %}">商品一覧</a></li>
-          
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#sale">特売</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#event">イベント</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#consult">相談</a></li>
-          <li class="nav-item"><a class="nav-link fw-bold" href="{% url 'dicon_app:qa' %}">よくある質問</a>
-        </li>
+        <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:shop_list' %}">お店</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:product_list' %}">商品</a></li>
+<li class="nav-item"><a class="nav-link text-warning" href="{% url 'dicon_app:sale_list' %}"><i class="fa-solid fa-fire"></i> 特売</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:set_list' %}">栄養士ごはん</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:consult_menu' %}">おばちゃんに相談</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:home' %}#locker-section">冷蔵ロッカーって？</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:event_list' %}">イベント</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'dicon_app:partner_list' %}">認定パートナー</a></li>
+<li class="nav-item">
+  <a class="nav-link text-white fw-bold" href="{% url 'dicon_app:qa' %}">FAQ</a>
+</li>
+          </ul> -->
+
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 text-nowrap">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 text-nowrap">
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-white fw-bold" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      お店
+                  </a>
+                  <ul class="dropdown-menu shadow border-0 rounded-3" aria-labelledby="shopDropdown">
+                      <li><a class="dropdown-item fw-bold" href="{% url 'dicon_app:shop_list' %}">お店一覧 <small class="text-muted">（店舗詳細へ）</small></a></li>
+                      
+                      <li><a class="dropdown-item fw-bold" href="{% url 'dicon_app:product_list' %}">商品一覧 <small class="text-muted">（全品検索）</small></a></li>
+                      
+                      <li><hr class="dropdown-divider"></li>
+                      
+                      <li><a class="dropdown-item fw-bold text-danger" href="{% url 'dicon_app:home' %}#sale-section">
+                          <i class="fa-solid fa-fire"></i> 本日の特売へ
+                      </a></li>
+                  </ul>
+              </li>
+        
+            <li class="nav-item">
+                <a class="nav-link text-white fw-bold" href="{% url 'dicon_app:home' %}#concierge">おばちゃんに相談</a>
+            </li>
+        
+            <li class="nav-item">
+                <a class="nav-link text-white fw-bold" href="{% url 'dicon_app:home' %}#event">シン・イベント</a>
+            </li>
+        
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white fw-bold" href="#" id="shinDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    シン・商店街
+                </a>
+                <ul class="dropdown-menu shadow border-0 rounded-3" aria-labelledby="shinDropdown">
+                    <li><a class="dropdown-item" href="{% url 'dicon_app:home' %}#locker-section">冷蔵ロッカーって？</a></li>
+                    <li><a class="dropdown-item border-top pt-2" href="{% url 'dicon_app:home' %}#partner">認定パートナー<br><small class="text-muted">（まちの助っ人）</small></a></li>
+                    <li><a class="dropdown-item border-top pt-2 text-primary fw-bold" href="{% url 'dicon_app:home' %}#challenge">空き店舗活用<br><small class="fw-normal">（1日からOK！）</small></a></li>
+                </ul>
+            </li>
+        
+            <li class="nav-item">
+                <a class="nav-link text-white fw-bold" href="{% url 'dicon_app:qa' %}">FAQ</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav ms-auto align-items-center gap-2">
@@ -38,15 +83,18 @@
           </li>
 
           {% if user.is_authenticated %}
-            <li class="nav-item d-none d-lg-block">
-              <a href="{% url 'dicon_app:profile' %}" class="nav-link text-white small me-2 fw-bold">
+        {# スマホでもPCでも共通して出すリンク #}
+        <li class="nav-item">
+            <a href="{% url 'dicon_app:profile' %}" class="nav-link text-white small me-2 fw-bold">
                 <i class="fa-solid fa-user me-1"></i>{{ user.username }}さん
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-light rounded-pill px-3">ログアウト</a>
-            </li>
-          {% else %}
+            </a>
+        </li>
+
+        {# ログアウトボタン #}
+        <li class="nav-item">
+            <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-light rounded-pill px-3 mt-1 mt-lg-0">ログアウト</a>
+        </li>
+    {% else %}
             <li class="nav-item">
               <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-light text-danger fw-bold rounded-pill px-3">ログイン</a>
             </li>

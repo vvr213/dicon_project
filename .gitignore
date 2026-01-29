@@ -17,3 +17,6 @@ venv/
 
 # Secrets
 .env
+
+# Media images
+# media/

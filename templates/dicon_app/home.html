@@ -41,6 +41,9 @@
   .hover-scale:hover { transform: scale(1.03); }
 </style>
 
+<div class="bg-dark text-white text-center py-1">
+  <small style="font-size: 0.75rem;">【Demo】本サイトは学校演習用のデモ画面です（架空のサービス）</small>
+</div>
 <section class="position-relative w-100 overflow-hidden d-flex align-items-center justify-content-center mb-5" 
          style="min-height: 600px; background-color: #333;">
   
@@ -174,7 +177,7 @@
 </section>
 
 {% if sale_products %}
-<section id="sale" class="container mb-5">
+<section id="sale-section" class="container mb-5">
   <div class="d-flex justify-content-between align-items-end mb-3 text-white">
     <h2 class="h4 fw-bold m-0">
       <i class="fa-solid fa-fire text-warning me-2"></i>本日の特売
@@ -231,8 +234,9 @@
     {# views.pyから渡された recommended_sets をループ #}
     {% for set in recommended_sets %}
     <div class="col-md-6 col-lg-4">
-      {# クリックしたら、そのセットの詳細ページへ移動 #}
-      <a href="{% url 'dicon_app:set_detail' pk=set.pk %}" class="card h-100 border-0 shadow-sm hover-scale rounded-4 overflow-hidden text-decoration-none text-dark">
+
+      {# クリックしたら、そのセットの詳細ページへ移動 #}     
+      <a href="{% url 'dicon_app:set_detail' pk=set.pk %}" class="card h-100 border-0 shadow-sm hover-scale rounded-4 overflow-hidden text-decoration-none text-dark">  
         
         <div class="position-relative">
           {# 画像があれば表示 #}
@@ -287,7 +291,7 @@
         <div class="col-lg-8">
           <span class="badge bg-success mb-2 px-3">商店街の食のプロ監修</span>
           <h2 class="fw-bold fs-2 mb-2 text-dark">
-              「忙しい！ごはん何しよ？！」<br>その悩み、Diconアプリが引き受けた！
+              「忙しい~ごはん何しよ？！」<br>その悩み、Diconアプリにおまかせ〜
           </h2>
           <p class="text-muted mb-0">
               新鮮食材の「献立セット」や、プロへの「相談」で、毎日の献立をもっと楽に自由に。
@@ -299,51 +303,43 @@
         
           {# データベースから取得した home_pickups をループして表示 #}
           {% for pickup in home_pickups %}
-          <div class="col-md-6 col-lg-4">
-              {# リンク先は管理画面で登録したURL名（pickup.link_url_name）を使います #}
-              <a href="{% url pickup.link_url_name %}" class="card h-100 border-0 shadow-sm hover-scale rounded-4 overflow-hidden text-decoration-none text-dark">
-                  <div class="position-relative">
-                      {# 画像があれば表示、なければダミー画像を表示 #}
-                      {% if pickup.image %}
-                      <img src="{{ pickup.image.url }}" 
-                           class="card-img-top" alt="{{ pickup.title }}" style="height: 200px; object-fit: cover;">
-                      {% else %}
-                       <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 200px;">
-                          <i class="fa-solid fa-image fa-2x"></i>
-                      </div>
-                      {% endif %}
-                      
-                      {# バッジテキストがあれば表示 #}
-                      {% if pickup.badge_text %}
-                      <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-2 rounded-pill fw-bold small shadow-sm">
-                          {{ pickup.badge_text }}
-                      </span>
-                      {% endif %}
-                  </div>
-                  <div class="card-body p-3 d-flex flex-column">
-                      <h5 class="fw-bold fs-6 mb-2">{{ pickup.title }}</h5>
-                      <p class="small text-muted mb-3 flex-grow-1">{{ pickup.description }}</p>
-                      <div class="d-flex justify-content-between align-items-center mt-auto">
-                          <span class="text-danger fw-bold fs-5">{{ pickup.price_text }}</span>
-                          <span class="small fw-bold text-success">
-                              {{ pickup.link_button_text }} <i class="fa-solid fa-chevron-right ms-1"></i>
-                          </span>
-                      </div>
-                  </div>
-              </a>
-          </div>
-          {% empty %}
-          {# データが1つもない場合の表示 #}
-          <div class="col-12 text-center text-muted py-5">
-              <p>現在ピックアップ情報はありません。</p>
-          </div>
-          {% endfor %}
-  
-      </div>
+    <div class="col-md-6 col-lg-4">
+        {# 管理画面の「リンク先のURL名」を使って詳細ページへ飛ばします #}
+        {# pickup.link_url_name と書くことで、管理画面に入れた「/concierge/」が反映されます #}
+<a href="{{ pickup.link_url_name }}" class="card h-100 border-0 shadow-sm hover-scale rounded-4 overflow-hidden text-decoration-none text-dark">
+            <div class="position-relative">
+                <img src="{{ pickup.image.url }}" class="card-img-top" alt="{{ pickup.title }}" style="height: 200px; object-fit: cover;">
+                
+                {# おばちゃんからのメッセージをバッジに！ #}
+                <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-2 rounded-pill fw-bold small shadow-sm">
+                    おばちゃん厳選！
+                </span>
+            </div>
 
-      <a href="{% url 'dicon_app:concierge_list' %}" class="btn btn-dark rounded-pill px-5 py-2 shadow">
-        おばちゃん（おっちゃん）コンシェルジュのおすすめ一覧へ
-      </a>
+            <div class="card-body p-3 d-flex flex-column">
+                <h5 class="fw-bold fs-6 mb-2">{{ pickup.title }}</h5>
+                <p class="small text-muted mb-3 flex-grow-1">{{ pickup.description }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center mt-auto">
+                    {# ★ここ！管理画面で入れた「価格テキスト」が自動で出ます #}
+                    <span class="text-danger fw-bold fs-5">{{ pickup.price_text }}</span>
+                    <span class="small fw-bold text-success">
+                        一覧へ <i class="fa-solid fa-chevron-right ms-1"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">おばちゃんが今、ええもん探してるところやで！</p>
+    {% endfor %}
+</div>
+
+      <div class="container py-4 mb-5"> 
+        <a href="{% url 'dicon_app:concierge_list' %}" class="btn btn-dark rounded-pill px-5 py-2">
+          おばちゃん（おっちゃん）コンシェルジュのおすすめ一覧へ
+        </a>
+      </div>
     </div>
 
     <hr class="my-5 border-secondary border-opacity-10">
@@ -358,49 +354,52 @@
             </p>
         </div>
         <div class="col-lg-4 text-lg-end d-none d-lg-block">
-             <a href="{% url 'dicon_app:consult_menu' %}" class="btn btn-outline-warning text-dark rounded-pill px-4 btn-sm fw-bold">
-                すべての相談メニュー <i class="fa-solid fa-chevron-right ms-1"></i>
-            </a>
+          <a href="{% url 'dicon_app:consult_menu' %}" class="btn btn-outline-warning text-dark rounded-pill px-5 py-2 fw-bold fs-5 shadow-sm">
+            いろんな相談メニュー <i class="fa-solid fa-chevron-right ms-2"></i>
+          </a>
         </div>
     </div>
 
     <div class="row row-cols-2 row-cols-lg-4 g-3">
     
       {% for item in consultation_items %}
-      <div class="col">
-          <a href="{% url 'dicon_app:consult_home' %}?preset={{ item.preset_id }}" 
-             class="card h-100 border-0 shadow-sm hover-scale text-decoration-none text-dark bg-light">
-              
-              {% if item.image %}
-              <img src="{{ item.image.url }}" 
-                   class="card-img-top rounded-top" 
-                   style="height: 140px; object-fit: cover;" 
-                   alt="{{ item.title }}">
-              {% else %}
-              <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-top" style="height: 140px;">
-                  <i class="fa-solid fa-image fa-2x"></i>
-              </div>
-              {% endif %}
-  
-              <div class="card-body p-3">
-                  <h6 class="fw-bold small mb-2">{{ item.title }}</h6>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.4;">
-                      {{ item.description|truncatechars:40 }}
-                  </p>
-              </div>
-              
-              <div class="card-footer bg-transparent border-0 pt-0 pb-3">
-                  <span class="btn btn-light text-{{ item.color_theme }} w-100 fw-bold rounded-pill btn-sm shadow-sm">
-                      相談する
-                  </span>
-              </div>
-          </a>
-      </div>
-      {% empty %}
-      <div class="col-12 text-center py-5">
-          <p class="text-muted">現在、相談メニューを準備中です。</p>
-      </div>
-      {% endfor %}
+    <div class="col-md-6 col-lg-4">
+        <a href="{% url 'dicon_app:consult_home' %}?preset={{ item.preset_id }}" 
+           class="card h-100 border-0 shadow-sm hover-scale text-decoration-none text-dark bg-white rounded-4 overflow-hidden">
+            
+            <div class="position-relative">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ item.title }}" 
+                         style="height: 180px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-secondary" style="height: 180px;">
+                        <i class="fa-solid fa-image fa-2x"></i>
+                    </div>
+                {% endif %}
+            </div>
+    
+            <div class="card-body p-3">
+                <h6 class="fw-bold mb-2 text-dark">【{{ item.title }}】</h6>
+                <p class="text-muted mb-0 small" style="line-height: 1.4;">
+                    {{ item.description|truncatechars:40 }}
+                </p>
+            </div>
+            
+            <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                <span class="btn btn-light text-warning w-100 fw-bold rounded-pill btn-sm shadow-sm">
+                    相談する
+                </span>
+            </div>
+        </a>
+    </div>
+    {% empty %}
+    {# ここが大事な「準備中」の表示です #}
+    <div class="col-12 text-center py-5">
+        <p class="text-muted">現在、相談メニューを準備中です。</p>
+    </div>
+    {% endfor %}
   
   </div>
 
@@ -414,7 +413,7 @@
 
 </section>
 
-<section id="locker" class="container mb-5">
+<section id="locker-section" class="container mb-5" style="scroll-margin-top: 100px;">
   <div class="section-card p-0 text-white overflow-hidden rounded-4 shadow-lg" 
      style="background: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);">
     <div class="row g-0 align-items-center">
@@ -429,10 +428,17 @@
             気にしなくて大丈夫。
         </h2>
         
-        <p class="text-white opacity-90 mb-4" style="line-height: 1.8;">
-          残業帰りでも、お子さんのお迎え等の前後でも。<br>
-          商店街に設置された<strong>「専用冷蔵ロッカー」</strong>が、あなたの冷蔵庫代わりになります。<br>
-          受け取りは、QRコードをかざすだけ。
+        <p class="text-white mb-4 shadow-text" style="line-height: 1.5; font-weight: 500;">
+          <span class="text-warning fw-bold d-block mb-2" style="font-size: 1.3rem; letter-spacing: 0.02rem;">
+            「献立に迷って店内を回る時間ゼロ」
+          </span>
+          
+          <span class="d-inline-block" style="font-size: 1rem; opacity: 0.95;">16時までの注文で、お迎え前後や残業帰りでも、</span><br class="d-none d-md-block">
+          <span class="d-inline-block" style="font-size: 1rem; opacity: 0.95;">商店街の新鮮食材や惣菜を</span><br class="d-md-none">
+          <strong class="border-bottom border-warning border-2 d-inline-block mt-1" style="font-size: 1.05rem;">
+            24時間いつでも「あなたの冷蔵庫」
+          </strong><span style="font-size: 1rem; opacity: 0.95;">から、</span><br class="d-none d-md-block">
+          <span class="d-inline-block" style="font-size: 1rem; opacity: 0.95;">スマホをかざすだけでお持ち帰りいただけます。</span>
         </p>
 
         <div class="d-flex gap-3 mb-4">
@@ -459,8 +465,9 @@
             </div>
         </div>
 
-        <span class="badge bg-white text-success fw-bold mb-3 px-3 py-2 rounded-pill shadow-sm animate-pulse">
-          <i class="fa-solid fa-circle-play me-2"></i>使い方を見る
+        <a href="{% url 'dicon_app:locker_guide' %}" 
+            class="btn btn-light text-success fw-bold px-5 py-3 rounded-pill shadow-lg animate-pulse text-decoration-none fs-5">
+              <i class="fa-solid fa-circle-play me-2"></i>使い方を見る
         </a>
       </div>
 
@@ -546,7 +553,7 @@
     <div class="text-center mb-5">
       <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 shadow-sm">FUN! FUN!</span>
       <h2 class="fw-bold display-6 text-dark" style="font-family: 'Mochiy Pop One', sans-serif;">
-        週末、どこいく？<br>商店街で遊ぼ！
+        商店街って最強の遊び場！<br>マルシェ、夜市、ヒーロー大暴れのアーケード<br>そこはもう異世界（テーマパーク）！
       </h2>
       <p class="text-muted mt-3">
         マルシェ、夜市、ヒーローショー。<br>
@@ -602,179 +609,70 @@
 </section>
 {% endif %}
 
-<!-- <section id="partner" class="container mb-5">
-    
-  <div class="section-card p-4 p-lg-5 bg-white shadow-sm rounded-4">
-      
-      <div class="text-center mb-5">
-          <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-bold">COMMUNITY</span>
-          <h2 class="fw-bold display-6 mb-3 text-dark" style="letter-spacing: 0.05em;">
-              商店街は、「買う場所」から<br>「頼れる場所」へ。
-          </h2>
-          <p class="text-muted lead" style="font-size: 1rem;">
-              お買い物以外のお困りごとも、地元のつながりで解決します。
-          </p>
-      </div>
-
-      <div class="row g-4 align-items-stretch">
-          
-          <div class="col-lg-6 d-flex flex-column">
-              <div class="h-100 d-flex flex-column justify-content-center">
-                  <div class="mb-4">
-                      <h3 class="fw-bold mb-3 text-dark">
-                          <span class="text-primary"><i class="fa-solid fa-hand-holding-heart me-2"></i></span>
-                          「ちょっと助けて！」に応えます。
-                      </h3>
-                      <p class="text-muted">
-                          遠くの親戚より、近くの商店街。<br>
-                          「こんなこと頼める？」という潜在的なお悩みも、認定パートナーにお任せください。
-                      </p>
-                  </div>
-
-                  <div class="d-flex flex-column gap-3 mb-4">
-                      <div class="d-flex align-items-center bg-light p-3 rounded-4 border border-white">
-                          <div class="bg-white text-danger rounded-circle p-3 me-3 shadow-sm" style="min-width: 50px; text-align: center;">
-                              <i class="fa-solid fa-user-nurse fs-5"></i>
-                          </div>
-                          <div>
-                              <h6 class="fw-bold mb-1 text-dark">親の見守り・介護サポート</h6>
-                              <p class="small text-muted mb-0">「実家の親、元気かな？」お弁当配達のついでに、顔を見て安否確認します。</p>
-                          </div>
-                      </div>
-                      <div class="d-flex align-items-center bg-light p-3 rounded-4 border border-white">
-                          <div class="bg-white text-primary rounded-circle p-3 me-3 shadow-sm" style="min-width: 50px; text-align: center;">
-                              <i class="fa-solid fa-screwdriver-wrench fs-5"></i>
-                          </div>
-                          <div>
-                              <h6 class="fw-bold mb-1 text-dark">住まいのSOS・修理</h6>
-                              <p class="small text-muted mb-0">水漏れ、鍵の紛失、網戸の張り替え。地元の職人が「すぐ」駆けつけます。</p>
-                          </div>
-                      </div>
-                       <div class="d-flex align-items-center bg-light p-3 rounded-4 border border-white">
-                          <div class="bg-white text-success rounded-circle p-3 me-3 shadow-sm" style="min-width: 50px; text-align: center;">
-                              <i class="fa-solid fa-truck-ramp-box fs-5"></i>
-                          </div>
-                          <div>
-                              <h6 class="fw-bold mb-1 text-dark">力仕事・スマホ相談</h6>
-                              <p class="small text-muted mb-0">家具の移動、電球交換、スマホの操作。「誰に頼めば？」を解決。</p>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="mt-auto">
-                       <a href="{% url 'dicon_app:partner_list' %}" class="btn btn-outline-primary rounded-pill w-100 py-3 fw-bold hover-scale">
-                          認定パートナーを探す <i class="fa-solid fa-chevron-right ms-2"></i>
-                      </a>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-lg-6">
-              <div class="card h-100 border-0 rounded-4 overflow-hidden shadow hover-scale text-white position-relative" 
-                   style="background: url('https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80') center/cover; min-height: 400px;">
-                  
-                  <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-75"></div>
-                  
-                  <div class="card-body p-4 p-lg-5 position-relative z-1 d-flex flex-column text-center justify-content-center">
-                      <div class="mb-3">
-                           <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill shadow-sm animate-pulse">
-                              <i class="fa-solid fa-shop me-2"></i>3店舗 OPEN!
-                          </span>
-                      </div>
-                      <h3 class="fw-bold mb-3 display-6" style="font-family: 'Mochiy Pop One', sans-serif; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                          空き店舗、<br>こうなってます。
-                      </h3>
-                      
-                      <p class="text-white fw-bold mb-4" style="font-size: 1.1rem; line-height: 1.8; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                          古い金物屋が「古着バー」に。<br>
-                          時計屋さんが「レトロ喫茶」に。<br>
-                          あなたの夢も、この街で叶えませんか？
-                      </p>
-
-                      <div class="row g-2 mb-4 justify-content-center">
-                          <div class="col-4">
-                              <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=150&q=80" class="rounded-3 shadow-sm w-100 border border-2 border-white" alt="Cafe" style="height: 70px; object-fit: cover;">
-                          </div>
-                          <div class="col-4">
-                              <img src="https://images.unsplash.com/photo-1524316885361-b1b6c0e5a6b0?auto=format&fit=crop&w=150&q=80" class="rounded-3 shadow-sm w-100 border border-2 border-white" alt="Bookstore" style="height: 70px; object-fit: cover;">
-                          </div>
-                           <div class="col-4">
-                              <img src="https://images.unsplash.com/photo-1595856488331-507949392289?auto=format&fit=crop&w=150&q=80" class="rounded-3 shadow-sm w-100 border border-2 border-white" alt="Shop" style="height: 70px; object-fit: cover;">
-                          </div>
-                      </div>
-
-                       <div class="mt-auto">
-                           <a href="{% url 'dicon_app:vacant_store' %}" class="btn btn-warning text-dark rounded-pill w-100 py-3 fw-bold shadow hover-scale">
-                              空き物件情報を見る <i class="fa-solid fa-chevron-right ms-2"></i>
-                          </a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-</section> -->
 <section id="partner" class="container mb-5">
-  <div class="section-card p-4 p-lg-5">
+  <div class="section-card p-4 p-lg-5 bg-white border-0">
       
       <div class="text-center mb-5">
-          <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-bold">COMMUNITY</span>
+          <span class="badge bg-primary mb-2 px-3 py-2 rounded-pill fw-bold shadow-sm">
+              <i class="fa-solid fa-handshake-angle me-1"></i> 認定パートナー制度
+          </span>
           <h2 class="fw-bold display-6 mb-3 text-dark">
-              商店街は、買う場所から<br>もっと頼れる場所へ。
+              商店街はもっと頼れる場所へ<br>ご相談待っています！
           </h2>
           <p class="text-muted lead" style="font-size: 1rem;">
-              お買い物以外のお困りごとも、地元の認定パートナーが解決します！
+              厳しい審査を通過した地元のプロが、あなたの暮らしを誠実にサポートします。
           </p>
       </div>
 
-      <div class="row g-4">
-          {% for partner in partners %}
-          <div class="col-lg-6">
-              <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-scale bg-light bg-opacity-50">
-                  <div class="row g-0 h-100 align-items-center">
-                      <div class="col-4 p-3 text-center">
-                          {% if partner.image %}
-                              <img src="{{ partner.image.url }}" alt="{{ partner.name }}" class="rounded-circle shadow-sm object-fit-cover" style="width: 100px; height: 100px;">
-                          {% else %}
-                              <div class="bg-white text-primary rounded-circle shadow-sm d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
-                                  <i class="fa-solid fa-user-check fs-2"></i>
-                              </div>
-                          {% endif %}
-                      </div>
-                      <div class="col-8">
-                          <div class="card-body p-3">
-                              <h5 class="fw-bold text-dark mb-1">{{ partner.name }}</h5>
-                              <p class="small text-muted mb-3" style="line-height: 1.5;">
-                                {{ partner.description|linebreaksbr|truncatechars:100 }}
-                              </p>
-                              <div class="text-end">
-                                  <a href="{% url 'dicon_app:partner_list' %}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">
-                                      詳しく見る <i class="fa-solid fa-chevron-right ms-1"></i>
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          {% empty %}
-          <div class="col-12 text-center text-muted py-5">
-              <p>現在、認定パートナーを募集中です。</p>
-          </div>
-          {% endfor %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    {% for partner in partners %}
+    <div class="col">
+        <div class="card h-100 border shadow-sm rounded-4 overflow-hidden hover-scale bg-white" style="border-top: 4px solid #0d6efd !important; border-color: rgba(13, 110, 253, 0.1);">
+            <div class="card-body p-4 text-center"> 
+                <div class="mb-3 position-relative d-inline-block">
+                    {% if partner.image %}
+                    <img src="{{ partner.image.url }}" class="rounded-circle border border-2 border-primary border-opacity-25 p-1" style="width: 90px; height: 90px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 90px; height: 90px;">
+                        <i class="fa-solid fa-user text-primary opacity-50 fa-2x"></i>
+                    </div>
+                    {% endif %}
+                    <span class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 24px; height: 24px; border: 2px solid white;">
+                        <i class="fa-solid fa-check" style="font-size: 12px;"></i>
+                    </span>
+                </div>
+
+                <h5 class="fw-bold text-dark mb-1 fs-6">{{ partner.name }}</h5>
+                <div class="mb-2">
+                    <span class="badge bg-light text-primary border border-primary border-opacity-25 small" style="font-size: 0.7rem;">認定事業者</span>
+                </div>
+                <p class="small text-muted mb-3" style="line-height: 1.5; height: 4.5em; overflow: hidden;">
+                    {{ partner.description|truncatechars:60 }}
+                </p>
+
+                <div class="mt-auto">
+                    <a href="{% url 'dicon_app:partner_list' %}" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm w-100">
+                        相談する <i class="fa-solid fa-chevron-right ms-1"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
     </div>
+    {% endfor %}
+</div>
 
     <div class="text-center mt-5">
-        <a href="{% url 'dicon_app:partner_list' %}" class="btn btn-outline-primary rounded-pill px-5 py-3 fw-bold hover-scale shadow-sm" style="border-width: 2px;">
-            認定事業者一覧へ <i class="fa-solid fa-chevron-right ms-2"></i>
+        <a href="{% url 'dicon_app:partner_list' %}" class="btn btn-primary rounded-pill px-5 py-3 fw-bold hover-scale shadow" style="background: linear-gradient(45deg, #0d6efd, #0a58ca);">
+            認定事業者一覧をすべて見る <i class="fa-solid fa-circle-chevron-right ms-2"></i>
         </a>
+        <p class="text-muted small mt-3"><i class="fa-solid fa-shield-halved me-1"></i> 私たちは地域に根ざした誠実な対応をお約束します</p>
     </div>
-    </section>
 
   </div>
 </section>
 
-<section id="vacant-store" class="container mb-5">
+<!-- <section id="vacant-store" class="container mb-5">
   <div class="section-card p-4 p-lg-5">
       
       <div class="text-center mb-5">
@@ -816,6 +714,56 @@
           </div>
       </div>
 
+  </div>
+</section> -->
+
+<section id="challenge" class="container mb-5">
+  <div class="section-card p-4 p-lg-5 text-center" style="background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%); border-radius: 2rem; border: 2px dashed #ff4d4d;">
+      
+      <div class="mb-4">
+          <span class="badge bg-danger mb-2 px-3 py-2 rounded-pill fw-bold animate-bounce">
+              <i class="fa-solid fa-rocket me-1"></i> U-25 チャレンジ募集中！
+          </span>
+          <h2 class="fw-bold display-5 mb-3 text-dark">
+              この街で、あなたの「やりたい」を形に。<br>
+              <span class="text-danger">空き店舗、貸し切り放題スタート！</span>
+          </h2>
+      </div>
+
+      <div class="row g-4 mb-5 text-start">
+          <div class="col-md-4">
+              <div class="p-4 bg-white rounded-4 shadow-sm h-100 border-bottom border-4 border-danger">
+                  <div class="text-danger mb-3"><i class="fa-solid fa-graduation-cap fa-2x"></i></div>
+                  <h4 class="fw-bold">学生の「単位」を応援！</h4>
+                  <p class="small text-muted">小・中・高・大学生の皆さん！ここでの活動が学校の「単位」や「ボランティア実績」になるよう、商店街が全力で公式証明書を発行します。履歴書にも堂々と書ける実績をここで作ろう！</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="p-4 bg-white rounded-4 shadow-sm h-100 border-bottom border-4 border-warning">
+                  <div class="text-warning mb-3"><i class="fa-solid fa-fire-flame-curved fa-2x"></i></div>
+                  <h4 class="fw-bold">「赤い人」が全力伴走！</h4>
+                  <p class="small text-muted">失敗しても大丈夫。商店街の「赤い情熱（おせっかい）」を持ったプロたちが、仕入れから接客までマンツーマンで指導。君の背中をドーンと押して、盛り上げるで！</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="p-4 bg-white rounded-4 shadow-sm h-100 border-bottom border-4 border-primary">
+                  <div class="text-primary mb-3"><i class="fa-solid fa-child-reaching fa-2x"></i></div>
+                  <h4 class="fw-bold">ちびっこ起業家求む！</h4>
+                  <p class="small text-muted">小学生の一日店長や、自分たちで作ったものを売る「起業マルシェ」も開催。お金の仕組みから「ありがとう」の重みまで、商店街が教室に変わる日！</p>
+              </div>
+          </div>
+      </div>
+
+      <div class="bg-dark text-white p-4 rounded-4 mb-4">
+          <p class="mb-0 lead fw-bold">
+              「こんなこと、できるかな？」その一言から始まります。<br>
+              <span class="text-warning">スポット（1日）利用OK！　利用料：学生は「やる気」で応相談！</span>
+          </p>
+      </div>
+
+      <a href="{% url 'dicon_app:consult_home' %}" class="btn btn-danger btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg hover-scale">
+          おせっかいおじさんに企画をぶつける！ <i class="fa-solid fa-paper-plane ms-2"></i>
+      </a>
   </div>
 </section>
 

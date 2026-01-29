@@ -45,4 +45,15 @@
     {% endfor %}
   </div>
 </div>
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
+  </a>
+</div>
 {% endblock %}

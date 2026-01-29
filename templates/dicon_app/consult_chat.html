@@ -202,5 +202,19 @@ footer {
     .fade-in { animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
+<div class="mt-5 mb-5 pb-5 text-center px-4" style="margin-bottom: 120px;">
+  
+  <div class="row justify-content-center mb-4">
+    <div class="col-10 col-md-4">
+      <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill py-2 w-100 fw-bold border-2">
+        <i class="fa-solid fa-chevron-left me-2"></i>戻る
+      </a>
+    </div>
+  </div>
 
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none opacity-75 hover-opacity-100">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
+  </a>
+
+</div>
 {% endblock %}

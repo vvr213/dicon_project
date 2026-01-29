@@ -111,23 +111,20 @@
     </div>
 </section>
 
-<div class="container pb-5">
-  <div class="mt-5 d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
-      
-      <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm fw-bold hover-scale">
-          <i class="fa-solid fa-arrow-left me-2"></i>前のページに戻る
-      </a>
-
-      <a href="{% url 'dicon_app:home' %}" class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm fw-bold hover-scale">
-          トップページへ <i class="fa-solid fa-house ms-2"></i>
-      </a>
-
-  </div>
-</div>
-
 <style>
 /* 統一感のあるアニメーション設定 */
 .hover-scale { transition: transform 0.2s; }
 .hover-scale:hover { transform: scale(1.03); }
 </style>
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
+  </a>
+</div>
 {% endblock %}

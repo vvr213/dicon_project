@@ -10,7 +10,7 @@
   <div class="row g-3">
     {% for set in sets %}
       <div class="col-12 col-md-4">
-        <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' slug=set.slug %}">
+        <a class="text-decoration-none text-dark" href="{% url 'dicon_app:set_detail' pk=set.pk %}">
           <div class="card h-100">
                        
             <!-- 管理画面の画像を使う -->
@@ -47,9 +47,15 @@
     {% endfor %}
   </div>
 </div>
-<div class="text-center mt-5 mb-5">
-  <a href="{% url 'dicon_app:home' %}#recommended-sets" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-    <i class="fa-solid fa-arrow-left me-2"></i>トップページの献立コーナーに戻る
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
   </a>
 </div>
 {% endblock %}

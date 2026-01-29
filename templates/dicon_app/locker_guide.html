@@ -5,17 +5,41 @@
 
 {% block content %}
 
-<section class="bg-success text-white py-5 text-center position-relative overflow-hidden">
+{# 7行目付近から置き換え開始 #}
+<section class="text-white py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #198754 0%, #20c997 100%); border-radius: 0 0 50px 50px;">
   <div class="container position-relative z-1">
-    <span class="badge bg-white text-success mb-2 px-3 py-1 rounded-pill">Smart Pick-up</span>
-    <h1 class="fw-bold display-5">お店が閉まっても、<br>受け取れます。</h1>
-    <p class="lead opacity-90 mt-3">
-      残業で遅くなっても大丈夫。<br>
-      商店街専用の「冷蔵ロッカー」が、あなたの夕食を預かっています。
-    </p>
+    <div class="row align-items-center">
+      
+      <div class="col-lg-7 text-center text-lg-start">
+        <span class="badge bg-white text-success mb-3 px-3 py-1 rounded-pill shadow-sm">Smart Pick-up</span>
+        <h1 class="fw-bold display-4 mb-3">お店が閉まっても、<br>受け取れます。</h1>
+        <p class="lead opacity-90 mt-3">
+          残業で遅くなっても大丈夫。<br>
+          商店街専用の「冷蔵ロッカー」が、あなたの夕食を預かっています。
+        </p>
+      </div>
+
+      <div class="col-lg-5 text-center mt-4 mt-lg-0">
+        <img src="{% static 'img/hero_locker1.png' %}" alt="Dicon専用ロッカー" 
+             class="img-fluid animate-float" 
+             style="max-height: 380px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));">
+      </div>
+
+    </div>
   </div>
-  <i class="fa-solid fa-box-open position-absolute top-50 start-0 translate-middle-y ms-n5 opacity-25" style="font-size: 15rem;"></i>
 </section>
+
+{# CSS：ふわふわ動かすアニメーション（どこか末尾にでも） #}
+<style>
+.animate-float {
+  animation: float-locker 4s ease-in-out infinite;
+}
+@keyframes float-locker {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+</style>
+{# 置き換え終了 #}
 
 <section class="container py-5">
   <div class="row g-4">
@@ -122,13 +146,25 @@
 
 <div class="text-center py-5">
   <h4 class="fw-bold mb-4">さっそく使ってみませんか？</h4>
-  <a href="{% url 'dicon_app:shop_list' %}" class="btn btn-success btn-lg rounded-pill px-5 shadow hover-scale">
-    <i class="fa-solid fa-store me-2"></i>お店を探して注文する
+  <a href="{% url 'dicon_app:product_list' %}" class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow hover-scale fw-bold">
+    <i class="fa-solid fa-cart-shopping me-2"></i>商品を見る
   </a>
 </div>
 
 <style>
 .space-y-3 > li { margin-bottom: 1rem; }
 </style>
+
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
+  </a>
+</div>
 
 {% endblock %}

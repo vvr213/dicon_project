@@ -32,9 +32,15 @@
     <p>現在、特売商品はありません。</p>
   {% endif %}
 </div>
-<div class="text-center mt-5 mb-4">
-  <a href="{% url 'dicon_app:home' %}#sale" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-    <i class="fa-solid fa-arrow-left me-2"></i>トップページの特売コーナーに戻る
+<div class="mt-5 text-center">
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+      <i class="fa-solid fa-chevron-left me-2"></i>前の画面に戻る
+    </a>
+  </div>
+
+  <a href="{% url 'dicon_app:home' %}" class="text-muted small text-decoration-none">
+    <i class="fa-solid fa-house me-1"></i>トップページへ
   </a>
 </div>
 {% endblock %}
